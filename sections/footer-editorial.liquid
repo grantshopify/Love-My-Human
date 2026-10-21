@@ -1,0 +1,1397 @@
+{%- liquid
+  assign s = section.settings
+  assign newsletter_form_id = 'FooterEditorialNewsletter-' | append: section.id
+  assign country_select_id = 'FooterEditorialCountry-' | append: section.id
+  assign social_platforms = 'facebook,instagram,youtube,tiktok,pinterest,x,linkedin,threads,snapchat,bluesky' | split: ','
+
+  assign has_social = false
+  for platform in social_platforms
+    assign setting_key = platform | append: '_url'
+    if s[setting_key] != blank
+      assign has_social = true
+      break
+    endif
+  endfor
+
+  assign has_aside = false
+  if s.show_newsletter or has_social
+    assign has_aside = true
+  endif
+
+  # Footer menu: a nested menu gives one column per top-level item (its sub-items are the links);
+  # a flat menu gives a single column.
+  assign footer_menu = s.footer_menu
+  assign menu_is_nested = false
+  assign menu_columns = 0
+  if footer_menu != blank and footer_menu.links.size > 0
+    for link in footer_menu.links
+      if link.links.size > 0
+        assign menu_is_nested = true
+        break
+      endif
+    endfor
+    if menu_is_nested
+      assign menu_columns = footer_menu.links.size
+    else
+      assign menu_columns = 1
+    endif
+  endif
+
+  # Desktop grid: never fewer tracks than there are columns to place, so extra menus can't wrap
+  assign menu_count = section.blocks.size | plus: menu_columns
+  assign columns_needed = menu_count
+  if has_aside
+    assign columns_needed = columns_needed | plus: 1
+  endif
+  assign desktop_tracks = s.desktop_tracks | at_least: columns_needed | at_least: 1
+
+  # Newsletter column start (desktop only), clamped so it never overlaps a menu or overflows the grid
+  assign aside_start = menu_count | plus: 1
+  case s.newsletter_position
+    when 'column_5'
+      assign aside_start = 5 | at_most: desktop_tracks | at_least: aside_start
+    when 'last'
+      assign aside_start = desktop_tracks
+  endcase
+
+  assign signature_logo = s.signature_logo | default: settings.logo
+  assign show_signature_image = false
+  if s.signature_content == 'image' and signature_logo != blank
+    assign show_signature_image = true
+  endif
+  assign signature_text = s.signature_text | default: shop.name
+
+  # Colours: the two presets read the theme's colour palette, so they follow the website if it changes
+  assign palette = settings.color_palette
+  case s.color_style
+    when 'website_red'
+      assign fe_background = palette.foreground
+      assign fe_text = palette.background
+      assign fe_signature_background = palette.background
+      assign fe_wordmark = palette.foreground
+      assign fe_divider = ''
+    when 'custom'
+      assign fe_background = s.background_color
+      assign fe_text = s.text_color
+      assign fe_signature_background = s.signature_background_color
+      assign fe_wordmark = s.wordmark_color
+      assign fe_divider = s.divider_color
+    else
+      assign fe_background = palette.background
+      assign fe_text = palette.color1
+      assign fe_signature_background = palette.color2
+      assign fe_wordmark = palette.foreground
+      assign fe_divider = ''
+  endcase
+-%}
+
+<div
+  class="footer-editorial footer-editorial--font-{{ s.heading_font }} footer-editorial--icons-{{ s.icon_style }}{% if s.show_signature and s.signature_effect == 'curtain' %} footer-editorial--curtain{% endif %}{% if s.mobile_dividers %} footer-editorial--mobile-dividers{% endif %}{% if s.logo_black %} footer-editorial--logo-black{% endif %}"
+  style="
+    --fe-background: {{ fe_background }};
+    --fe-signature-background: {{ fe_signature_background }};
+    --fe-text: {{ fe_text }};
+    --fe-wordmark: {{ fe_wordmark | default: fe_text }};
+    {% if fe_divider != blank %}--fe-divider: {{ fe_divider }};{% endif %}
+    --fe-padding-top: {{ s.padding_top }}px;
+    --fe-gutter: {{ s.gutter_desktop }}px;
+    --fe-gutter-mobile: {{ s.gutter_mobile }}px;
+    --fe-column-gap: {{ s.column_gap }}px;
+    --fe-tracks: {{ desktop_tracks }};
+    --fe-aside-start: {{ aside_start }};
+    --fe-heading-size: {{ s.heading_size }}px;
+    --fe-link-size: {{ s.link_size }}px;
+    --fe-link-line: {{ s.link_line_height }}px;
+    --fe-icon-size: {{ s.icon_size }}px;
+    --fe-icon-size-mobile: {{ s.icon_size_mobile }}px;
+    --fe-signature-height: {{ s.signature_height }}px;
+    --fe-logo-width: {{ s.logo_width }}px;
+    --fe-logo-width-mobile: {{ s.logo_width_mobile }}px;
+    --fe-wordmark-size: {{ s.signature_text_size }}px;
+    --fe-wordmark-size-mobile: {{ s.signature_text_size_mobile }}px;
+  "
+>
+  <div class="footer-editorial__main">
+    <div class="footer-editorial__columns">
+      {%- if footer_menu != blank -%}
+        {%- if menu_is_nested -%}
+          {%- for link in footer_menu.links -%}
+            {%- liquid
+              assign open_on_mobile = false
+              assign inline_on_mobile = false
+              if forloop.last
+                assign open_on_mobile = s.open_last_on_mobile
+                assign inline_on_mobile = s.inline_last_on_mobile
+              endif
+            -%}
+            {% render 'footer-editorial-column',
+              heading: link.title,
+              links: link.links,
+              accordion_on_mobile: s.mobile_accordion,
+              open_on_mobile: open_on_mobile,
+              inline_on_mobile: inline_on_mobile
+            %}
+          {%- endfor -%}
+        {%- else -%}
+          {% render 'footer-editorial-column',
+            heading: footer_menu.title,
+            links: footer_menu.links,
+            accordion_on_mobile: s.mobile_accordion,
+            open_on_mobile: s.open_last_on_mobile,
+            inline_on_mobile: s.inline_last_on_mobile
+          %}
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign menu = block.settings.menu
+          assign heading = block.settings.heading | default: menu.title
+          if menu == blank and heading == blank and request.design_mode == false
+            continue
+          endif
+          if heading == blank
+            assign heading = 'Menu'
+          endif
+        -%}
+        {% render 'footer-editorial-column',
+          heading: heading,
+          links: menu.links,
+          accordion_on_mobile: s.mobile_accordion,
+          open_on_mobile: block.settings.open_on_mobile,
+          inline_on_mobile: block.settings.inline_on_mobile,
+          attributes: block.shopify_attributes
+        %}
+      {%- endfor -%}
+
+      {%- if has_aside -%}
+        <div class="footer-editorial__aside">
+          {%- if s.show_newsletter -%}
+            <div class="footer-editorial__newsletter">
+              {%- if s.newsletter_heading != blank -%}
+                <h2 class="footer-editorial__heading footer-editorial__heading--static">{{ s.newsletter_heading }}</h2>
+              {%- endif -%}
+              {%- if s.newsletter_text != blank -%}
+                <p class="footer-editorial__text">{{ s.newsletter_text }}</p>
+              {%- endif -%}
+
+              {%- form 'customer', id: newsletter_form_id, class: 'footer-editorial__form' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <details
+                  class="footer-editorial__subscribe"
+                  {% if form.posted_successfully? or form.errors %}
+                    open
+                  {% endif %}
+                >
+                  <summary class="footer-editorial__mono-link">{{ s.newsletter_button_label }}</summary>
+                  {%- if form.posted_successfully? -%}
+                    <p class="footer-editorial__form-message" role="status">
+                      {{ 'blocks.email_signup.success' | t }}
+                    </p>
+                  {%- else -%}
+                    <div class="footer-editorial__field">
+                      <label class="visually-hidden" for="{{ newsletter_form_id }}-email">
+                        {{- 'blocks.email_signup.label' | t -}}
+                      </label>
+                      <input
+                        id="{{ newsletter_form_id }}-email"
+                        type="email"
+                        name="contact[email]"
+                        autocomplete="email"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        placeholder="{{ s.newsletter_placeholder | escape }}"
+                        required
+                        {% if form.errors %}
+                          aria-invalid="true" aria-describedby="{{ newsletter_form_id }}-error"
+                        {% endif %}
+                      >
+                      <button type="submit" class="footer-editorial__submit">{{ s.newsletter_submit_label }}</button>
+                    </div>
+                    {%- if form.errors -%}
+                      <p class="footer-editorial__form-message" id="{{ newsletter_form_id }}-error" role="alert">
+                        {{ form.errors.translated_fields.email | capitalize }}
+                        {{ form.errors.messages.email }}
+                      </p>
+                    {%- endif -%}
+                  {%- endif -%}
+                </details>
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+
+          {%- if has_social -%}
+            <div class="footer-editorial__social">
+              {%- if s.social_heading != blank -%}
+                <h2 class="footer-editorial__heading footer-editorial__heading--static">{{ s.social_heading }}</h2>
+              {%- endif -%}
+              <ul class="footer-editorial__social-list list-unstyled">
+                {%- for platform in social_platforms -%}
+                  {%- liquid
+                    assign setting_key = platform | append: '_url'
+                    assign link_url = s[setting_key]
+                    if link_url == blank
+                      continue
+                    endif
+                    assign platform_label = platform | capitalize
+                    case platform
+                      when 'x'
+                        assign platform_label = 'X'
+                      when 'youtube'
+                        assign platform_label = 'YouTube'
+                      when 'tiktok'
+                        assign platform_label = 'TikTok'
+                      when 'linkedin'
+                        assign platform_label = 'LinkedIn'
+                    endcase
+                  -%}
+                  <li>
+                    <a
+                      href="{{ link_url }}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="footer-editorial__social-link"
+                    >
+                      <span class="visually-hidden">{{ platform_label }}</span>
+                      <svg
+                        class="footer-editorial__icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        {%- if s.icon_style == 'circle' -%}
+                          {%- if platform == 'facebook' or platform == 'pinterest' -%}
+                            {%- comment -%} These glyphs are already a disc with the letter cut out; scale them to fill the circle. {%- endcomment -%}
+                            <g transform="translate(-2.5 -2.5) scale(1.25)">{%- render 'icon', icon: platform -%}</g>
+                          {%- else -%}
+                            <circle cx="10" cy="10" r="10" fill="currentColor" />
+                            <g class="footer-editorial__icon-glyph" transform="translate(10 10) scale(0.56) translate(-10 -10)">
+                              {%- render 'icon', icon: platform -%}
+                            </g>
+                          {%- endif -%}
+                        {%- else -%}
+                          {%- render 'icon', icon: platform -%}
+                        {%- endif -%}
+                      </svg>
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="footer-editorial__bar">
+      {%- if s.show_ship_to and localization.country -%}
+        {%- if localization.available_countries.size > 1 -%}
+          {%- form 'localization', class: 'footer-editorial__ship-to' -%}
+            <label class="footer-editorial__ship-to-label" for="{{ country_select_id }}">{{ s.ship_to_label }} :</label>
+            <span class="footer-editorial__ship-to-value">
+              <span class="footer-editorial__mono-link" aria-hidden="true">{{ localization.country.name }}</span>
+              <select id="{{ country_select_id }}" name="country_code" onchange="this.form.submit()">
+                {%- for country in localization.available_countries -%}
+                  <option
+                    value="{{ country.iso_code }}"
+                    {% if country.iso_code == localization.country.iso_code %}
+                      selected
+                    {% endif %}
+                  >
+                    {{- country.name -}}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </span>
+            <noscript><button type="submit">{{ s.ship_to_label }}</button></noscript>
+          {%- endform -%}
+        {%- else -%}
+          <p class="footer-editorial__ship-to">
+            <span class="footer-editorial__ship-to-label">{{ s.ship_to_label }} :</span>
+            <span class="footer-editorial__mono-link">{{ localization.country.name }}</span>
+          </p>
+        {%- endif -%}
+      {%- endif -%}
+
+      <p class="footer-editorial__copyright">
+        &copy; {{ shop.name }} {{ 'now' | date: '%Y' }}.
+        {{- s.copyright_text | prepend: ' ' -}}
+      </p>
+    </div>
+  </div>
+
+  {%- if s.show_signature -%}
+    <div class="footer-editorial__signature">
+      <a href="{{ routes.root_url }}" class="footer-editorial__signature-link{% unless show_signature_image %} footer-editorial__signature-link--text{% endunless %}">
+        {%- if show_signature_image -%}
+          {{
+            signature_logo
+            | image_url: width: 600
+            | image_tag:
+              widths: '200, 300, 400, 600',
+              sizes: '(min-width: 750px) var(--fe-logo-width), var(--fe-logo-width-mobile)',
+              alt: shop.name,
+              loading: 'lazy',
+              class: 'footer-editorial__logo'
+          }}
+        {%- else -%}
+          <span class="footer-editorial__wordmark footer-editorial__wordmark--{{ s.signature_font }}">
+            {{- signature_text -}}
+            {%- if s.signature_subtext != blank -%}
+              <span class="footer-editorial__wordmark-sub">{{ s.signature_subtext }}</span>
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .footer-editorial {
+    --fe-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+    position: relative;
+    color: var(--fe-text);
+    font-family: var(--font-body--family);
+    --fe-divider-auto: color-mix(in srgb, var(--fe-text) 18%, var(--fe-background));
+    font-size: var(--fe-link-size);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .footer-editorial--font-heading {
+    --fe-mono: var(--font-heading--family);
+  }
+
+  .footer-editorial--font-body {
+    --fe-mono: var(--font-body--family);
+  }
+
+  .footer-editorial a,
+  .footer-editorial button,
+  .footer-editorial summary {
+    color: inherit;
+  }
+
+  .footer-editorial a {
+    text-decoration: none;
+  }
+
+  .footer-editorial__main {
+    position: relative;
+    z-index: 1;
+    padding: var(--fe-padding-top) var(--fe-gutter) 0;
+    background: var(--fe-background);
+  }
+
+  /* ---------- Columns ---------- */
+  .footer-editorial__columns {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .footer-editorial__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    font-family: var(--fe-mono);
+    font-size: var(--fe-heading-size);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .footer-editorial__heading::-webkit-details-marker {
+    display: none;
+  }
+
+  .footer-editorial__heading--static {
+    cursor: default;
+  }
+
+  .footer-editorial__links {
+    padding-block-start: 16px;
+  }
+
+  .footer-editorial__links a {
+    display: inline-block;
+    line-height: var(--fe-link-line);
+    transition: opacity 0.2s ease;
+  }
+
+  .footer-editorial__links a:hover,
+  .footer-editorial__social-link:hover {
+    opacity: 0.6;
+  }
+
+  .footer-editorial__placeholder {
+    margin: 16px 0 0;
+    opacity: 0.6;
+  }
+
+  /* Plus / minus toggle (mobile accordions only) */
+  .footer-editorial__toggle {
+    position: relative;
+    flex: none;
+    inline-size: 11px;
+    block-size: 11px;
+  }
+
+  .footer-editorial__toggle::before,
+  .footer-editorial__toggle::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 0;
+    inline-size: 100%;
+    block-size: 1px;
+    background: currentColor;
+    transition: transform 0.2s ease;
+  }
+
+  .footer-editorial__toggle::after {
+    transform: rotate(90deg);
+  }
+
+  .footer-editorial__details[open] .footer-editorial__toggle::after {
+    transform: rotate(0deg);
+  }
+
+  .footer-editorial__column--static-mobile .footer-editorial__toggle {
+    display: none;
+  }
+
+  /* ---------- Newsletter ---------- */
+  .footer-editorial__text {
+    margin: 12px 0 0;
+    line-height: 1.6;
+  }
+
+  .footer-editorial__mono-link {
+    display: inline-block;
+    padding-block-end: 3px;
+    border-block-end: 1px solid currentColor;
+    font-family: var(--fe-mono);
+    font-size: var(--fe-heading-size);
+    letter-spacing: 0.06em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .footer-editorial__subscribe {
+    margin-block-start: 4px;
+  }
+
+  .footer-editorial__subscribe > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .footer-editorial__subscribe > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .footer-editorial__subscribe[open] > summary {
+    display: none;
+  }
+
+  .footer-editorial__field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-inline-size: 280px;
+    border-block-end: 1px solid currentColor;
+  }
+
+  .footer-editorial__field input {
+    flex: 1;
+    min-inline-size: 0;
+    padding: 6px 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    outline-offset: 2px;
+  }
+
+  .footer-editorial__field input::placeholder {
+    color: inherit;
+    opacity: 0.55;
+  }
+
+  .footer-editorial__submit {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: var(--fe-mono);
+    font-size: var(--fe-heading-size);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .footer-editorial__form-message {
+    margin: 8px 0 0;
+  }
+
+  /* ---------- Social ---------- */
+  .footer-editorial__newsletter + .footer-editorial__social {
+    margin-block-start: 34px;
+  }
+
+  .footer-editorial__social-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fe-icon-size);
+    margin-block-start: 16px;
+  }
+
+  .footer-editorial__social-link {
+    display: block;
+    transition: opacity 0.2s ease;
+  }
+
+  .footer-editorial__icon {
+    display: block;
+    inline-size: var(--fe-icon-size);
+    block-size: var(--fe-icon-size);
+    fill: currentColor;
+    color: var(--fe-text);
+  }
+
+  .footer-editorial__icon-glyph {
+    color: var(--fe-background);
+    fill: currentColor;
+  }
+
+  /* ---------- Bottom bar ---------- */
+  .footer-editorial__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+    margin-block-start: 56px;
+    padding-block: 17px;
+    border-block-start: 1px solid var(--fe-divider, var(--fe-divider-auto));
+  }
+
+  .footer-editorial__bar p {
+    margin: 0;
+  }
+
+  .footer-editorial__ship-to {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6em;
+    margin: 0;
+    font-family: var(--fe-mono);
+    font-size: var(--fe-heading-size);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .footer-editorial__ship-to-value {
+    position: relative;
+  }
+
+  .footer-editorial__ship-to-value select {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    opacity: 0;
+    cursor: pointer;
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+
+  .footer-editorial__ship-to-value:has(select:focus-visible) .footer-editorial__mono-link {
+    outline: 1px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  /* ---------- Logo band ---------- */
+  .footer-editorial__signature {
+    display: grid;
+    place-items: center;
+    min-block-size: var(--fe-signature-height);
+    padding: 40px var(--fe-gutter);
+    background: var(--fe-signature-background);
+  }
+
+  /*
+    Curtain: the logo band sticks to the bottom of the viewport underneath the footer,
+    so the footer slides up off it as you reach the end of the page (as on hermes.com).
+    Sticky is bounded by .footer-editorial, so the band can never show outside the footer.
+  */
+  .footer-editorial--curtain .footer-editorial__signature {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 0;
+  }
+
+  .footer-editorial__signature-link {
+    display: block;
+    inline-size: var(--fe-logo-width);
+  }
+
+  .footer-editorial__signature-link--text {
+    inline-size: auto !important;
+  }
+
+  .footer-editorial__logo {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .footer-editorial--logo-black .footer-editorial__logo {
+    filter: brightness(0);
+  }
+
+  .footer-editorial__wordmark {
+    display: block;
+    color: var(--fe-wordmark);
+    font-family: var(--font-heading--family);
+    font-size: var(--fe-wordmark-size);
+    letter-spacing: 0.06em;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .footer-editorial__wordmark--body {
+    font-family: var(--font-body--family);
+  }
+
+  .footer-editorial__wordmark--mono {
+    font-family: var(--fe-mono);
+  }
+
+  .footer-editorial__wordmark-sub {
+    display: block;
+    margin-block-start: 0.45em;
+    font-family: var(--font-body--family);
+    font-size: max(10px, calc(var(--fe-wordmark-size) * 0.45));
+    letter-spacing: 0.2em;
+  }
+
+  /* ---------- Mobile (Hermès mobile layout) ---------- */
+  @media screen and (max-width: 749px) {
+    .footer-editorial__main {
+      padding: min(var(--fe-padding-top), 24px) var(--fe-gutter-mobile) 0;
+    }
+
+    .footer-editorial__column .footer-editorial__heading {
+      padding-block: 13px;
+    }
+
+    .footer-editorial__links {
+      padding-block: 4px 13px;
+    }
+
+    .footer-editorial__links--inline-mobile {
+      display: flex;
+      flex-wrap: wrap;
+      row-gap: 10px;
+    }
+
+    .footer-editorial__links--inline-mobile li {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .footer-editorial__links--inline-mobile li:not(:last-child)::after {
+      content: '|';
+      margin-inline: 18px;
+      opacity: 0.3;
+    }
+
+    .footer-editorial--mobile-dividers .footer-editorial__column {
+      border-block-end: 1px solid var(--fe-divider, var(--fe-divider-auto));
+    }
+
+    .footer-editorial__aside {
+      margin-block-start: 11px;
+      padding-block-start: 24px;
+      border-block-start: 1px solid var(--fe-divider, var(--fe-divider-auto));
+    }
+
+    .footer-editorial__social-list {
+      gap: calc(var(--fe-icon-size-mobile) * 0.67);
+    }
+
+    .footer-editorial__icon {
+      inline-size: var(--fe-icon-size-mobile);
+      block-size: var(--fe-icon-size-mobile);
+    }
+
+    .footer-editorial__bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      margin-block-start: 24px;
+      padding-block: 0;
+    }
+
+    .footer-editorial__ship-to {
+      padding-block: 24px;
+    }
+
+    .footer-editorial__copyright {
+      padding-block: 24px;
+    }
+
+    .footer-editorial__ship-to + .footer-editorial__copyright {
+      border-block-start: 1px solid var(--fe-divider, var(--fe-divider-auto));
+    }
+
+    .footer-editorial__signature {
+      padding-inline: var(--fe-gutter-mobile);
+    }
+
+    .footer-editorial__signature-link {
+      inline-size: var(--fe-logo-width-mobile);
+    }
+
+    .footer-editorial__wordmark {
+      font-size: var(--fe-wordmark-size-mobile);
+    }
+  }
+
+  /* ---------- Tablet ---------- */
+  @media screen and (min-width: 750px) {
+    .footer-editorial__columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 48px var(--fe-column-gap);
+    }
+
+    .footer-editorial__toggle {
+      display: none;
+    }
+
+    .footer-editorial__heading:not(.footer-editorial__heading--static) {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .footer-editorial__text {
+      max-inline-size: 220px;
+    }
+  }
+
+  /* ---------- Desktop: Hermès grid ---------- */
+  @media screen and (min-width: 1200px) {
+    .footer-editorial__columns {
+      grid-template-columns: repeat(var(--fe-tracks), minmax(0, 1fr));
+    }
+
+    .footer-editorial__aside {
+      grid-column-start: var(--fe-aside-start);
+      grid-row: 1;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Editorial footer",
+  "tag": "div",
+  "class": "footer-editorial-section",
+  "max_blocks": 5,
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "blocks": [
+    {
+      "type": "menu_column",
+      "name": "Menu column",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "footer"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "info": "Leave empty to use the menu title"
+        },
+        {
+          "type": "header",
+          "content": "Mobile"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_on_mobile",
+          "label": "Open by default",
+          "info": "Only applies when mobile accordions are on",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "inline_on_mobile",
+          "label": "Show links inline with separators",
+          "info": "Hermès uses this for its Legal column",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu",
+      "label": "Footer menu",
+      "info": "Each top-level item becomes a column and its sub-items become the links. Hermès has 4 columns + newsletter."
+    },
+    {
+      "type": "paragraph",
+      "content": "You can also add Menu column blocks (up to 5) after the footer menu's columns. The grid adds tracks automatically if your columns need more, so nothing wraps."
+    },
+    {
+      "type": "range",
+      "id": "desktop_tracks",
+      "label": "Desktop grid tracks",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "select",
+      "id": "newsletter_position",
+      "label": "Newsletter column position (desktop)",
+      "options": [
+        {
+          "value": "after_menus",
+          "label": "Right after the menus"
+        },
+        {
+          "value": "column_5",
+          "label": "Track 5 (Hermès)"
+        },
+        {
+          "value": "last",
+          "label": "Last track"
+        }
+      ],
+      "default": "after_menus"
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Column gap",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "gutter_desktop",
+      "label": "Side padding (desktop)",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "gutter_mobile",
+      "label": "Side padding (mobile)",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 20,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_accordion",
+      "label": "Collapse menus into accordions",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "open_last_on_mobile",
+      "label": "Open the footer menu's last column by default",
+      "info": "Hermès opens its Legal column",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "inline_last_on_mobile",
+      "label": "Show the footer menu's last column links inline",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_dividers",
+      "label": "Dividers between menus",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_font",
+      "label": "Heading font",
+      "info": "Headings, Subscribe, Ship to. Hermès uses a monospace font.",
+      "options": [
+        {
+          "value": "mono",
+          "label": "Monospace (Hermès)"
+        },
+        {
+          "value": "heading",
+          "label": "Theme heading font"
+        },
+        {
+          "value": "body",
+          "label": "Theme body font"
+        }
+      ],
+      "default": "mono"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "label": "Link size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "link_line_height",
+      "label": "Link row height",
+      "min": 16,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Heading",
+      "default": "Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Text",
+      "default": "Receive our newsletter and discover our stories, collections, and surprises."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button_label",
+      "label": "Link label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Email placeholder",
+      "default": "Email address"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_submit_label",
+      "label": "Submit label",
+      "default": "OK"
+    },
+    {
+      "type": "header",
+      "content": "Social media"
+    },
+    {
+      "type": "text",
+      "id": "social_heading",
+      "label": "Heading",
+      "default": "Follow us"
+    },
+    {
+      "type": "select",
+      "id": "icon_style",
+      "label": "Icon style",
+      "options": [
+        {
+          "value": "circle",
+          "label": "Filled circle (Hermès)"
+        },
+        {
+          "value": "plain",
+          "label": "Plain"
+        }
+      ],
+      "default": "circle"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size (desktop)",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "icon_size_mobile",
+      "label": "Icon size (mobile)",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "paragraph",
+      "content": "Each filled-in link shows its icon. Replace the placeholder links with your profile URLs, e.g. https://www.instagram.com/yourbrand."
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram"
+    },
+    {
+      "type": "url",
+      "id": "youtube_url",
+      "label": "YouTube"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok"
+    },
+    {
+      "type": "url",
+      "id": "pinterest_url",
+      "label": "Pinterest"
+    },
+    {
+      "type": "url",
+      "id": "x_url",
+      "label": "X (Twitter)"
+    },
+    {
+      "type": "url",
+      "id": "linkedin_url",
+      "label": "LinkedIn"
+    },
+    {
+      "type": "url",
+      "id": "threads_url",
+      "label": "Threads"
+    },
+    {
+      "type": "url",
+      "id": "snapchat_url",
+      "label": "Snapchat"
+    },
+    {
+      "type": "url",
+      "id": "bluesky_url",
+      "label": "Bluesky"
+    },
+    {
+      "type": "header",
+      "content": "Bottom bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ship_to",
+      "label": "Show country selector",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "ship_to_label",
+      "label": "Country label",
+      "default": "Ship to"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Text after copyright",
+      "default": "All rights reserved."
+    },
+    {
+      "type": "header",
+      "content": "Logo band"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_signature",
+      "label": "Show logo band",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "signature_effect",
+      "label": "Scroll effect",
+      "options": [
+        {
+          "value": "curtain",
+          "label": "Curtain reveal (Hermès)"
+        },
+        {
+          "value": "static",
+          "label": "None"
+        }
+      ],
+      "default": "curtain"
+    },
+    {
+      "type": "select",
+      "id": "signature_content",
+      "label": "Show",
+      "options": [
+        {
+          "value": "text",
+          "label": "Text wordmark (Hermès)"
+        },
+        {
+          "value": "image",
+          "label": "Logo image"
+        }
+      ],
+      "default": "text"
+    },
+    {
+      "type": "text",
+      "id": "signature_text",
+      "label": "Wordmark text",
+      "info": "Leave empty to use the store name",
+      "visible_if": "{{ section.settings.signature_content == 'text' }}"
+    },
+    {
+      "type": "text",
+      "id": "signature_subtext",
+      "label": "Small line under the wordmark",
+      "info": "Like PARIS under HERMÈS, e.g. a city",
+      "visible_if": "{{ section.settings.signature_content == 'text' }}"
+    },
+    {
+      "type": "select",
+      "id": "signature_font",
+      "label": "Wordmark font",
+      "options": [
+        {
+          "value": "heading",
+          "label": "Theme heading font"
+        },
+        {
+          "value": "body",
+          "label": "Theme body font"
+        },
+        {
+          "value": "mono",
+          "label": "Monospace"
+        }
+      ],
+      "default": "heading",
+      "visible_if": "{{ section.settings.signature_content == 'text' }}"
+    },
+    {
+      "type": "range",
+      "id": "signature_text_size",
+      "label": "Wordmark size (desktop)",
+      "min": 14,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 24,
+      "visible_if": "{{ section.settings.signature_content == 'text' }}"
+    },
+    {
+      "type": "range",
+      "id": "signature_text_size_mobile",
+      "label": "Wordmark size (mobile)",
+      "min": 12,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 22,
+      "visible_if": "{{ section.settings.signature_content == 'text' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "signature_logo",
+      "label": "Logo",
+      "info": "Leave empty to use the theme logo",
+      "visible_if": "{{ section.settings.signature_content == 'image' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "logo_black",
+      "label": "Make logo black",
+      "info": "Use this if your logo is white or light (it would be invisible on the light band)",
+      "default": false,
+      "visible_if": "{{ section.settings.signature_content == 'image' }}"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width (desktop)",
+      "min": 40,
+      "max": 300,
+      "step": 4,
+      "unit": "px",
+      "default": 100,
+      "visible_if": "{{ section.settings.signature_content == 'image' }}"
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "label": "Logo width (mobile)",
+      "min": 40,
+      "max": 240,
+      "step": 2,
+      "unit": "px",
+      "default": 100,
+      "visible_if": "{{ section.settings.signature_content == 'image' }}"
+    },
+    {
+      "type": "range",
+      "id": "signature_height",
+      "label": "Band height",
+      "min": 98,
+      "max": 498,
+      "step": 4,
+      "unit": "px",
+      "default": 298
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "color_style",
+      "label": "Colour style",
+      "info": "The website styles use your theme colour palette (Theme settings → Colors), so they stay in sync with the site.",
+      "options": [
+        {
+          "value": "website_light",
+          "label": "Website light: cream, black text, red wordmark"
+        },
+        {
+          "value": "website_red",
+          "label": "Website red: red, cream text"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "website_light"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "{{ settings.color_palette.background }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text and icons",
+      "default": "{{ settings.color_palette.color1 }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Dividers",
+      "default": "{{ settings.color_palette.color3 }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "signature_background_color",
+      "label": "Logo band background",
+      "default": "{{ settings.color_palette.color2 }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "wordmark_color",
+      "label": "Wordmark",
+      "default": "{{ settings.color_palette.foreground }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial footer",
+      "category": "t:categories.footer",
+      "settings": {
+        "footer_menu": "footer"
+      }
+    }
+  ]
+}
+{% endschema %}

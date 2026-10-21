@@ -1,0 +1,56 @@
+{%- doc -%}
+  Renders one footer-editorial menu column: a heading plus a list of links,
+  collapsing into an accordion on mobile.
+
+  @param {string} heading - Column heading
+  @param {object[]} [links] - Links to list (menu links or child links)
+  @param {boolean} [accordion_on_mobile] - Collapse into an accordion on mobile
+  @param {boolean} [open_on_mobile] - Start open on mobile
+  @param {boolean} [inline_on_mobile] - Lay links out inline with separators on mobile
+  @param {string} [attributes] - Extra attributes for the column wrapper (e.g. block.shopify_attributes)
+{%- enddoc -%}
+
+{%- liquid
+  assign disable_on_mobile = true
+  assign open_by_default_on_mobile = true
+  if accordion_on_mobile
+    assign disable_on_mobile = false
+    assign open_by_default_on_mobile = open_on_mobile
+  endif
+-%}
+
+{% capture column_children %}
+  <details class="footer-editorial__details" open>
+    <summary class="footer-editorial__heading">
+      <span>{{ heading }}</span>
+      <span class="footer-editorial__toggle" aria-hidden="true"></span>
+    </summary>
+    <nav class="details-content" aria-label="{{ heading | escape }}">
+      {%- if links.size > 0 -%}
+        <ul class="footer-editorial__links{% if inline_on_mobile %} footer-editorial__links--inline-mobile{% endif %} list-unstyled">
+          {%- for link in links -%}
+            <li>
+              <a href="{{ link.url }}">
+                {{- link.title -}}
+                {%- if link.data_sharing_opt_out_icon %}{{ link.data_sharing_opt_out_icon }}{% endif -%}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- elsif request.design_mode -%}
+        <p class="footer-editorial__placeholder">Add sub-items to this menu item, or pick a menu with links.</p>
+      {%- endif -%}
+    </nav>
+  </details>
+{% endcapture %}
+
+<div class="footer-editorial__column{% unless accordion_on_mobile %} footer-editorial__column--static-mobile{% endunless %}" {{ attributes }}>
+  {% render 'accordion-custom-component',
+    children: column_children,
+    class: 'footer-editorial__accordion',
+    disable_on_desktop: true,
+    open_by_default_on_desktop: true,
+    disable_on_mobile: disable_on_mobile,
+    open_by_default_on_mobile: open_by_default_on_mobile
+  %}
+</div>
