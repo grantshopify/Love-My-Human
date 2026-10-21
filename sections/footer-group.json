@@ -25,7 +25,7 @@
         "open_last_on_mobile": true,
         "inline_last_on_mobile": true,
         "mobile_dividers": false,
-        "heading_font": "mono",
+        "heading_font": "body",
         "heading_size": 12,
         "link_size": 11,
         "link_line_height": 24,
