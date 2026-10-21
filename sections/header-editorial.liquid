@@ -1261,7 +1261,7 @@
       "type": "checkbox",
       "id": "transparent_home",
       "label": "Transparent over the homepage hero",
-      "info": "White text over the first section, turns solid when you hover, search or open a menu",
+      "info": "White text over the hero at the top of the page. The background appears once you scroll, and while search or a menu is open.",
       "default": false
     },
     {
@@ -1270,15 +1270,15 @@
       "label": "Background appears",
       "options": [
         {
-          "value": "hero",
-          "label": "When the header leaves the hero banner"
+          "value": "scroll",
+          "label": "As soon as you scroll away from the top"
         },
         {
-          "value": "scroll",
-          "label": "As soon as you scroll"
+          "value": "hero",
+          "label": "Only after the hero banner has scrolled past"
         }
       ],
-      "default": "hero",
+      "default": "scroll",
       "visible_if": "{{ section.settings.transparent_home }}"
     },
     {

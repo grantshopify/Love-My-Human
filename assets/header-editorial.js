@@ -37,10 +37,6 @@ class HeaderEditorial extends HTMLElement {
       }
     }
 
-    // Transparent header turns solid while the pointer is over it
-    this.bar.addEventListener('mouseenter', () => this.classList.add('he--solid'), { signal });
-    this.bar.addEventListener('mouseleave', () => this.#syncSolid(), { signal });
-
     if (this.searchInput) {
       this.searchInput.addEventListener('focus', () => this.#openSearch(), { signal });
       this.searchInput.addEventListener('input', this.#onSearchInput, { signal });
@@ -71,8 +67,8 @@ class HeaderEditorial extends HTMLElement {
   #pastHero = false;
 
   /**
-   * Transparent header: turns solid once it is no longer over the hero
-   * (data-solid-after="hero"), or as soon as the page is scrolled (data-solid-after="scroll").
+   * Transparent header: gets its background as soon as the page is scrolled away from the top
+   * (data-solid-after="scroll"), or only once it has left the hero banner (data-solid-after="hero").
    */
   #checkPastHero(position) {
     let past = position > 10;
@@ -170,11 +166,8 @@ class HeaderEditorial extends HTMLElement {
   }
 
   #syncSolid() {
-    const active =
-      this.#pastHero ||
-      Boolean(this.#openTrigger) ||
-      this.classList.contains('he--search-open') ||
-      this.bar.matches(':hover');
+    // Scroll position decides the background; an open mega menu or search also needs it to stay readable
+    const active = this.#pastHero || Boolean(this.#openTrigger) || this.classList.contains('he--search-open');
     this.classList.toggle('he--solid', active);
   }
 
