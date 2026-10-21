@@ -133,7 +133,7 @@
         "category_image_gQWLND": {
           "type": "category_image",
           "settings": {
-            "category": "",
+            "category": "test",
             "caption": "",
             "link": "",
             "hide_image": false
