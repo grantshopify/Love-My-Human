@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "header",
   "name": "t:names.header",
@@ -73,9 +82,9 @@
         }
       },
       "settings": {
-        "logo_position": "left",
+        "logo_position": "center",
         "menu_position": "center",
-        "menu_row": "top",
+        "menu_row": "bottom",
         "customer_account_menu": "customer-account-main-menu",
         "show_search": true,
         "search_position": "right",
@@ -106,7 +115,7 @@
         "bubble_style": "default",
         "bubble_background_color": "",
         "bubble_text_color": "",
-        "enable_transparent_header_home": false,
+        "enable_transparent_header_home": true,
         "home_inverse_logo": false,
         "text_color_transparent_home": "{{ settings.color_palette.background }}",
         "enable_transparent_header_product": false,
@@ -115,42 +124,11 @@
         "enable_transparent_header_collection": false,
         "collection_inverse_logo": false,
         "text_color_transparent_collection": "{{ settings.color_palette.background }}"
-      },
-      "disabled": true
-    },
-    "header_editorial": {
-      "type": "header-editorial",
-      "settings": {
-        "menu": "main-menu",
-        "open_on_hover": true,
-        "show_mega_image": true,
-        "show_view_all": true,
-        "view_all_label": "View all",
-        "tray_title": "Menu",
-        "customer_account_menu": "customer-account-main-menu",
-        "search_placeholder": "Search",
-        "logo_color": "original",
-        "logo_height": 40,
-        "logo_height_mobile": 36,
-        "gutter": 24,
-        "transparent_home": false,
-        "color_style": "website_red",
-        "background_color": "{{ settings.color_palette.foreground }}",
-        "text_color": "{{ settings.color_palette.background }}",
-        "panel_background_color": "{{ settings.color_palette.background }}",
-        "panel_text_color": "{{ settings.color_palette.color1 }}",
-        "sticky_mode": "none",
-        "tray_menu": "",
-        "popular_label": "Suggested searches",
-        "popular_searches": "Dog coats\nDog treats\nDog toys\nPuppy essentials\nCat toys"
-      },
-      "blocks": {},
-      "block_order": []
+      }
     }
   },
   "order": [
     "header_announcements_QPnrTT",
-    "header_editorial",
     "header_section"
   ]
 }

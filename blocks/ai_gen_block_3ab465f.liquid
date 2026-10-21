@@ -1,0 +1,137 @@
+{% doc %}
+  @prompt
+    can you make me a faq page that suits the font thats in the middle of the page, suits iphone and desktop, but isnt the full width of page, is editable, and font ec, can you copy the contact us below, that type of font etc
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-faq-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px;
+    color: {{ block.settings.text_color }};
+    background: {{ block.settings.background_color }};
+    font-family: var(--font-body-family, sans-serif);
+  }
+  .ai-faq-{{ ai_gen_id }}__inner { max-width: 820px; margin: 0 auto; }
+  .ai-faq-{{ ai_gen_id }}__heading {
+    margin: 0 0 24px;
+    color: {{ block.settings.text_color }};
+    font-family: var(--font-heading-family, var(--font-body-family, sans-serif));
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+  .ai-faq-{{ ai_gen_id }}__intro { margin: 0 0 24px; font-size: 16px; line-height: 1.6; }
+  .ai-faq-{{ ai_gen_id }}__intro p { margin: 0 0 12px; }
+  .ai-faq-{{ ai_gen_id }}__item { border-top: 1px solid {{ block.settings.border_color }}; }
+  .ai-faq-{{ ai_gen_id }}__item:last-child { border-bottom: 1px solid {{ block.settings.border_color }}; }
+  .ai-faq-{{ ai_gen_id }}__question {
+    display: flex;
+    width: 100%;
+    min-height: 56px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    font-family: var(--font-body-family, sans-serif);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    cursor: pointer;
+  }
+  .ai-faq-{{ ai_gen_id }}__question:focus-visible { outline: 2px solid {{ block.settings.text_color }}; outline-offset: 4px; }
+  .ai-faq-{{ ai_gen_id }}__icon { flex: 0 0 20px; font-family: var(--font-body-family, sans-serif); font-size: 22px; font-weight: 400; line-height: 1; text-align: center; }
+  .ai-faq-{{ ai_gen_id }}__answer { padding: 0 36px 20px 0; font-family: var(--font-body-family, sans-serif); font-size: 14px; line-height: 1.7; }
+  .ai-faq-{{ ai_gen_id }}__answer p { margin: 0 0 12px; }
+  .ai-faq-{{ ai_gen_id }}__answer p:last-child { margin-bottom: 0; }
+  @media screen and (max-width: 749px) {
+    .ai-faq-{{ ai_gen_id }} { padding: 24px 18px; }
+    .ai-faq-{{ ai_gen_id }}__question { font-size: 15px; }
+    .ai-faq-{{ ai_gen_id }}__answer, .ai-faq-{{ ai_gen_id }}__intro { font-size: 14px; }
+  }
+{% endstyle %}
+
+<faq-list-{{ ai_gen_id }} class="ai-faq-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-faq-{{ ai_gen_id }}__inner">
+    {% if block.settings.heading != blank %}<h2 class="ai-faq-{{ ai_gen_id }}__heading">{{ block.settings.heading | escape }}</h2>{% endif %}
+    {% if block.settings.intro != blank %}<div class="ai-faq-{{ ai_gen_id }}__intro">{{ block.settings.intro }}</div>{% endif %}
+    <div class="ai-faq-{{ ai_gen_id }}__list">
+      {% for i in (1..8) %}
+        {% assign question_key = 'question_' | append: i %}
+        {% assign answer_key = 'answer_' | append: i %}
+        {% assign question = block.settings[question_key] %}
+        {% assign answer = block.settings[answer_key] %}
+        {% if question != blank %}
+          <div class="ai-faq-{{ ai_gen_id }}__item">
+            <button class="ai-faq-{{ ai_gen_id }}__question" type="button" aria-expanded="false" aria-controls="ai-faq-answer-{{ ai_gen_id }}-{{ i }}">
+              <span>{{ question | escape }}</span><span class="ai-faq-{{ ai_gen_id }}__icon" aria-hidden="true">+</span>
+            </button>
+            <div class="ai-faq-{{ ai_gen_id }}__answer" id="ai-faq-answer-{{ ai_gen_id }}-{{ i }}" hidden>{{ answer }}</div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</faq-list-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    const elementName = 'faq-list-{{ ai_gen_id }}';
+    if (customElements.get(elementName)) return;
+    class FAQList extends HTMLElement {
+      connectedCallback() {
+        this.querySelectorAll('.ai-faq-{{ ai_gen_id }}__question').forEach((button) => {
+          button.addEventListener('click', () => {
+            const expanded = button.getAttribute('aria-expanded') === 'true';
+            const answer = this.querySelector('#' + button.getAttribute('aria-controls'));
+            button.setAttribute('aria-expanded', String(!expanded));
+            answer.hidden = expanded;
+            button.querySelector('.ai-faq-{{ ai_gen_id }}__icon').textContent = expanded ? '+' : '−';
+          });
+        });
+      }
+    }
+    customElements.define(elementName, FAQList);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "FAQ list",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Frequently asked questions" },
+    { "type": "richtext", "id": "intro", "label": "Introduction", "default": "<p>Find answers to common questions below.</p>" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 85 },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#000000" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#F6F7F1" },
+    { "type": "color", "id": "border_color", "label": "Divider", "default": "#777777" },
+    { "type": "header", "content": "Questions and answers" },
+    { "type": "text", "id": "question_1", "label": "Question 1", "default": "How can I contact you?" },
+    { "type": "richtext", "id": "answer_1", "label": "Answer 1", "default": "<p>Please use the contact page and our team will be happy to help.</p>" },
+    { "type": "text", "id": "question_2", "label": "Question 2", "default": "When will my order arrive?" },
+    { "type": "richtext", "id": "answer_2", "label": "Answer 2", "default": "<p>Delivery times vary by destination. Please check the delivery information shown at checkout.</p>" },
+    { "type": "text", "id": "question_3", "label": "Question 3", "default": "Can I return an item?" },
+    { "type": "richtext", "id": "answer_3", "label": "Answer 3", "default": "<p>Please refer to our returns policy for eligibility and instructions.</p>" },
+    { "type": "text", "id": "question_4", "label": "Question 4", "default": "How do I track my order?" },
+    { "type": "richtext", "id": "answer_4", "label": "Answer 4", "default": "<p>Tracking details are sent by email once your order has been dispatched.</p>" },
+    { "type": "text", "id": "question_5", "label": "Question 5" },
+    { "type": "richtext", "id": "answer_5", "label": "Answer 5" },
+    { "type": "text", "id": "question_6", "label": "Question 6" },
+    { "type": "richtext", "id": "answer_6", "label": "Answer 6" },
+    { "type": "text", "id": "question_7", "label": "Question 7" },
+    { "type": "richtext", "id": "answer_7", "label": "Answer 7" },
+    { "type": "text", "id": "question_8", "label": "Question 8" },
+    { "type": "richtext", "id": "answer_8", "label": "Answer 8" }
+  ],
+  "presets": [{ "name": "FAQ list" }],
+  "tag": null,
+  "class": "faq-list-block"
+}
+{% endschema %}
