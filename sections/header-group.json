@@ -81,6 +81,7 @@
           "blocks": {}
         }
       },
+      "disabled": true,
       "settings": {
         "logo_position": "center",
         "menu_position": "center",
@@ -125,10 +126,53 @@
         "collection_inverse_logo": false,
         "text_color_transparent_collection": "{{ settings.color_palette.background }}"
       }
+    },
+    "header_editorial_PEbGEX": {
+      "type": "header-editorial",
+      "blocks": {
+        "category_image_gQWLND": {
+          "type": "category_image",
+          "settings": {
+            "category": "",
+            "caption": "",
+            "link": "",
+            "hide_image": false
+          }
+        }
+      },
+      "block_order": [
+        "category_image_gQWLND"
+      ],
+      "name": "Editorial header",
+      "settings": {
+        "menu": "main-menu",
+        "open_on_hover": true,
+        "show_mega_image": true,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "tray_title": "Menu",
+        "tray_menu": "",
+        "customer_account_menu": "customer-account-main-menu",
+        "search_placeholder": "Search",
+        "popular_label": "Suggested searches",
+        "popular_searches": "Dog coats\nDog treats\nDog toys\nPuppy essentials\nCat toys",
+        "logo_color": "original",
+        "logo_height": 40,
+        "logo_height_mobile": 36,
+        "gutter": 24,
+        "sticky_mode": "none",
+        "transparent_home": false,
+        "color_style": "website_red",
+        "background_color": "{{ settings.color_palette.foreground }}",
+        "text_color": "{{ settings.color_palette.background }}",
+        "panel_background_color": "{{ settings.color_palette.background }}",
+        "panel_text_color": "{{ settings.color_palette.color1 }}"
+      }
     }
   },
   "order": [
     "header_announcements_QPnrTT",
-    "header_section"
+    "header_section",
+    "header_editorial_PEbGEX"
   ]
 }
