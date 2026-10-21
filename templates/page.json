@@ -59,14 +59,14 @@
         "padding-block-end": 80
       }
     },
-    "section_dmeRMf": {
+    "section_TqYU69": {
       "type": "section",
       "blocks": {
-        "text_H9Rp9p": {
+        "text_DeRPqW": {
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<h2>modern slavery statement</h2>",
+            "text": "<h2>privacy policy</h2>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
@@ -90,7 +90,7 @@
         }
       },
       "block_order": [
-        "text_H9Rp9p"
+        "text_DeRPqW"
       ],
       "name": "t:names.rich_text_section",
       "settings": {
@@ -125,6 +125,6 @@
   },
   "order": [
     "main",
-    "section_dmeRMf"
+    "section_TqYU69"
   ]
 }
