@@ -46,6 +46,7 @@
   data-predictive-url="{{ routes.predictive_search_url }}"
   data-search-url="{{ routes.search_url }}"
   data-hover="{{ s.open_on_hover }}"
+  data-solid-after="{{ s.transparent_solid_after }}"
   style="
     --he-background: {{ he_background }};
     --he-text: {{ he_text }};
@@ -1262,6 +1263,23 @@
       "label": "Transparent over the homepage hero",
       "info": "White text over the first section, turns solid when you hover, search or open a menu",
       "default": false
+    },
+    {
+      "type": "select",
+      "id": "transparent_solid_after",
+      "label": "Background appears",
+      "options": [
+        {
+          "value": "hero",
+          "label": "When the header leaves the hero banner"
+        },
+        {
+          "value": "scroll",
+          "label": "As soon as you scroll"
+        }
+      ],
+      "default": "hero",
+      "visible_if": "{{ section.settings.transparent_home }}"
     },
     {
       "type": "header",

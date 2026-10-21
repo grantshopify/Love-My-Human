@@ -48,11 +48,18 @@ class HeaderEditorial extends HTMLElement {
 
     this.popularTemplate = this.querySelector('template[data-popular-searches]');
 
-    // "Show when scrolling up": the page scrolls inside .page-wrapper on desktop, the window on mobile
-    if (this.classList.contains('he--sticky-scroll-up')) {
-      const onScroll = (event) => this.#onScroll(event.currentTarget === window ? window.scrollY : event.currentTarget.scrollTop);
+    // The page scrolls inside .page-wrapper on desktop and the window on mobile, so listen to both
+    const scrollUp = this.classList.contains('he--sticky-scroll-up');
+    const transparent = this.classList.contains('he--transparent');
+    if (scrollUp || transparent) {
+      const onScroll = (event) => {
+        const position = event.currentTarget === window ? window.scrollY : event.currentTarget.scrollTop;
+        if (scrollUp) this.#onScroll(position);
+        if (transparent) this.#checkPastHero(position);
+      };
       window.addEventListener('scroll', onScroll, { signal, passive: true });
       document.querySelector('.page-wrapper')?.addEventListener('scroll', onScroll, { signal, passive: true });
+      if (transparent) this.#checkPastHero(window.scrollY);
     }
 
     this.#measure();
@@ -61,6 +68,22 @@ class HeaderEditorial extends HTMLElement {
   }
 
   #lastScroll = 0;
+  #pastHero = false;
+
+  /**
+   * Transparent header: turns solid once it is no longer over the hero
+   * (data-solid-after="hero"), or as soon as the page is scrolled (data-solid-after="scroll").
+   */
+  #checkPastHero(position) {
+    let past = position > 10;
+    if (this.dataset.solidAfter !== 'scroll') {
+      const hero = document.querySelector('#MainContent > .shopify-section');
+      if (hero) past = hero.getBoundingClientRect().bottom <= this.bar.getBoundingClientRect().height;
+    }
+    if (past === this.#pastHero) return;
+    this.#pastHero = past;
+    this.#syncSolid();
+  }
 
   #onScroll(position) {
     const delta = position - this.#lastScroll;
@@ -148,7 +171,10 @@ class HeaderEditorial extends HTMLElement {
 
   #syncSolid() {
     const active =
-      Boolean(this.#openTrigger) || this.classList.contains('he--search-open') || this.bar.matches(':hover');
+      this.#pastHero ||
+      Boolean(this.#openTrigger) ||
+      this.classList.contains('he--search-open') ||
+      this.bar.matches(':hover');
     this.classList.toggle('he--solid', active);
   }
 
