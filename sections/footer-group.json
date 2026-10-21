@@ -56,7 +56,7 @@
             "icon_zGq33i": {
               "type": "icon",
               "settings": {
-                "icon": "eye",
+                "icon": "price_tag",
                 "width": 32,
                 "link": "",
                 "open_in_new_tab": false,
@@ -106,7 +106,7 @@
                 "text_LM3Afg": {
                   "type": "text",
                   "settings": {
-                    "text": "<h2>Intentional design</h2>",
+                    "text": "<p>Secure Payments</p>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "center",
@@ -131,7 +131,7 @@
                 "text_xW6LTC": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Everything we do starts with why</p>",
+                    "text": "<p>Shop with confidence using safe and secure payment methods.</p>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "center",
