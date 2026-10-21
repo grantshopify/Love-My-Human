@@ -130,10 +130,31 @@
     "header_editorial_PEbGEX": {
       "type": "header-editorial",
       "blocks": {
+        "category_image_DFReNT": {
+          "type": "category_image",
+          "settings": {
+            "category": "Wholesale",
+            "image": "shopify://shop_images/blogImage_78f861b2-5271-4f77-99f5-5b894ef4e58f.webp",
+            "caption": "",
+            "link": "",
+            "hide_image": false
+          }
+        },
+        "category_image_KP9JXX": {
+          "type": "category_image",
+          "settings": {
+            "category": "Townhouse",
+            "image": "shopify://shop_images/image_13.webp",
+            "caption": "",
+            "link": "",
+            "hide_image": false
+          }
+        },
         "category_image_gQWLND": {
           "type": "category_image",
           "settings": {
-            "category": "test",
+            "category": "Puppies",
+            "image": "shopify://shop_images/LuxuryDogLoversChristmas_2_0a954db0-7bd8-4dd3-a212-d289494db10d.webp",
             "caption": "",
             "link": "",
             "hide_image": false
@@ -141,6 +162,8 @@
         }
       },
       "block_order": [
+        "category_image_DFReNT",
+        "category_image_KP9JXX",
         "category_image_gQWLND"
       ],
       "name": "Editorial header",
