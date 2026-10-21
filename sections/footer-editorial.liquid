@@ -141,9 +141,14 @@
             {%- liquid
               assign open_on_mobile = false
               assign inline_on_mobile = false
+              if s.mobile_link_layout == 'inline_all'
+                assign inline_on_mobile = true
+              endif
               if forloop.last
                 assign open_on_mobile = s.open_last_on_mobile
-                assign inline_on_mobile = s.inline_last_on_mobile
+                if s.mobile_link_layout == 'inline_last'
+                  assign inline_on_mobile = true
+                endif
               endif
             -%}
             {% render 'footer-editorial-column',
@@ -155,12 +160,18 @@
             %}
           {%- endfor -%}
         {%- else -%}
+          {%- liquid
+            assign inline_single_column = false
+            if s.mobile_link_layout != 'list'
+              assign inline_single_column = true
+            endif
+          -%}
           {% render 'footer-editorial-column',
             heading: footer_menu.title,
             links: footer_menu.links,
             accordion_on_mobile: s.mobile_accordion,
             open_on_mobile: s.open_last_on_mobile,
-            inline_on_mobile: s.inline_last_on_mobile
+            inline_on_mobile: inline_single_column
           %}
         {%- endif -%}
       {%- endif -%}
@@ -176,13 +187,24 @@
           if heading == blank
             assign heading = 'Menu'
           endif
+          case s.mobile_link_layout
+            when 'inline_all'
+              assign inline_on_mobile = true
+            when 'list'
+              assign inline_on_mobile = false
+            else
+              assign inline_on_mobile = block.settings.inline_on_mobile
+              if forloop.last
+                assign inline_on_mobile = true
+              endif
+          endcase
         -%}
         {% render 'footer-editorial-column',
           heading: heading,
           links: menu.links,
           accordion_on_mobile: s.mobile_accordion,
           open_on_mobile: block.settings.open_on_mobile,
-          inline_on_mobile: block.settings.inline_on_mobile,
+          inline_on_mobile: inline_on_mobile,
           attributes: block.shopify_attributes
         %}
       {%- endfor -%}
@@ -887,7 +909,7 @@
           "type": "checkbox",
           "id": "inline_on_mobile",
           "label": "Show links inline with separators",
-          "info": "Hermès uses this for its Legal column",
+          "info": "Used when Mobile link layout is \"Last column inline\" (the last column is always inline then)",
           "default": false
         }
       ]
@@ -995,10 +1017,24 @@
       "default": true
     },
     {
-      "type": "checkbox",
-      "id": "inline_last_on_mobile",
-      "label": "Show the footer menu's last column links inline",
-      "default": true
+      "type": "select",
+      "id": "mobile_link_layout",
+      "label": "Mobile link layout",
+      "options": [
+        {
+          "value": "inline_all",
+          "label": "All columns inline with separators (Hermès)"
+        },
+        {
+          "value": "inline_last",
+          "label": "Last column inline, others as a list"
+        },
+        {
+          "value": "list",
+          "label": "All columns as a list"
+        }
+      ],
+      "default": "inline_all"
     },
     {
       "type": "checkbox",

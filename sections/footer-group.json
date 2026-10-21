@@ -9,7 +9,6 @@
       "settings": {
         "footer_menu": "footer-menu-new",
         "open_last_on_mobile": true,
-        "inline_last_on_mobile": true,
         "show_newsletter": true,
         "newsletter_heading": "Join the pack",
         "newsletter_text": "Receive our newsletter and discover our stories, collections, and surprises.",
@@ -59,7 +58,8 @@
         "signature_text_size_mobile": 22,
         "color_style": "website_light",
         "wordmark_color": "{{ settings.color_palette.foreground }}",
-        "logo_color": "wordmark"
+        "logo_color": "wordmark",
+        "mobile_link_layout": "inline_all"
       }
     }
   },
