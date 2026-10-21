@@ -49,7 +49,7 @@
         "threads_url": "",
         "snapchat_url": "",
         "bluesky_url": "",
-        "show_ship_to": true,
+        "show_ship_to": false,
         "ship_to_label": "Ship to",
         "copyright_text": "All rights reserved.",
         "show_signature": true,
