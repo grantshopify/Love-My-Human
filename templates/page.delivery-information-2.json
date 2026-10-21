@@ -59,80 +59,17 @@
         "padding-block-end": 80
       }
     },
-    "17925893098b178183": {
-      "type": "_blocks",
-      "blocks": {
-        "ai_gen_block_3ab465f_9axPmw": {
-          "type": "ai_gen_block_3ab465f",
-          "settings": {
-            "heading": "Frequently asked questions",
-            "intro": "<p>Find answers to common questions below.</p>",
-            "desktop_width_percent": 85,
-            "text_color": "#000000",
-            "background_color": "#F6F7F1",
-            "border_color": "#777777",
-            "question_1": "How can I contact you?",
-            "answer_1": "<p>Please use the contact page and our team will be happy to help.</p>",
-            "question_2": "When will my order arrive?",
-            "answer_2": "<p>Delivery times vary by destination. Please check the delivery information shown at checkout.</p>",
-            "question_3": "Can I return an item?",
-            "answer_3": "<p>Please refer to our returns policy for eligibility and instructions.</p>",
-            "question_4": "How do I track my order?",
-            "answer_4": "<p>Tracking details are sent by email once your order has been dispatched.</p>",
-            "question_5": "",
-            "answer_5": "",
-            "question_6": "",
-            "answer_6": "",
-            "question_7": "",
-            "answer_7": "",
-            "question_8": "",
-            "answer_8": ""
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "ai_gen_block_3ab465f_9axPmw"
-      ],
-      "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
-    "section_JHFjDW": {
+    "section_PNpxVH": {
       "type": "section",
       "blocks": {
-        "text_hnPmpr": {
+        "text_cUMQmT": {
           "type": "text",
+          "name": "t:names.heading",
           "settings": {
-            "text": "<h2>Contact us</h2>",
-            "width": "100%",
+            "text": "<h2>shipping & delivery</h2>",
+            "width": "fit-content",
             "max_width": "normal",
-            "alignment": "center",
+            "alignment": "left",
             "type_preset": "rte",
             "font": "var(--font-body--family)",
             "font_size": "",
@@ -150,52 +87,12 @@
             "padding-inline-end": 0
           },
           "blocks": {}
-        },
-        "contact_form_bzgWke": {
-          "type": "contact-form",
-          "settings": {
-            "width": "custom",
-            "custom_width": 50,
-            "width_mobile": "custom",
-            "custom_width_mobile": 100,
-            "background_color": "",
-            "input_style": "default",
-            "input_background_color": "{{ settings.color_palette.background }}",
-            "input_text_color": "{{ settings.color_palette.foreground }}",
-            "input_border_color": "{{ settings.color_palette.foreground }}",
-            "border_width": 1,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "submit-button": {
-              "type": "contact-form-submit-button",
-              "static": true,
-              "settings": {
-                "label": "Submit",
-                "style_class": "button",
-                "custom_button_background": "{{ settings.color_palette.foreground }}",
-                "custom_button_text": "{{ settings.color_palette.background }}",
-                "custom_button_border": "{{ settings.color_palette.background }}",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
         }
       },
       "block_order": [
-        "text_hnPmpr",
-        "contact_form_bzgWke"
+        "text_cUMQmT"
       ],
-      "name": "t:names.contact_form",
+      "name": "t:names.rich_text_section",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -204,9 +101,9 @@
         "align_baseline": false,
         "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "center",
-        "gap": 32,
+        "gap": 25,
         "section_width": "page-width",
-        "section_height": "",
+        "section_height": "small",
         "section_height_custom": 50,
         "background_media": "none",
         "background_color": "",
@@ -221,14 +118,13 @@
         "border_opacity": 100,
         "border_color": "",
         "border_radius": 0,
-        "padding-block-start": 32,
-        "padding-block-end": 32
+        "padding-block-start": 48,
+        "padding-block-end": 48
       }
     }
   },
   "order": [
     "main",
-    "17925893098b178183",
-    "section_JHFjDW"
+    "section_PNpxVH"
   ]
 }
