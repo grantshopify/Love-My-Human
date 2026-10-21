@@ -1,0 +1,1327 @@
+{%- liquid
+  assign s = section.settings
+  assign menu = s.menu
+  assign max_columns = 6
+
+  # Colours: the presets read the theme colour palette so the header follows the website
+  assign palette = settings.color_palette
+  case s.color_style
+    when 'website_light'
+      assign he_background = palette.background
+      assign he_text = palette.color1
+      assign he_panel_background = palette.background
+      assign he_panel_text = palette.color1
+    when 'custom'
+      assign he_background = s.background_color
+      assign he_text = s.text_color
+      assign he_panel_background = s.panel_background_color
+      assign he_panel_text = s.panel_text_color
+    else
+      assign he_background = palette.foreground
+      assign he_text = palette.background
+      assign he_panel_background = palette.background
+      assign he_panel_text = palette.color1
+  endcase
+
+  assign transparent = false
+  if s.transparent_home and template.name == 'index'
+    assign transparent = true
+  endif
+
+  assign logo = s.logo | default: settings.logo
+  assign logo_inverse = s.logo_inverse | default: logo
+
+  assign sticky_class = ''
+  case s.sticky_mode
+    when 'always'
+      assign sticky_class = ' he--sticky'
+    when 'scroll_up'
+      assign sticky_class = ' he--sticky he--sticky-scroll-up'
+  endcase
+  assign search_id = 'HeaderEditorialSearch-' | append: section.id
+-%}
+
+<header-editorial
+  class="he{% if transparent %} he--transparent{% endif %}{{ sticky_class }}"
+  data-predictive-url="{{ routes.predictive_search_url }}"
+  data-search-url="{{ routes.search_url }}"
+  data-hover="{{ s.open_on_hover }}"
+  style="
+    --he-background: {{ he_background }};
+    --he-text: {{ he_text }};
+    --he-panel-background: {{ he_panel_background }};
+    --he-panel-text: {{ he_panel_text }};
+    --he-logo-height: {{ s.logo_height }}px;
+    --he-logo-height-mobile: {{ s.logo_height_mobile }}px;
+    --he-gutter: {{ s.gutter }}px;
+  "
+>
+  <div class="he__bar">
+    {%- comment -%} Top row: menu + search (left), logo (centre), account + bag (right) {%- endcomment -%}
+    <div class="he__top">
+      <div class="he__start">
+        <button
+          type="button"
+          class="he__icon-button he__menu-toggle"
+          aria-label="{{ s.tray_title | escape }}"
+          aria-controls="HeaderEditorialTray-{{ section.id }}"
+          aria-expanded="false"
+          data-action="open-tray"
+        >
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" width="20" height="20"><path d="M2 5h16M2 10h16M2 15h16" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+        </button>
+
+        <form
+          action="{{ routes.search_url }}"
+          method="get"
+          role="search"
+          class="he__search"
+          data-search-form
+        >
+          <button type="button" class="he__icon-button he__search-icon" data-action="open-search" aria-label="{{ s.search_placeholder | escape }}">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" width="20" height="20"><circle cx="8.5" cy="8.5" r="6" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="m13 13 5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+          </button>
+          <label class="visually-hidden" for="{{ search_id }}">{{ s.search_placeholder }}</label>
+          <input
+            id="{{ search_id }}"
+            class="he__search-input"
+            type="search"
+            name="q"
+            placeholder="{{ s.search_placeholder | escape }}"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            role="combobox"
+            aria-expanded="false"
+            aria-controls="HeaderEditorialResults-{{ section.id }}"
+            aria-autocomplete="list"
+            data-search-input
+          >
+          <input type="hidden" name="options[prefix]" value="last">
+          <button type="button" class="he__search-clear" data-action="clear-search" aria-label="{{ 'actions.clear' | t }}" hidden>
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" width="14" height="14"><path d="m4 4 12 12M16 4 4 16" stroke="currentColor" stroke-width="1.2"/></svg>
+          </button>
+        </form>
+      </div>
+
+      <a href="{{ routes.root_url }}" class="he__logo{% if transparent and s.logo_inverse != blank %} he__logo--has-inverse{% endif %}">
+        {%- if transparent and s.logo_inverse != blank -%}
+          {{
+            logo_inverse
+            | image_url: width: 600
+            | image_tag:
+              widths: '150, 300, 450, 600',
+              sizes: '200px',
+              alt: shop.name,
+              class: 'he__logo-image he__logo-image--inverse',
+              loading: 'eager'
+          }}
+        {%- endif -%}
+        {%- if logo != blank and s.logo_color == 'original' -%}
+          {{
+            logo
+            | image_url: width: 600
+            | image_tag:
+              widths: '150, 300, 450, 600',
+              sizes: '200px',
+              alt: shop.name,
+              class: 'he__logo-image',
+              loading: 'eager',
+              fetchpriority: 'high'
+          }}
+        {%- elsif logo != blank -%}
+          <span
+            class="he__logo-image he__logo-image--tinted"
+            role="img"
+            aria-label="{{ shop.name | escape }}"
+            style="--he-logo-mask: url('{{ logo | image_url: width: 600 }}'); aspect-ratio: {{ logo.aspect_ratio }};"
+          ></span>
+        {%- else -%}
+          <span class="he__wordmark">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+
+      <div class="he__end">
+        {% render 'header-actions', section: section, display_style: 'icon', customer_account_menu: s.customer_account_menu %}
+      </div>
+    </div>
+
+    {%- comment -%} Desktop category bar + mega menus {%- endcomment -%}
+    {%- if menu != blank -%}
+      <nav class="he__nav" aria-label="{{ menu.title | escape }}">
+        <ul class="he__nav-list list-unstyled">
+          {%- for link in menu.links limit: 12 -%}
+            {%- assign panel_id = 'HeaderEditorialPanel-' | append: section.id | append: '-' | append: forloop.index -%}
+            <li class="he__nav-item">
+              {%- if link.links.size > 0 -%}
+                <button
+                  type="button"
+                  class="he__nav-link{% if link.url != routes.root_url and link.active or link.url != routes.root_url and link.child_active %} he__nav-link--current{% endif %}"
+                  aria-expanded="false"
+                  aria-controls="{{ panel_id }}"
+                  data-mega-trigger
+                >
+                  {{- link.title -}}
+                </button>
+                <div class="he__mega" id="{{ panel_id }}" hidden data-mega-panel>
+                  <div class="he__mega-inner">
+                    {%- liquid
+                      # A "Category image" block whose category matches this menu item wins;
+                      # otherwise fall back to the image of the collection the item links to.
+                      assign feature_image = nil
+                      assign feature_caption = link.title
+                      assign feature_url = link.url
+                      assign feature_block = nil
+                      assign link_key = link.title | handleize
+                      for feature in section.blocks
+                        assign feature_key = feature.settings.category | handleize
+                        if feature.type == 'category_image' and feature_key == link_key
+                          assign feature_block = feature
+                          break
+                        endif
+                      endfor
+                      if feature_block != nil
+                        if feature_block.settings.hide_image == false
+                          assign feature_image = feature_block.settings.image | default: link.object.featured_image | default: link.object.image
+                        endif
+                        if feature_block.settings.caption != blank
+                          assign feature_caption = feature_block.settings.caption
+                        endif
+                        if feature_block.settings.link != blank
+                          assign feature_url = feature_block.settings.link
+                        endif
+                      elsif s.show_mega_image
+                        assign feature_image = link.object.featured_image | default: link.object.image
+                      endif
+                    -%}
+                    {%- if feature_image != blank -%}
+                      <a class="he__mega-feature" href="{{ feature_url }}"{% if feature_block %} {{ feature_block.shopify_attributes }}{% endif %}>
+                        {{
+                          feature_image
+                          | image_url: width: 600
+                          | image_tag:
+                            widths: '300, 500, 600',
+                            sizes: '250px',
+                            alt: feature_caption,
+                            loading: 'lazy',
+                            class: 'he__mega-feature-image'
+                        }}
+                        <span class="he__mega-feature-caption">{{ feature_caption }}</span>
+                      </a>
+                    {%- endif -%}
+
+                    <div class="he__mega-columns">
+                      {%- assign has_grandchildren = false -%}
+                      {%- for child in link.links -%}
+                        {%- if child.links.size > 0 -%}{%- assign has_grandchildren = true -%}{%- endif -%}
+                      {%- endfor -%}
+
+                      {%- if has_grandchildren -%}
+                        {%- for child in link.links limit: max_columns -%}
+                          <div class="he__mega-column">
+                            <a class="he__mega-heading" href="{{ child.url }}">{{ child.title }}</a>
+                            {%- if child.links.size > 0 -%}
+                              <ul class="list-unstyled">
+                                {%- for grandchild in child.links -%}
+                                  <li><a class="he__mega-link" href="{{ grandchild.url }}">{{ grandchild.title }}</a></li>
+                                {%- endfor -%}
+                                {%- if s.show_view_all -%}
+                                  <li><a class="he__mega-link" href="{{ child.url }}">{{ s.view_all_label }}</a></li>
+                                {%- endif -%}
+                              </ul>
+                            {%- endif -%}
+                          </div>
+                        {%- endfor -%}
+                      {%- else -%}
+                        <div class="he__mega-column">
+                          <a class="he__mega-heading" href="{{ link.url }}">{{ link.title }}</a>
+                          <ul class="list-unstyled">
+                            {%- for child in link.links -%}
+                              <li><a class="he__mega-link" href="{{ child.url }}">{{ child.title }}</a></li>
+                            {%- endfor -%}
+                            {%- if s.show_view_all -%}
+                              <li><a class="he__mega-link" href="{{ link.url }}">{{ s.view_all_label }}</a></li>
+                            {%- endif -%}
+                          </ul>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+              {%- else -%}
+                <a
+                  href="{{ link.url }}"
+                  class="he__nav-link{% if link.active and link.url != routes.root_url %} he__nav-link--current{% endif %}"
+                  {% if link.active %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  {{- link.title -}}
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    {%- comment -%} Predictive search results (filled by header-editorial.js) {%- endcomment -%}
+    <div class="he__results" id="HeaderEditorialResults-{{ section.id }}" hidden data-search-results>
+      <div class="he__results-inner" data-search-results-inner></div>
+    </div>
+
+    {%- assign popular_searches = s.popular_searches | newline_to_br | split: '<br />' -%}
+    {%- if s.popular_searches != blank -%}
+      <template data-popular-searches>
+        <div>
+          <p class="he__results-label">{{ s.popular_label }}</p>
+          <ul class="he__results-list list-unstyled">
+            {%- for term in popular_searches -%}
+              {%- assign term = term | strip -%}
+              {%- if term != blank -%}
+                <li><a href="{{ routes.search_url }}?q={{ term | url_encode }}&options%5Bprefix%5D=last">{{ term }}</a></li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </div>
+      </template>
+    {%- endif -%}
+  </div>
+
+  <div class="he__overlay" data-action="close-all" hidden></div>
+
+  {%- comment -%} Mobile menu tray {%- endcomment -%}
+  <div
+    class="he__tray"
+    id="HeaderEditorialTray-{{ section.id }}"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ s.tray_title | escape }}"
+    hidden
+    data-tray
+  >
+    <div class="he__tray-head">
+      <p class="he__tray-title">{{ s.tray_title }}</p>
+      <button type="button" class="he__icon-button" data-action="close-tray" aria-label="{{ 'actions.close' | t }}">
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" width="20" height="20"><path d="m4 4 12 12M16 4 4 16" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+    </div>
+
+    <div class="he__tray-views" data-tray-views>
+      <ul class="he__tray-list list-unstyled" data-tray-root>
+        {%- if menu != blank -%}
+          {%- for link in menu.links -%}
+            <li>
+              {%- if link.links.size > 0 -%}
+                <button type="button" class="he__tray-link" data-action="tray-open" data-target="HeaderEditorialTrayLevel-{{ section.id }}-{{ forloop.index }}">
+                  <span>{{ link.title }}</span>
+                  <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" width="12" height="12"><path d="m7 4 6 6-6 6" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+                </button>
+              {%- else -%}
+                <a class="he__tray-link" href="{{ link.url }}">{{ link.title }}</a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+        {%- if s.tray_menu != blank or shop.customer_accounts_enabled -%}
+          <li class="he__tray-secondary">
+            <ul class="list-unstyled">
+              {%- for link in s.tray_menu.links -%}
+                <li><a class="he__tray-sublink he__tray-sublink--flat" href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- endfor -%}
+              {%- if shop.customer_accounts_enabled -%}
+                <li><a class="he__tray-sublink he__tray-sublink--flat" href="{{ routes.account_url }}">{{ 'content.account_title' | t }}</a></li>
+              {%- endif -%}
+            </ul>
+          </li>
+        {%- endif -%}
+      </ul>
+
+      {%- if menu != blank -%}
+        {%- for link in menu.links -%}
+          {%- if link.links.size > 0 -%}
+            <div class="he__tray-level" id="HeaderEditorialTrayLevel-{{ section.id }}-{{ forloop.index }}" hidden data-tray-level>
+              <button type="button" class="he__tray-back" data-action="tray-back">
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" width="12" height="12"><path d="m13 4-6 6 6 6" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+                <span>{{ link.title }}</span>
+              </button>
+              {%- for child in link.links -%}
+                {%- if child.links.size > 0 -%}
+                  <div class="he__tray-group">
+                    <a class="he__tray-group-heading" href="{{ child.url }}">{{ child.title }}</a>
+                    <ul class="list-unstyled">
+                      {%- for grandchild in child.links -%}
+                        <li><a class="he__tray-sublink" href="{{ grandchild.url }}">{{ grandchild.title }}</a></li>
+                      {%- endfor -%}
+                      {%- if s.show_view_all -%}
+                        <li><a class="he__tray-sublink" href="{{ child.url }}">{{ s.view_all_label }}</a></li>
+                      {%- endif -%}
+                    </ul>
+                  </div>
+                {%- else -%}
+                  <a class="he__tray-sublink he__tray-sublink--flat" href="{{ child.url }}">{{ child.title }}</a>
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if s.show_view_all -%}
+                <a class="he__tray-sublink he__tray-sublink--flat" href="{{ link.url }}">{{ s.view_all_label }}</a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</header-editorial>
+
+<script src="{{ 'header-editorial.js' | asset_url }}" defer="defer"></script>
+
+{% stylesheet %}
+  .he {
+    --he-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    --he-top-height: 64px;
+    --he-nav-height: 46px;
+    --he-ease: cubic-bezier(0.2, 0, 0, 1);
+
+    display: block;
+    position: relative;
+    z-index: 30;
+    color: var(--he-text);
+    font-family: var(--font-body--family);
+    font-size: 12px;
+  }
+
+  /* Sticky: like the theme's own header, the section wrapper sticks (not the inner element) */
+  #header-group:has(.he--sticky) {
+    display: contents;
+  }
+
+  .header-editorial-section:has(> .he--sticky) {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--layer-menu-drawer, 40);
+  }
+
+  .he--sticky-scroll-up .he__bar {
+    transition: transform 0.35s var(--he-ease), background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .he--sticky-scroll-up.he--hidden .he__bar {
+    transform: translateY(-100%);
+  }
+
+  .he__bar {
+    position: relative;
+    z-index: 2;
+    background: var(--he-background);
+    color: var(--he-text);
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* Transparent over the homepage hero until hovered, opened or focused */
+  .he--transparent {
+    position: absolute;
+    inset-inline: 0;
+  }
+
+  .he--transparent:not(.he--solid) .he__bar {
+    background: transparent;
+    color: #fff;
+  }
+
+  .he__logo--has-inverse {
+    display: grid;
+  }
+
+  .he__logo--has-inverse > * {
+    grid-area: 1 / 1;
+    justify-self: center;
+    transition: opacity 0.25s ease;
+  }
+
+  .he--transparent:not(.he--solid) .he__logo--has-inverse > :not(.he__logo-image--inverse),
+  :is(.he:not(.he--transparent), .he--solid) .he__logo-image--inverse {
+    opacity: 0;
+  }
+
+  /* Resets use :where() so they never outrank the component styles below */
+  :where(.he) a,
+  :where(.he) button {
+    color: inherit;
+  }
+
+  :where(.he) a {
+    text-decoration: none;
+  }
+
+  :where(.he) button {
+    border: 0;
+    background: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .he__icon-button {
+    display: inline-grid;
+    place-items: center;
+    inline-size: 32px;
+    block-size: 32px;
+  }
+
+  /* ---------- Top row ---------- */
+  .he__top {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    block-size: 50px;
+    /* Icon buttons are 32px with a 20px icon: this puts the icons 15px from the edge, like Hermès */
+    padding-inline: max(4px, calc(var(--he-gutter) - 15px));
+  }
+
+  .he__start {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .he__end {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .he__logo {
+    display: block;
+    justify-self: center;
+  }
+
+  .he__logo-image {
+    display: block;
+    block-size: var(--he-logo-height-mobile);
+    inline-size: auto;
+  }
+
+  .he__logo-image--tinted {
+    background-color: currentColor;
+    -webkit-mask: var(--he-logo-mask) center / contain no-repeat;
+    mask: var(--he-logo-mask) center / contain no-repeat;
+  }
+
+  .he__wordmark {
+    font-family: var(--font-heading--family);
+    font-size: 20px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Theme account + bag buttons, restyled to Hermès' bare 20px icons */
+  .he header-actions {
+    gap: 4px;
+  }
+
+  .he .header-actions__action {
+    color: inherit;
+  }
+
+  .he .header-actions__action svg,
+  .he .account-button__icon {
+    inline-size: 20px;
+    block-size: 20px;
+  }
+
+  /* ---------- Search ---------- */
+  .he__search {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .he__search-input,
+  .he__search-clear {
+    display: none;
+  }
+
+  /* Doubled class beats the theme's global input styles */
+  .he__search-input.he__search-input {
+    inline-size: 130px;
+    padding: 4px 22px 4px 0;
+    border: 0;
+    border-block-end: 1px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: inherit;
+    font: inherit;
+    font-size: 12px;
+    outline: none;
+    transition: inline-size 0.3s var(--he-ease), border-color 0.2s ease;
+  }
+
+  .he__search-input::placeholder {
+    color: inherit;
+    opacity: 1;
+  }
+
+  .he__search-input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  .he__search-clear {
+    position: absolute;
+    inset-inline-end: 0;
+    place-items: center;
+    inline-size: 20px;
+    block-size: 20px;
+  }
+
+  .he--search-open .he__search-input.he__search-input {
+    inline-size: 266px;
+    border-block-end-color: currentColor;
+  }
+
+  .he--search-open .he__search-input::placeholder {
+    opacity: 0.5;
+  }
+
+  .he--search-open .he__search-clear:not([hidden]) {
+    display: inline-grid;
+  }
+
+  /* ---------- Category bar ---------- */
+  .he__nav {
+    display: none;
+  }
+
+  .he__nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .he__nav-link {
+    display: block;
+    position: relative;
+    padding: 16px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 14px;
+    text-transform: uppercase;
+  }
+
+  .he__nav-link::after {
+    content: '';
+    position: absolute;
+    inset-inline: 12px;
+    inset-block-end: 15px;
+    block-size: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--he-ease);
+  }
+
+  .he__nav-link:hover::after,
+  .he__nav-link[aria-expanded='true']::after,
+  .he__nav-link--current::after {
+    transform: scaleX(1);
+  }
+
+  /* ---------- Mega menu ---------- */
+  .he__mega {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 100%;
+    background: var(--he-panel-background);
+    color: var(--he-panel-text);
+    animation: he-drop 0.35s var(--he-ease);
+  }
+
+  .he__mega[hidden] {
+    display: none;
+  }
+
+  .he__mega-inner {
+    display: flex;
+    gap: 32px;
+    padding: 48px var(--he-gutter) 56px;
+    max-block-size: calc(100dvh - 160px);
+    overflow-y: auto;
+  }
+
+  .he__mega-feature {
+    position: relative;
+    flex: none;
+    inline-size: 250px;
+    block-size: 141px;
+    overflow: hidden;
+  }
+
+  .he__mega-feature::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.45), transparent 60%);
+  }
+
+  .he__mega-feature-image {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--he-ease);
+  }
+
+  .he__mega-feature:hover .he__mega-feature-image {
+    transform: scale(1.04);
+  }
+
+  .he__mega-feature-caption {
+    position: absolute;
+    inset-inline-start: 16px;
+    inset-block-end: 14px;
+    z-index: 1;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .he__mega-columns {
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 223px));
+    gap: 40px 32px;
+    align-content: start;
+  }
+
+  .he__mega-heading {
+    display: block;
+    margin-block-end: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 14px;
+    text-transform: uppercase;
+  }
+
+  .he__mega-link {
+    display: inline-block;
+    padding-block: 4px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  .he__mega-link:hover,
+  .he__mega-heading:hover,
+  .he__results a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @keyframes he-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+
+  /* ---------- Search results ---------- */
+  .he__results {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 100%;
+    background: var(--he-panel-background);
+    color: var(--he-panel-text);
+    animation: he-drop 0.3s var(--he-ease);
+  }
+
+  .he__results[hidden] {
+    display: none;
+  }
+
+  .he__results-inner {
+    display: grid;
+    gap: 32px 48px;
+    padding: 24px var(--he-gutter) 40px;
+    max-block-size: calc(100dvh - 120px);
+    overflow-y: auto;
+  }
+
+  .he__results-label {
+    margin: 0 0 12px;
+    font-family: var(--he-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .he__results-list a {
+    display: inline-block;
+    padding-block: 6px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  .he__results-list mark {
+    background: none;
+    color: inherit;
+    font-weight: 700;
+  }
+
+  .he__results-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 16px;
+  }
+
+  .he__result-product {
+    display: grid;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .he__result-product img {
+    display: block;
+    inline-size: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    background: rgb(0 0 0 / 0.04);
+  }
+
+  .he__result-price {
+    opacity: 0.7;
+  }
+
+  .he__results-all {
+    font-family: var(--he-mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .he__results-empty {
+    margin: 0;
+    font-size: 12px;
+  }
+
+  /* ---------- Overlay ---------- */
+  .he__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: rgb(0 0 0 / 0.3);
+    animation: he-fade 0.3s ease;
+  }
+
+  .he__overlay[hidden] {
+    display: none;
+  }
+
+  @keyframes he-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  /* ---------- Mobile tray ---------- */
+  .he__tray {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    background: var(--he-panel-background);
+    color: var(--he-panel-text);
+    animation: he-slide-in 0.4s var(--he-ease);
+  }
+
+  .he__tray[hidden] {
+    display: none;
+  }
+
+  .he__tray-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 0 24px;
+  }
+
+  .he__tray-title {
+    margin: 0;
+    font-family: var(--he-mono);
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 28px;
+    text-transform: uppercase;
+  }
+
+  .he__tray-views {
+    position: relative;
+    flex: 1;
+    overflow: hidden auto;
+  }
+
+  .he__tray-list,
+  .he__tray-level {
+    padding: 22px 24px 40px;
+  }
+
+  .he__tray-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    inline-size: 100%;
+    padding-block: 15px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 14px;
+    text-align: start;
+    text-transform: uppercase;
+  }
+
+  .he__tray-secondary {
+    margin-block-start: 24px;
+    padding-block-start: 12px;
+    border-block-start: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+  }
+
+  .he__tray-level {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    background: var(--he-panel-background);
+    animation: he-slide-in-right 0.35s var(--he-ease);
+  }
+
+  .he__tray-level[hidden] {
+    display: none;
+  }
+
+  .he__tray-back {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-block: 15px;
+    margin-block-end: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .he__tray-group + .he__tray-group {
+    margin-block-start: 20px;
+  }
+
+  .he__tray-group-heading {
+    display: block;
+    padding-block: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .he__tray-sublink {
+    display: block;
+    padding: 10px 0 10px 24px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  .he__tray-sublink--flat {
+    padding-inline-start: 0;
+  }
+
+  @keyframes he-slide-in {
+    from {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes he-slide-in-right {
+    from {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Mobile search: the search row opens under the bar */
+  @media screen and (max-width: 989px) {
+    .he--search-open .he__search {
+      position: absolute;
+      inset-inline: 0;
+      inset-block-start: 100%;
+      z-index: 2;
+      padding: 12px var(--he-gutter);
+      background: var(--he-panel-background);
+      color: var(--he-panel-text);
+    }
+
+    .he--search-open .he__search-input.he__search-input {
+      display: block;
+      flex: 1;
+      inline-size: auto;
+      font-size: 16px; /* prevents iOS zoom */
+    }
+
+    .he--search-open .he__results {
+      inset-block-start: calc(100% + 58px);
+    }
+
+    .he__results-inner {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- Desktop ---------- */
+  @media screen and (min-width: 990px) {
+    .he__top {
+      block-size: var(--he-top-height);
+      padding-inline: var(--he-gutter);
+    }
+
+    .he__menu-toggle {
+      display: none;
+    }
+
+    .he__search-icon {
+      inline-size: 20px;
+      margin-inline-end: 8px;
+      pointer-events: none;
+    }
+
+    .he__search-input.he__search-input {
+      display: block;
+    }
+
+    .he__logo-image {
+      block-size: var(--he-logo-height);
+    }
+
+    .he__nav {
+      display: block;
+      block-size: var(--he-nav-height);
+    }
+
+    .he__results-inner {
+      grid-template-columns: minmax(220px, 1fr) 3fr;
+    }
+
+    .he--search-open .he__nav {
+      visibility: hidden;
+    }
+
+    .he--search-open .he__results {
+      inset-block-start: var(--he-top-height);
+    }
+
+    .he__tray {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .he *,
+    .he *::before,
+    .he *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Editorial header",
+  "tag": "div",
+  "class": "header-editorial-section",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "category_image",
+      "name": "Category image",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Sets the image card in one category's mega menu."
+        },
+        {
+          "type": "text",
+          "id": "category",
+          "label": "Category",
+          "info": "Type the menu item's name exactly as it appears in the header, e.g. Dogs"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Leave empty to use the collection image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption",
+          "info": "Leave empty to use the category name"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Leave empty to link to the category"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_image",
+          "label": "Hide the image card for this category",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu",
+      "info": "Top-level items become the category bar. Their sub-items become mega menu columns, and the next level becomes the links in each column."
+    },
+    {
+      "type": "checkbox",
+      "id": "open_on_hover",
+      "label": "Open mega menu on hover",
+      "info": "Off: opens on click instead. Touch screens always open on tap.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mega_image",
+      "label": "Show image card in mega menu",
+      "info": "Uses the image of the collection each category links to",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show \"View all\" links",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "\"View all\" label",
+      "default": "View all"
+    },
+    {
+      "type": "text",
+      "id": "tray_title",
+      "label": "Mobile menu title",
+      "default": "Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "tray_menu",
+      "label": "Mobile menu: extra links",
+      "info": "Small links under the categories in the mobile menu, e.g. Contact, Find us, Book grooming"
+    },
+    {
+      "type": "link_list",
+      "id": "customer_account_menu",
+      "label": "Customer account menu",
+      "default": "customer-account-main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Search"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Placeholder",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "popular_label",
+      "label": "Suggestions heading",
+      "default": "Suggested searches"
+    },
+    {
+      "type": "textarea",
+      "id": "popular_searches",
+      "label": "Suggested searches",
+      "info": "One per line. Shown when someone clicks into search, before they type.",
+      "default": "Dog coats\nDog treats\nDog toys\nPuppy essentials\nCat toys"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Leave empty to use the site logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_inverse",
+      "label": "Logo over the homepage hero",
+      "info": "Only used when the header is transparent on the homepage. Use a light version of your logo.",
+      "visible_if": "{{ section.settings.transparent_home }}"
+    },
+    {
+      "type": "select",
+      "id": "logo_color",
+      "label": "Logo colour",
+      "options": [
+        {
+          "value": "original",
+          "label": "Original"
+        },
+        {
+          "value": "text",
+          "label": "Header text colour"
+        }
+      ],
+      "default": "original",
+      "info": "Use \"Header text colour\" when the logo would not show on the header background"
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo height (desktop)",
+      "min": 20,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "logo_height_mobile",
+      "label": "Logo height (mobile)",
+      "min": 16,
+      "max": 44,
+      "step": 1,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "gutter",
+      "label": "Side padding",
+      "min": 8,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "sticky_mode",
+      "label": "Sticky header",
+      "options": [
+        {
+          "value": "none",
+          "label": "Off: scrolls away"
+        },
+        {
+          "value": "scroll_up",
+          "label": "Show when scrolling up"
+        },
+        {
+          "value": "always",
+          "label": "Always visible"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent_home",
+      "label": "Transparent over the homepage hero",
+      "info": "White text over the first section, turns solid when you hover, search or open a menu",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "color_style",
+      "label": "Colour style",
+      "info": "Website styles use your theme colour palette, so they stay in sync with the site.",
+      "options": [
+        {
+          "value": "website_red",
+          "label": "Website red: red bar, cream text"
+        },
+        {
+          "value": "website_light",
+          "label": "Website light: cream bar, black text (Hermès)"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "website_red"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Bar background",
+      "default": "{{ settings.color_palette.foreground }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Bar text and icons",
+      "default": "{{ settings.color_palette.background }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "panel_background_color",
+      "label": "Menu and search panel background",
+      "default": "{{ settings.color_palette.background }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "panel_text_color",
+      "label": "Menu and search panel text",
+      "default": "{{ settings.color_palette.color1 }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial header",
+      "category": "t:categories.header"
+    }
+  ]
+}
+{% endschema %}

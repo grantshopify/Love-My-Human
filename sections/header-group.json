@@ -1,1 +1,156 @@
-{"type":"header","name":"t:names.header","sections":{"header_announcements_QPnrTT":{"type":"header-announcements","blocks":{"announcement_7YTP6V":{"type":"_announcement","settings":{"text":"Complimentary standard shipping across UK mainland on orders over £75!","link":"","font":"var(--font-body--family)","font_size":"0.875rem","weight":"","letter_spacing":"tight","case":"uppercase","text_color":"{{ settings.color_palette.background }}"},"blocks":{}}},"block_order":["announcement_7YTP6V"],"name":"t:names.announcement_bar","settings":{"speed":5,"section_width":"page-width","background_color":"{{ settings.color_palette.foreground }}","divider_width":0,"divider_color":"","padding-block-start":5,"padding-block-end":5}},"header_section":{"type":"header","blocks":{"header-logo":{"type":"_header-logo","static":true,"settings":{"hide_logo_on_home_page":false,"padding-block-start":0,"padding-block-end":0},"blocks":{}},"header-menu":{"type":"_header-menu","static":true,"settings":{"menu":"main-menu","background_color":"{{ settings.color_palette.background }}","text_color":"","type_font_primary_size":"1.125rem","menu_font_style":"inverse_large","type_font_primary_link":"subheading","type_case_primary_link":"uppercase","menu_style":"featured_collections","featured_products_aspect_ratio":"4 \/ 5","featured_collections_aspect_ratio":"16 \/ 9","image_border_radius":0,"navigation_bar":false,"background_color_navigation_bar":"{{ settings.color_palette.background }}","text_color_navigation_bar":"","drawer_accordion":false,"drawer_accordion_expand_first":false,"drawer_dividers":false},"blocks":{}}},"settings":{"logo_position":"left","menu_position":"center","menu_row":"top","customer_account_menu":"customer-account-main-menu","show_search":true,"search_position":"right","search_row":"top","show_country":true,"country_selector_style":false,"show_language":true,"localization_font":"heading","localization_font_size":"1rem","localization_position":"right","localization_row":"top","section_width":"page-width","section_height":"compact","enable_sticky_header":"never","divider_width":0,"divider_size":"page-width","divider_color":"","border_width":0,"bottom_border_color":"","actions_display_style":"icon","actions_font_size":"0.875rem","actions_font":"body","actions_text_case":"none","background_color_top":"{{ settings.color_palette.foreground }}","text_color_top":"{{ settings.color_palette.background }}","background_color_bottom":"","text_color_bottom":"","bubble_style":"default","bubble_background_color":"","bubble_text_color":"","enable_transparent_header_home":false,"home_inverse_logo":false,"text_color_transparent_home":"{{ settings.color_palette.background }}","enable_transparent_header_product":false,"product_inverse_logo":false,"text_color_transparent_product":"","enable_transparent_header_collection":false,"collection_inverse_logo":false,"text_color_transparent_collection":"{{ settings.color_palette.background }}"}}},"order":["header_announcements_QPnrTT","header_section"]}
+{
+  "type": "header",
+  "name": "t:names.header",
+  "sections": {
+    "header_announcements_QPnrTT": {
+      "type": "header-announcements",
+      "blocks": {
+        "announcement_7YTP6V": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Complimentary standard shipping across UK mainland on orders over £75!",
+            "link": "",
+            "font": "var(--font-body--family)",
+            "font_size": "0.875rem",
+            "weight": "",
+            "letter_spacing": "tight",
+            "case": "uppercase",
+            "text_color": "{{ settings.color_palette.background }}"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "announcement_7YTP6V"
+      ],
+      "name": "t:names.announcement_bar",
+      "settings": {
+        "speed": 5,
+        "section_width": "page-width",
+        "background_color": "{{ settings.color_palette.foreground }}",
+        "divider_width": 0,
+        "divider_color": "",
+        "padding-block-start": 5,
+        "padding-block-end": 5
+      }
+    },
+    "header_section": {
+      "type": "header",
+      "blocks": {
+        "header-logo": {
+          "type": "_header-logo",
+          "static": true,
+          "settings": {
+            "hide_logo_on_home_page": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0
+          },
+          "blocks": {}
+        },
+        "header-menu": {
+          "type": "_header-menu",
+          "static": true,
+          "settings": {
+            "menu": "main-menu",
+            "background_color": "{{ settings.color_palette.background }}",
+            "text_color": "",
+            "type_font_primary_size": "1.125rem",
+            "menu_font_style": "inverse_large",
+            "type_font_primary_link": "subheading",
+            "type_case_primary_link": "uppercase",
+            "menu_style": "featured_collections",
+            "featured_products_aspect_ratio": "4 / 5",
+            "featured_collections_aspect_ratio": "16 / 9",
+            "image_border_radius": 0,
+            "navigation_bar": false,
+            "background_color_navigation_bar": "{{ settings.color_palette.background }}",
+            "text_color_navigation_bar": "",
+            "drawer_accordion": false,
+            "drawer_accordion_expand_first": false,
+            "drawer_dividers": false
+          },
+          "blocks": {}
+        }
+      },
+      "settings": {
+        "logo_position": "left",
+        "menu_position": "center",
+        "menu_row": "top",
+        "customer_account_menu": "customer-account-main-menu",
+        "show_search": true,
+        "search_position": "right",
+        "search_row": "top",
+        "show_country": true,
+        "country_selector_style": false,
+        "show_language": true,
+        "localization_font": "heading",
+        "localization_font_size": "1rem",
+        "localization_position": "right",
+        "localization_row": "top",
+        "section_width": "page-width",
+        "section_height": "compact",
+        "enable_sticky_header": "never",
+        "divider_width": 0,
+        "divider_size": "page-width",
+        "divider_color": "",
+        "border_width": 0,
+        "bottom_border_color": "",
+        "actions_display_style": "icon",
+        "actions_font_size": "0.875rem",
+        "actions_font": "body",
+        "actions_text_case": "none",
+        "background_color_top": "{{ settings.color_palette.foreground }}",
+        "text_color_top": "{{ settings.color_palette.background }}",
+        "background_color_bottom": "",
+        "text_color_bottom": "",
+        "bubble_style": "default",
+        "bubble_background_color": "",
+        "bubble_text_color": "",
+        "enable_transparent_header_home": false,
+        "home_inverse_logo": false,
+        "text_color_transparent_home": "{{ settings.color_palette.background }}",
+        "enable_transparent_header_product": false,
+        "product_inverse_logo": false,
+        "text_color_transparent_product": "",
+        "enable_transparent_header_collection": false,
+        "collection_inverse_logo": false,
+        "text_color_transparent_collection": "{{ settings.color_palette.background }}"
+      },
+      "disabled": true
+    },
+    "header_editorial": {
+      "type": "header-editorial",
+      "settings": {
+        "menu": "main-menu",
+        "open_on_hover": true,
+        "show_mega_image": true,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "tray_title": "Menu",
+        "customer_account_menu": "customer-account-main-menu",
+        "search_placeholder": "Search",
+        "logo_color": "original",
+        "logo_height": 40,
+        "logo_height_mobile": 36,
+        "gutter": 24,
+        "transparent_home": false,
+        "color_style": "website_red",
+        "background_color": "{{ settings.color_palette.foreground }}",
+        "text_color": "{{ settings.color_palette.background }}",
+        "panel_background_color": "{{ settings.color_palette.background }}",
+        "panel_text_color": "{{ settings.color_palette.color1 }}",
+        "sticky_mode": "none",
+        "tray_menu": "",
+        "popular_label": "Suggested searches",
+        "popular_searches": "Dog coats\nDog treats\nDog toys\nPuppy essentials\nCat toys"
+      },
+      "blocks": {},
+      "block_order": []
+    }
+  },
+  "order": [
+    "header_announcements_QPnrTT",
+    "header_editorial",
+    "header_section"
+  ]
+}
