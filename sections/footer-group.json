@@ -51,15 +51,15 @@
         "icon_size_mobile": 24,
         "signature_effect": "curtain",
         "logo_width_mobile": 100,
-        "signature_content": "text",
+        "signature_content": "site_logo",
         "signature_text": "",
         "signature_subtext": "",
         "signature_font": "heading",
         "signature_text_size": 24,
         "signature_text_size_mobile": 22,
-        "logo_black": false,
         "color_style": "website_light",
-        "wordmark_color": "{{ settings.color_palette.foreground }}"
+        "wordmark_color": "{{ settings.color_palette.foreground }}",
+        "logo_color": "wordmark"
       }
     }
   },

@@ -18,9 +18,16 @@
     assign has_aside = true
   endif
 
+  # Hard limit on menu columns (Hermès: 4 menus + newsletter). Blocks are capped by max_blocks in the schema.
+  assign max_menu_columns = 5
+
+  # Columns come from ONE source: Menu column blocks if any exist, otherwise the Footer menu setting.
   # Footer menu: a nested menu gives one column per top-level item (its sub-items are the links);
   # a flat menu gives a single column.
   assign footer_menu = s.footer_menu
+  if section.blocks.size > 0
+    assign footer_menu = nil
+  endif
   assign menu_is_nested = false
   assign menu_columns = 0
   if footer_menu != blank and footer_menu.links.size > 0
@@ -31,7 +38,7 @@
       endif
     endfor
     if menu_is_nested
-      assign menu_columns = footer_menu.links.size
+      assign menu_columns = footer_menu.links.size | at_most: max_menu_columns
     else
       assign menu_columns = 1
     endif
@@ -54,9 +61,17 @@
       assign aside_start = desktop_tracks
   endcase
 
-  assign signature_logo = s.signature_logo | default: settings.logo
+  # Logo band: site logo (default), a custom logo, or text. Falls back to text if no logo is set.
+  case s.signature_content
+    when 'custom_logo'
+      assign signature_logo = s.signature_logo | default: settings.logo
+    when 'text'
+      assign signature_logo = nil
+    else
+      assign signature_logo = settings.logo
+  endcase
   assign show_signature_image = false
-  if s.signature_content == 'image' and signature_logo != blank
+  if signature_logo != blank
     assign show_signature_image = true
   endif
   assign signature_text = s.signature_text | default: shop.name
@@ -86,7 +101,7 @@
 -%}
 
 <div
-  class="footer-editorial footer-editorial--font-{{ s.heading_font }} footer-editorial--icons-{{ s.icon_style }}{% if s.show_signature and s.signature_effect == 'curtain' %} footer-editorial--curtain{% endif %}{% if s.mobile_dividers %} footer-editorial--mobile-dividers{% endif %}{% if s.logo_black %} footer-editorial--logo-black{% endif %}"
+  class="footer-editorial footer-editorial--font-{{ s.heading_font }} footer-editorial--icons-{{ s.icon_style }}{% if s.show_signature and s.signature_effect == 'curtain' %} footer-editorial--curtain{% endif %}{% if s.mobile_dividers %} footer-editorial--mobile-dividers{% endif %}"
   style="
     --fe-background: {{ fe_background }};
     --fe-signature-background: {{ fe_signature_background }};
@@ -112,10 +127,17 @@
   "
 >
   <div class="footer-editorial__main">
+    {%- if request.design_mode and menu_is_nested and footer_menu.links.size > max_menu_columns -%}
+      <p class="footer-editorial__notice">
+        The footer shows up to {{ max_menu_columns }} columns. "{{ footer_menu.title }}" has
+        {{ footer_menu.links.size }} top-level items, so the last
+        {{ footer_menu.links.size | minus: max_menu_columns }} are hidden. (Only visible in the theme editor.)
+      </p>
+    {%- endif -%}
     <div class="footer-editorial__columns">
       {%- if footer_menu != blank -%}
         {%- if menu_is_nested -%}
-          {%- for link in footer_menu.links -%}
+          {%- for link in footer_menu.links limit: max_menu_columns -%}
             {%- liquid
               assign open_on_mobile = false
               assign inline_on_mobile = false
@@ -147,7 +169,8 @@
         {%- liquid
           assign menu = block.settings.menu
           assign heading = block.settings.heading | default: menu.title
-          if menu == blank and heading == blank and request.design_mode == false
+          # A column without a menu is a placeholder: shown in the theme editor only
+          if menu == blank and request.design_mode == false
             continue
           endif
           if heading == blank
@@ -324,7 +347,15 @@
   {%- if s.show_signature -%}
     <div class="footer-editorial__signature">
       <a href="{{ routes.root_url }}" class="footer-editorial__signature-link{% unless show_signature_image %} footer-editorial__signature-link--text{% endunless %}">
-        {%- if show_signature_image -%}
+        {%- if show_signature_image and s.logo_color != 'original' -%}
+          {%- comment -%} Recoloured logo: the image is used as a mask filled with the chosen colour {%- endcomment -%}
+          <span
+            class="footer-editorial__logo footer-editorial__logo--tinted footer-editorial__logo--{{ s.logo_color }}"
+            role="img"
+            aria-label="{{ shop.name | escape }}"
+            style="--fe-logo-mask: url('{{ signature_logo | image_url: width: 600 }}'); aspect-ratio: {{ signature_logo.aspect_ratio }};"
+          ></span>
+        {%- elsif show_signature_image -%}
           {{
             signature_logo
             | image_url: width: 600
@@ -428,6 +459,13 @@
   .footer-editorial__links a:hover,
   .footer-editorial__social-link:hover {
     opacity: 0.6;
+  }
+
+  .footer-editorial__notice {
+    margin: 0 0 24px;
+    padding: 10px 12px;
+    border: 1px dashed currentColor;
+    font-size: 12px;
   }
 
   .footer-editorial__placeholder {
@@ -651,8 +689,14 @@
     block-size: auto;
   }
 
-  .footer-editorial--logo-black .footer-editorial__logo {
-    filter: brightness(0);
+  .footer-editorial__logo--tinted {
+    background-color: var(--fe-wordmark);
+    -webkit-mask: var(--fe-logo-mask) center / contain no-repeat;
+    mask: var(--fe-logo-mask) center / contain no-repeat;
+  }
+
+  .footer-editorial__logo--text {
+    background-color: var(--fe-text);
   }
 
   .footer-editorial__wordmark {
@@ -807,7 +851,9 @@
   "class": "footer-editorial-section",
   "max_blocks": 5,
   "enabled_on": {
-    "groups": ["footer"]
+    "groups": [
+      "footer"
+    ]
   },
   "blocks": [
     {
@@ -818,7 +864,7 @@
           "type": "link_list",
           "id": "menu",
           "label": "Menu",
-          "default": "footer"
+          "info": "Its links become this column's links. The column stays hidden on the store until a menu is chosen."
         },
         {
           "type": "text",
@@ -856,11 +902,11 @@
       "type": "link_list",
       "id": "footer_menu",
       "label": "Footer menu",
-      "info": "Each top-level item becomes a column and its sub-items become the links. Hermès has 4 columns + newsletter."
+      "info": "Each top-level item becomes a column and its sub-items become the links. Only the first 5 items are used. Hermès has 4 columns + newsletter."
     },
     {
       "type": "paragraph",
-      "content": "You can also add Menu column blocks (up to 5) after the footer menu's columns. The grid adds tracks automatically if your columns need more, so nothing wraps."
+      "content": "Maximum 5 columns. Or build the columns yourself: add Menu column blocks (up to 5), one menu each. As soon as you add a block, the blocks replace the Footer menu columns. Remove all blocks to go back to the Footer menu."
     },
     {
       "type": "range",
@@ -1209,15 +1255,71 @@
       "label": "Show",
       "options": [
         {
-          "value": "text",
-          "label": "Text wordmark (Hermès)"
+          "value": "site_logo",
+          "label": "Site logo"
         },
         {
-          "value": "image",
-          "label": "Logo image"
+          "value": "custom_logo",
+          "label": "Custom logo"
+        },
+        {
+          "value": "text",
+          "label": "Text"
         }
       ],
-      "default": "text"
+      "default": "site_logo",
+      "info": "Site logo uses the logo from Theme settings → Logo. Text shows when no logo is set."
+    },
+    {
+      "type": "image_picker",
+      "id": "signature_logo",
+      "label": "Custom logo",
+      "info": "Leave empty to use the site logo",
+      "visible_if": "{{ section.settings.signature_content == 'custom_logo' }}"
+    },
+    {
+      "type": "select",
+      "id": "logo_color",
+      "label": "Logo colour",
+      "options": [
+        {
+          "value": "wordmark",
+          "label": "Wordmark colour"
+        },
+        {
+          "value": "text",
+          "label": "Text colour"
+        },
+        {
+          "value": "original",
+          "label": "Original"
+        }
+      ],
+      "default": "wordmark",
+      "info": "Recolours the logo so a white or light logo stays visible on the band. Use Original for multi-colour logos.",
+      "visible_if": "{{ section.settings.signature_content != 'text' }}"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width (desktop)",
+      "min": 40,
+      "max": 300,
+      "step": 4,
+      "unit": "px",
+      "default": 100,
+      "visible_if": "{{ section.settings.signature_content != 'text' }}"
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "label": "Logo width (mobile)",
+      "min": 40,
+      "max": 240,
+      "step": 2,
+      "unit": "px",
+      "default": 100,
+      "visible_if": "{{ section.settings.signature_content != 'text' }}"
     },
     {
       "type": "text",
@@ -1275,43 +1377,6 @@
       "unit": "px",
       "default": 22,
       "visible_if": "{{ section.settings.signature_content == 'text' }}"
-    },
-    {
-      "type": "image_picker",
-      "id": "signature_logo",
-      "label": "Logo",
-      "info": "Leave empty to use the theme logo",
-      "visible_if": "{{ section.settings.signature_content == 'image' }}"
-    },
-    {
-      "type": "checkbox",
-      "id": "logo_black",
-      "label": "Make logo black",
-      "info": "Use this if your logo is white or light (it would be invisible on the light band)",
-      "default": false,
-      "visible_if": "{{ section.settings.signature_content == 'image' }}"
-    },
-    {
-      "type": "range",
-      "id": "logo_width",
-      "label": "Logo width (desktop)",
-      "min": 40,
-      "max": 300,
-      "step": 4,
-      "unit": "px",
-      "default": 100,
-      "visible_if": "{{ section.settings.signature_content == 'image' }}"
-    },
-    {
-      "type": "range",
-      "id": "logo_width_mobile",
-      "label": "Logo width (mobile)",
-      "min": 40,
-      "max": 240,
-      "step": 2,
-      "unit": "px",
-      "default": 100,
-      "visible_if": "{{ section.settings.signature_content == 'image' }}"
     },
     {
       "type": "range",
@@ -1379,7 +1444,7 @@
     {
       "type": "color",
       "id": "wordmark_color",
-      "label": "Wordmark",
+      "label": "Wordmark and logo",
       "default": "{{ settings.color_palette.foreground }}",
       "visible_if": "{{ section.settings.color_style == 'custom' }}"
     }
