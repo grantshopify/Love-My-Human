@@ -46,6 +46,7 @@
     "secondary_button_border_width": 0,
     "button_border_radius_secondary": 0,
     "cart_type": "drawer",
+    "cart_progress_goal_1_amount": 100,
     "drawer_background_color": "{{ settings.color_palette.background }}",
     "drawer_text_color": "{{ settings.color_palette.foreground }}",
     "palette_input_background": "{{ settings.color_palette.background }}",
