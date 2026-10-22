@@ -219,36 +219,6 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "card_NnbQxY": {
-              "type": "_card",
-              "name": "t:names.card",
-              "settings": {
-                "content_direction": "column",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-start",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
-                "gap": 12,
-                "background_media": "none",
-                "background_color": "",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "aspect_ratio": "adapt",
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "link": "",
-                "open_in_new_tab": false,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "card_XMD7Bf": {
               "type": "_card",
               "name": "t:names.card",
@@ -282,8 +252,9 @@
                   "type": "image",
                   "name": "t:names.image",
                   "settings": {
-                    "link": "",
-                    "image_ratio": "adapt",
+                    "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-aoife-journey-main-header-grooming-academy-training_ebb4d686-9f0a-4132-9d95-5488fcef8bef.webp",
+                    "link": "shopify://pages/dog-grooming-chelsea-premium-pet-grooming-services-love-my-human",
+                    "image_ratio": "portrait",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
@@ -305,7 +276,7 @@
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<p>Artistry in action </p>",
+                    "text": "<p>Grooming Academy</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -331,7 +302,7 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Bold style that's recognizable anywhere</p>",
+                    "text": "<p>Join Our Grooming Academy</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -360,7 +331,7 @@
                 "text_rjKNbn"
               ]
             },
-            "card_xWAWBx": {
+            "card_idczLz": {
               "type": "_card",
               "name": "t:names.card",
               "settings": {
@@ -389,12 +360,13 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "image_Hz4Tmg": {
+                "image_kfYKwe": {
                   "type": "image",
                   "name": "t:names.image",
                   "settings": {
-                    "link": "",
-                    "image_ratio": "adapt",
+                    "image": "shopify://shop_images/Jenny_Matthews_at_the_LMH_Townhouse.webp",
+                    "link": "shopify://pages/dog-grooming-chelsea-premium-pet-grooming-services-love-my-human",
+                    "image_ratio": "portrait",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
@@ -412,11 +384,11 @@
                   },
                   "blocks": {}
                 },
-                "text_HqQADa": {
+                "text_YG9mfM": {
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<p>Uncompromising standards </p>",
+                    "text": "<p>Doggy Day-Care</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -438,11 +410,11 @@
                   },
                   "blocks": {}
                 },
-                "text_FCjEJX": {
+                "text_KEM8pK": {
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Expert construction and an impeccable finish</p>",
+                    "text": "<p>Join Our Grooming Academy</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -466,12 +438,12 @@
                 }
               },
               "block_order": [
-                "image_Hz4Tmg",
-                "text_HqQADa",
-                "text_FCjEJX"
+                "image_kfYKwe",
+                "text_YG9mfM",
+                "text_KEM8pK"
               ]
             },
-            "card_4bCwjX": {
+            "card_caKKir": {
               "type": "_card",
               "name": "t:names.card",
               "settings": {
@@ -500,12 +472,13 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "image_yVrECa": {
+                "image_Qq77z4": {
                   "type": "image",
                   "name": "t:names.image",
                   "settings": {
-                    "link": "",
-                    "image_ratio": "adapt",
+                    "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-london-main-head-poodle-finished-groom_f3960ddd-c51e-4e56-99ac-e0c800078d43_1.webp",
+                    "link": "shopify://pages/dog-grooming-chelsea-premium-pet-grooming-services-love-my-human",
+                    "image_ratio": "portrait",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
@@ -523,11 +496,11 @@
                   },
                   "blocks": {}
                 },
-                "text_74UqCx": {
+                "text_e8Hj4P": {
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<p>Made to last </p>",
+                    "text": "<p>Book A Dog Groom</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -549,11 +522,11 @@
                   },
                   "blocks": {}
                 },
-                "text_Mnwh98": {
+                "text_D6eE4k": {
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Pieces that only get better with time and wear </p>",
+                    "text": "<p>Join Our Grooming Academy</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -577,12 +550,12 @@
                 }
               },
               "block_order": [
-                "image_yVrECa",
-                "text_74UqCx",
-                "text_Mnwh98"
+                "image_Qq77z4",
+                "text_e8Hj4P",
+                "text_D6eE4k"
               ]
             },
-            "card_HQdXVw": {
+            "card_mdKQpR": {
               "type": "_card",
               "name": "t:names.card",
               "settings": {
@@ -611,12 +584,13 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "image_eXb9WL": {
+                "image_khYUBM": {
                   "type": "image",
                   "name": "t:names.image",
                   "settings": {
-                    "link": "",
-                    "image_ratio": "adapt",
+                    "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-london-main-head-poodle-finished-groom_f3960ddd-c51e-4e56-99ac-e0c800078d43_1.webp",
+                    "link": "shopify://pages/dog-grooming-chelsea-premium-pet-grooming-services-love-my-human",
+                    "image_ratio": "portrait",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
@@ -634,11 +608,11 @@
                   },
                   "blocks": {}
                 },
-                "text_LzCCYw": {
+                "text_t8feJL": {
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<h2>Quality you can feel</h2>",
+                    "text": "<p>Join Us Wholesale</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -660,11 +634,11 @@
                   },
                   "blocks": {}
                 },
-                "text_UVNhNA": {
+                "text_MXi6Yi": {
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Authentic materials, no compromises </p>",
+                    "text": "<p>Join Our Grooming Academy</p>",
                     "width": "fit-content",
                     "max_width": "normal",
                     "alignment": "left",
@@ -688,18 +662,356 @@
                 }
               },
               "block_order": [
-                "image_eXb9WL",
-                "text_LzCCYw",
-                "text_UVNhNA"
+                "image_khYUBM",
+                "text_t8feJL",
+                "text_MXi6Yi"
+              ]
+            },
+            "card_A3JhQa": {
+              "type": "_card",
+              "name": "t:names.card",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 12,
+                "background_media": "none",
+                "background_color": "",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "aspect_ratio": "adapt",
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "image_UcriQi": {
+                  "type": "image",
+                  "name": "t:names.image",
+                  "settings": {
+                    "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-london-main-head-poodle-finished-groom_f3960ddd-c51e-4e56-99ac-e0c800078d43_1.webp",
+                    "link": "shopify://pages/dog-grooming-chelsea-premium-pet-grooming-services-love-my-human",
+                    "image_ratio": "portrait",
+                    "width": "fill",
+                    "custom_width": 100,
+                    "width_mobile": "fill",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_GCFhcD": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p>Grooming Academy</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h5",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_V8KCBU": {
+                  "type": "text",
+                  "name": "t:names.text",
+                  "settings": {
+                    "text": "<p>Join Our Grooming Academy</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "image_UcriQi",
+                "text_GCFhcD",
+                "text_V8KCBU"
+              ]
+            },
+            "card_ikLaUg": {
+              "type": "_card",
+              "name": "t:names.card",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 12,
+                "background_media": "none",
+                "background_color": "",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "aspect_ratio": "adapt",
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "image_wmpCtQ": {
+                  "type": "image",
+                  "name": "t:names.image",
+                  "settings": {
+                    "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-london-main-head-poodle-finished-groom_f3960ddd-c51e-4e56-99ac-e0c800078d43_1.webp",
+                    "link": "shopify://pages/dog-grooming-chelsea-premium-pet-grooming-services-love-my-human",
+                    "image_ratio": "portrait",
+                    "width": "fill",
+                    "custom_width": 100,
+                    "width_mobile": "fill",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_LRzndG": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p>Grooming Academy</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h5",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_bXQTcp": {
+                  "type": "text",
+                  "name": "t:names.text",
+                  "settings": {
+                    "text": "<p>Join Our Grooming Academy</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "image_wmpCtQ",
+                "text_LRzndG",
+                "text_bXQTcp"
+              ]
+            },
+            "card_RHXE6R": {
+              "type": "_card",
+              "name": "t:names.card",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 12,
+                "background_media": "none",
+                "background_color": "",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "aspect_ratio": "adapt",
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "image_mz6BY7": {
+                  "type": "image",
+                  "name": "t:names.image",
+                  "settings": {
+                    "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-london-main-head-poodle-finished-groom_f3960ddd-c51e-4e56-99ac-e0c800078d43_1.webp",
+                    "link": "shopify://pages/dog-grooming-chelsea-premium-pet-grooming-services-love-my-human",
+                    "image_ratio": "portrait",
+                    "width": "fill",
+                    "custom_width": 100,
+                    "width_mobile": "fill",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_8Mpcwk": {
+                  "type": "text",
+                  "name": "t:names.heading",
+                  "settings": {
+                    "text": "<p>Grooming Academy</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "h5",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_piGmdR": {
+                  "type": "text",
+                  "name": "t:names.text",
+                  "settings": {
+                    "text": "<p>Join Our Grooming Academy</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "image_mz6BY7",
+                "text_8Mpcwk",
+                "text_piGmdR"
               ]
             }
           },
           "block_order": [
-            "card_NnbQxY",
             "card_XMD7Bf",
-            "card_xWAWBx",
-            "card_4bCwjX",
-            "card_HQdXVw"
+            "card_idczLz",
+            "card_caKKir",
+            "card_mdKQpR",
+            "card_A3JhQa",
+            "card_ikLaUg",
+            "card_RHXE6R"
           ]
         }
       },
