@@ -12,7 +12,7 @@
     "faq": {
       "type": "faq-editorial",
       "blocks": {
-        "group_1": {
+        "group_shop": {
           "type": "group",
           "settings": {
             "title": "Online shopping",
@@ -20,245 +20,49 @@
             "open": true
           }
         },
-        "topic_1_1": {
+        "topic_orders": {
           "type": "topic",
           "settings": {
-            "title": "Orders"
+            "title": "Orders and delivery"
           }
         },
-        "question_1": {
-          "type": "question",
-          "settings": {
-            "question": "How do I place an order?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p><p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "question_2": {
+        "q_order_change": {
           "type": "question",
           "settings": {
             "question": "Can I change or cancel my order?",
-            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>",
-            "bullets": "Dolor sit amet, consectetur adipiscing\nInteger posuere erat a ante venenatis\nDonec ullamcorper nulla non metus",
-            "answer_after": "<p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
-          }
-        },
-        "question_3": {
-          "type": "question",
-          "settings": {
-            "question": "Will I receive an order confirmation?",
-            "answer": "<p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo. <a href=\"/pages/contact\" title=\"Contact us\">Contact our team</a> for more details.</p>",
+            "answer": "<p>Yes, as long as your order hasn't been dispatched yet. Get in touch as soon as possible with your order number and we'll do our best to help.</p>",
             "bullets": "",
-            "answer_after": ""
+            "answer_after": "<p><a href=\"/pages/contact\" title=\"Contact us\">Contact our team</a></p>"
           }
         },
-        "topic_1_2": {
-          "type": "topic",
-          "settings": {
-            "title": "Delivery"
-          }
-        },
-        "question_4": {
+        "q_delivery_cost": {
           "type": "question",
           "settings": {
             "question": "How much is delivery?",
-            "answer": "<p>Lorem ipsum dolor sit amet (options subject to availability at the time of purchase):<br>The delivery costs are as follows:</p>",
-            "bullets": "Standard delivery: free on orders over £50\nExpress delivery: lorem ipsum at a cost of £5\nCollection from the Townhouse: free",
+            "answer": "<p>Delivery costs are shown at checkout before you pay:</p>",
+            "bullets": "Standard UK delivery: free on orders over £50\nStandard UK delivery under £50: [£X]\nExpress delivery: [£X]",
             "answer_after": ""
           }
         },
-        "question_5": {
+        "q_delivery_time": {
           "type": "question",
           "settings": {
             "question": "How long will delivery take?",
-            "answer": "<p><strong>Standard:</strong> lorem ipsum dolor sit amet, 2–3 working days.<br><strong>Express:</strong> consectetur adipiscing elit, next working day.<br><strong>Collection:</strong> integer posuere erat a ante, same day.</p><p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>",
+            "answer": "<p>Orders are usually dispatched within [1–2] working days. Once on its way, standard UK delivery takes [2–4] working days and express [1–2] working days.</p>",
             "bullets": "",
             "answer_after": ""
           }
         },
-        "question_6": {
+        "q_tracking": {
           "type": "question",
           "settings": {
             "question": "How can I track my order?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>",
+            "answer": "<p>As soon as your order ships, we'll email you a tracking link. You can also follow your order from your account.</p>",
             "bullets": "",
             "answer_after": ""
           }
         },
-        "question_7": {
-          "type": "question",
-          "settings": {
-            "question": "Do you deliver outside the UK?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p><p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "topic_1_3": {
-          "type": "topic",
-          "settings": {
-            "title": "Returns and exchanges"
-          }
-        },
-        "question_8": {
-          "type": "question",
-          "settings": {
-            "question": "How do I return an item?",
-            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>",
-            "bullets": "Dolor sit amet, consectetur adipiscing\nInteger posuere erat a ante venenatis\nDonec ullamcorper nulla non metus",
-            "answer_after": "<p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
-          }
-        },
-        "question_9": {
-          "type": "question",
-          "settings": {
-            "question": "When will I receive my refund?",
-            "answer": "<p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo. <a href=\"/pages/contact\" title=\"Contact us\">Contact our team</a> for more details.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "question_10": {
-          "type": "question",
-          "settings": {
-            "question": "Can I exchange a product?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p><p><em>Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</em></p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "topic_1_4": {
-          "type": "topic",
-          "settings": {
-            "title": "Payment"
-          }
-        },
-        "question_11": {
-          "type": "question",
-          "settings": {
-            "question": "Which payment methods do you accept?",
-            "answer": "<p><strong>Standard:</strong> lorem ipsum dolor sit amet, 2–3 working days.<br><strong>Express:</strong> consectetur adipiscing elit, next working day.<br><strong>Collection:</strong> integer posuere erat a ante, same day.</p><p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "question_12": {
-          "type": "question",
-          "settings": {
-            "question": "Is my payment secure?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "group_2": {
-          "type": "group",
-          "settings": {
-            "title": "Customer account",
-            "icon": "user",
-            "open": false
-          }
-        },
-        "topic_2_1": {
-          "type": "topic",
-          "settings": {
-            "title": "My account"
-          }
-        },
-        "question_13": {
-          "type": "question",
-          "settings": {
-            "question": "How do I create an account?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p><p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "question_14": {
-          "type": "question",
-          "settings": {
-            "question": "I forgot my password, what should I do?",
-            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>",
-            "bullets": "Dolor sit amet, consectetur adipiscing\nInteger posuere erat a ante venenatis\nDonec ullamcorper nulla non metus",
-            "answer_after": "<p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
-          }
-        },
-        "question_15": {
-          "type": "question",
-          "settings": {
-            "question": "How do I update my details?",
-            "answer": "<p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo. <a href=\"/pages/contact\" title=\"Contact us\">Contact our team</a> for more details.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "topic_2_2": {
-          "type": "topic",
-          "settings": {
-            "title": "Newsletter"
-          }
-        },
-        "question_16": {
-          "type": "question",
-          "settings": {
-            "question": "How do I subscribe to the newsletter?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p><p><em>Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</em></p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "question_17": {
-          "type": "question",
-          "settings": {
-            "question": "How do I unsubscribe?",
-            "answer": "<p><strong>Standard:</strong> lorem ipsum dolor sit amet, 2–3 working days.<br><strong>Express:</strong> consectetur adipiscing elit, next working day.<br><strong>Collection:</strong> integer posuere erat a ante, same day.</p><p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "group_3": {
-          "type": "group",
-          "settings": {
-            "title": "Products",
-            "icon": "box",
-            "open": false
-          }
-        },
-        "topic_3_1": {
-          "type": "topic",
-          "settings": {
-            "title": "Care and sizing"
-          }
-        },
-        "question_18": {
-          "type": "question",
-          "settings": {
-            "question": "How do I find the right size for my dog?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "question_19": {
-          "type": "question",
-          "settings": {
-            "question": "How should I wash my dog's coat?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p><p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "question_20": {
-          "type": "question",
-          "settings": {
-            "question": "Are your treats suitable for puppies?",
-            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>",
-            "bullets": "Dolor sit amet, consectetur adipiscing\nInteger posuere erat a ante venenatis\nDonec ullamcorper nulla non metus",
-            "answer_after": "<p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
-          }
-        },
-        "group_4": {
+        "group_townhouse": {
           "type": "group",
           "settings": {
             "title": "The Townhouse",
@@ -266,130 +70,62 @@
             "open": false
           }
         },
-        "topic_4_1": {
+        "topic_grooming": {
           "type": "topic",
           "settings": {
-            "title": "Grooming"
+            "title": "Grooming and daycare"
           }
         },
-        "question_21": {
+        "q_book_groom": {
           "type": "question",
           "settings": {
             "question": "How do I book a grooming appointment?",
-            "answer": "<p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo. <a href=\"/pages/contact\" title=\"Contact us\">Contact our team</a> for more details.</p>",
+            "answer": "<p>You can book online or by phone. We recommend booking [2 weeks] ahead, especially at weekends.</p>",
             "bullets": "",
-            "answer_after": ""
+            "answer_after": "<p><a href=\"/pages/contact\" title=\"Book a groom\">Book a groom</a></p>"
           }
         },
-        "question_22": {
+        "q_groom_includes": {
           "type": "question",
           "settings": {
             "question": "What does a full groom include?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p><p><em>Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</em></p>",
-            "bullets": "",
+            "answer": "<p>Every full groom is tailored to your dog's coat and includes:</p>",
+            "bullets": "Bath with dog-friendly shampoo and conditioner\nBlow-dry and brush-out\nBreed or style cut\nNail trim and ear clean",
             "answer_after": ""
           }
         },
-        "question_23": {
-          "type": "question",
-          "settings": {
-            "question": "How long does a groom take?",
-            "answer": "<p><strong>Standard:</strong> lorem ipsum dolor sit amet, 2–3 working days.<br><strong>Express:</strong> consectetur adipiscing elit, next working day.<br><strong>Collection:</strong> integer posuere erat a ante, same day.</p><p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "topic_4_2": {
-          "type": "topic",
-          "settings": {
-            "title": "Dog daycare"
-          }
-        },
-        "question_24": {
+        "q_daycare": {
           "type": "question",
           "settings": {
             "question": "What does a day at daycare include?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>",
+            "answer": "<p>A supervised day of play, rest and company in a safe, dog-friendly space, from [8 AM] to [6 PM]. We'll send you an update during the day.</p>",
             "bullets": "",
             "answer_after": ""
           }
         },
-        "question_25": {
+        "q_trial": {
           "type": "question",
           "settings": {
             "question": "Does my dog need a trial day?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p><p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo.</p>",
+            "answer": "<p>Yes. New dogs join us for a short trial first, so we can make sure they're happy and settled before their first full day.</p>",
             "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "topic_4_3": {
-          "type": "topic",
-          "settings": {
-            "title": "Café"
-          }
-        },
-        "question_26": {
-          "type": "question",
-          "settings": {
-            "question": "Are dogs allowed in the café?",
-            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>",
-            "bullets": "Dolor sit amet, consectetur adipiscing\nInteger posuere erat a ante venenatis\nDonec ullamcorper nulla non metus",
-            "answer_after": "<p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
-          }
-        },
-        "question_27": {
-          "type": "question",
-          "settings": {
-            "question": "Do you take reservations?",
-            "answer": "<p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Nullam quis risus eget urna mollis ornare vel eu leo. <a href=\"/pages/contact\" title=\"Contact us\">Contact our team</a> for more details.</p>",
-            "bullets": "",
-            "answer_after": ""
+            "answer_after": "<p>Please bring your dog's up-to-date vaccination record.</p>"
           }
         }
       },
       "block_order": [
-        "group_1",
-        "topic_1_1",
-        "question_1",
-        "question_2",
-        "question_3",
-        "topic_1_2",
-        "question_4",
-        "question_5",
-        "question_6",
-        "question_7",
-        "topic_1_3",
-        "question_8",
-        "question_9",
-        "question_10",
-        "topic_1_4",
-        "question_11",
-        "question_12",
-        "group_2",
-        "topic_2_1",
-        "question_13",
-        "question_14",
-        "question_15",
-        "topic_2_2",
-        "question_16",
-        "question_17",
-        "group_3",
-        "topic_3_1",
-        "question_18",
-        "question_19",
-        "question_20",
-        "group_4",
-        "topic_4_1",
-        "question_21",
-        "question_22",
-        "question_23",
-        "topic_4_2",
-        "question_24",
-        "question_25",
-        "topic_4_3",
-        "question_26",
-        "question_27"
+        "group_shop",
+        "topic_orders",
+        "q_order_change",
+        "q_delivery_cost",
+        "q_delivery_time",
+        "q_tracking",
+        "group_townhouse",
+        "topic_grooming",
+        "q_book_groom",
+        "q_groom_includes",
+        "q_daycare",
+        "q_trial"
       ],
       "settings": {
         "layout": "simple",
