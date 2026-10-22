@@ -16,7 +16,7 @@
   case s.color_style
     when 'neutral'
       assign faq_background = palette.background
-      assign faq_card = '#FFFFFF'
+      assign faq_card = palette.background
       assign faq_text = palette.color1
       assign faq_muted = palette.color1
     when 'custom'
@@ -26,7 +26,7 @@
       assign faq_muted = s.muted_color
     else
       assign faq_background = palette.background
-      assign faq_card = '#FFFFFF'
+      assign faq_card = palette.background
       assign faq_text = palette.foreground
       assign faq_muted = palette.foreground
   endcase
@@ -424,6 +424,8 @@
 
 {% stylesheet %}
   .faq-editorial {
+    --faq-divider: color-mix(in srgb, var(--faq-text) 16%, transparent);
+
     display: block;
     padding-block: var(--faq-padding-top) var(--faq-padding-bottom);
     background: var(--faq-background);
@@ -489,8 +491,12 @@
     background: var(--faq-card);
   }
 
-  .faq-editorial__group-card + .faq-editorial__group-card {
-    margin-block-start: 1px;
+  .faq-editorial__group-card {
+    border-block-end: 1px solid var(--faq-divider);
+  }
+
+  .faq-editorial__group-card:first-of-type {
+    border-block-start: 1px solid var(--faq-divider);
   }
 
   .faq-editorial__group {
@@ -519,7 +525,7 @@
     inline-size: 40px;
     block-size: 40px;
     border-radius: 50%;
-    background: var(--faq-background);
+    background: color-mix(in srgb, var(--faq-text) 8%, transparent);
   }
 
   .faq-editorial__group-icon img {
@@ -580,7 +586,7 @@
   .faq-editorial__title {
     margin: 0;
     padding: 24px;
-    border-block-end: 1px solid var(--faq-background);
+    border-block-end: 1px solid var(--faq-divider);
     background: var(--faq-card);
     font-family: var(--font-heading--family);
     font-size: 18px;
@@ -594,13 +600,9 @@
     background: var(--faq-card);
   }
 
-  .faq-editorial__item + .faq-editorial__item {
-    margin-block-start: 1px;
-  }
-
-  .faq-editorial__item[hidden] + .faq-editorial__item,
-  .faq-editorial__title + .faq-editorial__item {
-    margin-block-start: 0;
+  /* Rows are separated by thin lines, so they read as a list even on the page background */
+  .faq-editorial__item {
+    border-block-end: 1px solid var(--faq-divider);
   }
 
   .faq-editorial__question {
