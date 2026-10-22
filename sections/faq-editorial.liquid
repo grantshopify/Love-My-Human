@@ -260,7 +260,11 @@
             {%- if s.form_note != blank -%}
               <div class="faq-editorial__form-note rte">{{ s.form_note }}</div>
             {%- endif -%}
-            <button type="submit" class="button faq-editorial__form-submit{% if s.form_columns != 'two' %} faq-editorial__form-submit--full{% endif %}">{{ s.form_submit_label }}</button>
+            <button type="submit" class="button faq-editorial__form-submit{% if s.form_columns != 'two' %} faq-editorial__form-submit--full{% endif %}{% if s.form_button_style != 'theme' %} faq-editorial__form-submit--brand{% endif %}"
+              {% if s.form_button_style != 'theme' %}
+                style="--faq-button-background: {{ s.form_button_background }}; --faq-button-text: {{ s.form_button_text }};"
+              {% endif %}
+            >{{ s.form_submit_label }}</button>
           {%- endif -%}
         {%- endform -%}
       {%- endif -%}
@@ -877,6 +881,22 @@
     inline-size: 100%;
   }
 
+  /* Custom-coloured send button (colours set on the element from the section settings) */
+  .faq-editorial__form-submit--brand.button {
+    --button-color: var(--faq-button-text);
+    --button-background-color: var(--faq-button-background);
+    --button-border-color: var(--faq-button-background);
+
+    border-color: var(--faq-button-background);
+    background-color: var(--faq-button-background);
+    color: var(--faq-button-text);
+    transition: opacity 0.2s ease;
+  }
+
+  .faq-editorial__form-submit--brand.button:hover {
+    opacity: 0.85;
+  }
+
   .faq-editorial__form-status {
     margin: 0 0 16px;
     padding: 12px 16px;
@@ -1348,6 +1368,36 @@
       "id": "form_submit_label",
       "label": "Send button",
       "default": "Send message"
+    },
+    {
+      "type": "select",
+      "id": "form_button_style",
+      "label": "Send button style",
+      "options": [
+        {
+          "value": "color",
+          "label": "Custom colours (below)"
+        },
+        {
+          "value": "theme",
+          "label": "Theme button (Theme settings → Buttons)"
+        }
+      ],
+      "default": "color"
+    },
+    {
+      "type": "color",
+      "id": "form_button_background",
+      "label": "Send button background",
+      "default": "{{ settings.color_palette.foreground }}",
+      "visible_if": "{{ section.settings.form_button_style == 'color' }}"
+    },
+    {
+      "type": "color",
+      "id": "form_button_text",
+      "label": "Send button text",
+      "default": "{{ settings.color_palette.background }}",
+      "visible_if": "{{ section.settings.form_button_style == 'color' }}"
     },
     {
       "type": "text",
