@@ -107,7 +107,7 @@
           "type": "question",
           "settings": {
             "question": "How long does delivery take?",
-            "answer": "<p>Orders placed before 4.00pm, Monday to Friday, are dispatched the same working day. Orders placed after 4.00pm are dispatched the next working day.</p><p>Once dispatched, Royal Mail Tracked 24 aims to delivery within one working day, while Royal Mail Tracked 48 aims to deliver within two to three working days. Delivery times are estimates and are not guaranteed.&nbsp;</p>",
+            "answer": "<p>Once dispatched, Royal Mail Tracked 24 aims to delivery within one working day, while Royal Mail Tracked 48 aims to deliver within two to three working days. Delivery times are estimates and are not guaranteed.&nbsp;</p>",
             "bullets": "",
             "answer_after": ""
           }
@@ -151,7 +151,7 @@
           "type": "question",
           "settings": {
             "question": "What does a day at daycare include?",
-            "answer": "<p>A supervised day of play, rest and company in a safe, dog-friendly space, from [8 AM] to [6 PM]. We'll send you an update during the day.</p>",
+            "answer": "<p>Our order cut-off time is 4.00pm,.</p>",
             "bullets": "",
             "answer_after": ""
           }
