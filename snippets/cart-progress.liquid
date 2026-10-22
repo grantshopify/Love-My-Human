@@ -29,7 +29,8 @@
   assign goal_count = 0
   assign goal_amounts = ''
   assign goal_labels = ''
-  for i in (1..5)
+  # One goal (free shipping) for now; the multi-goal version is on branch archive/cart-progress-multi-goal
+  for i in (1..1)
     assign amount_key = 'cart_progress_goal_' | append: i | append: '_amount'
     assign label_key = 'cart_progress_goal_' | append: i | append: '_label'
     assign amount = settings[amount_key] | default: 0 | times: 100 | round
