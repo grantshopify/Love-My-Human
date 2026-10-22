@@ -70,8 +70,8 @@
         "section_width": "full-width",
         "background_color": "{{ settings.color_palette.background }}",
         "text_color": "{{ settings.color_palette.foreground }}",
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-start": 100,
+        "padding-block-end": 100
       }
     }
   },
