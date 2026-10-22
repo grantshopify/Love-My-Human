@@ -106,8 +106,8 @@
         "question_itnmFV": {
           "type": "question",
           "settings": {
-            "question": "How can I track my order?",
-            "answer": "<p>As soon as your order ships, we'll email you a tracking link. You can also follow your order from your account.</p>",
+            "question": "How long does delivery take?",
+            "answer": "<p>Orders placed before 4.00pm, Monday to Friday, are dispatched the same working day. Orders placed after 4.00pm are dispatched the next working day.</p><p>Once dispatched, Royal Mail Tracked 24 aims to delivery within one working day, while Royal Mail Tracked 48 aims to deliver within two to three working days. Delivery times are estimates and are not guaranteed.&nbsp;</p>",
             "bullets": "",
             "answer_after": ""
           }
