@@ -88,9 +88,9 @@
         "question_Mtt33U": {
           "type": "question",
           "settings": {
-            "question": "How much is delivery?",
-            "answer": "<p>Delivery costs are shown at checkout before you pay:</p>",
-            "bullets": "Standard UK delivery: free on orders over £50\nStandard UK delivery under £50: [£X]\nExpress delivery: [£X]",
+            "question": "Do you offer international shipping?",
+            "answer": "<p>Yes! We ship internationally.</p><p>Available destinations, tracked delivery options and shipping costs are calculated at checkout once you enter your delivery address.&nbsp;</p><p>Any applicable shipping charges will be displayed before you complete your purchase.</p>",
+            "bullets": "",
             "answer_after": ""
           }
         },
