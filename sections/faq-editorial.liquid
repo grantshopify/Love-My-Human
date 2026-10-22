@@ -1,0 +1,668 @@
+{%- comment -%}
+  FAQ (Hermès style): sidebar of groups and topics on the left, the selected topic's questions
+  as an accordion on the right, and a "More questions?" contact box underneath.
+
+  Everything is managed with blocks, in order:
+    Group    → a heading in the sidebar (e.g. "Online shopping")
+    Topic    → a link under the group and the title above its questions (e.g. "Delivery")
+    Question → belongs to the topic above it
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign has_topic = false
+  for block in section.blocks
+    if block.type == 'topic'
+      assign has_topic = true
+      break
+    endif
+  endfor
+-%}
+
+<faq-editorial
+  class="faq-editorial"
+  data-single-open="{{ s.single_open }}"
+  data-open-first="{{ s.open_first }}"
+  style="
+    --faq-background: {{ s.background_color }};
+    --faq-card: {{ s.card_color }};
+    --faq-text: {{ s.text_color }};
+    --faq-muted: {{ s.muted_color }};
+    --faq-padding-top: {{ s.padding_top }}px;
+    --faq-padding-bottom: {{ s.padding_bottom }}px;
+  "
+>
+  <div class="faq-editorial__inner">
+    {%- if has_topic -%}
+      <nav class="faq-editorial__sidebar" aria-label="{{ s.sidebar_label | escape }}">
+        {%- if s.back_label != blank and s.back_link != blank -%}
+          <a class="faq-editorial__back" href="{{ s.back_link }}">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" width="12" height="12"><path d="m13 4-6 6 6 6" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+            {{ s.back_label }}
+          </a>
+        {%- endif -%}
+
+        {%- comment -%} Mobile: a button showing the current topic opens the topic list {%- endcomment -%}
+        <button type="button" class="faq-editorial__picker" aria-expanded="false" data-faq-picker>
+          <span data-faq-picker-label></span>
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" width="12" height="12"><path d="m4 7 6 6 6-6" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        </button>
+
+        <div class="faq-editorial__menu" data-faq-menu>
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'group' -%}
+                <p class="faq-editorial__group" {{ block.shopify_attributes }}>{{ block.settings.title }}</p>
+              {%- when 'topic' -%}
+                {%- assign topic_id = block.settings.title | handleize -%}
+                <a
+                  class="faq-editorial__topic"
+                  href="#{{ topic_id }}"
+                  data-faq-topic-link="{{ topic_id }}"
+                  {{ block.shopify_attributes }}
+                >
+                  {{- block.settings.title -}}
+                </a>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </nav>
+    {%- endif -%}
+
+    {%- comment -%}
+      Each title and question carries the topic it belongs to (the Topic block above it);
+      the script shows the selected topic's title and questions.
+    {%- endcomment -%}
+    <div class="faq-editorial__content">
+      {%- assign current_topic = 'faq' -%}
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'topic' -%}
+            {%- assign current_topic = block.settings.title | handleize -%}
+            <h2
+              class="faq-editorial__title"
+              id="{{ current_topic }}"
+              data-faq-topic="{{ current_topic }}"
+              data-faq-title
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.title }}
+            </h2>
+          {%- when 'question' -%}
+            <details
+              class="faq-editorial__item"
+              id="faq-{{ block.id }}"
+              data-faq-topic="{{ current_topic }}"
+              {{ block.shopify_attributes }}
+            >
+              <summary class="faq-editorial__question">
+                <h3 class="faq-editorial__question-text">{{ block.settings.question }}</h3>
+                <span class="faq-editorial__icon" aria-hidden="true"></span>
+              </summary>
+              <div class="faq-editorial__answer rte">{{ block.settings.answer }}</div>
+            </details>
+        {%- endcase -%}
+      {%- endfor -%}
+
+      {%- if section.blocks.size == 0 and request.design_mode -%}
+        <p class="faq-editorial__empty">Add a Group, then Topics and Questions in the section's blocks.</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if s.contact_heading != blank or s.contact_text != blank -%}
+    <div class="faq-editorial__contact">
+      {%- if s.contact_heading != blank -%}
+        <h2 class="faq-editorial__contact-heading">{{ s.contact_heading }}</h2>
+      {%- endif -%}
+      {%- if s.contact_text != blank -%}
+        <div class="faq-editorial__contact-text rte">{{ s.contact_text }}</div>
+      {%- endif -%}
+      {%- if s.contact_button_label != blank and s.contact_button_link != blank -%}
+        <a class="faq-editorial__contact-button" href="{{ s.contact_button_link }}">{{ s.contact_button_label }}</a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</faq-editorial>
+
+<script>
+  if (!customElements.get('faq-editorial')) {
+    customElements.define(
+      'faq-editorial',
+      class extends HTMLElement {
+        connectedCallback() {
+          this.items = [...this.querySelectorAll('.faq-editorial__content [data-faq-topic]')];
+          this.topics = [...new Set(this.items.map((item) => item.dataset.faqTopic))];
+          this.links = [...this.querySelectorAll('[data-faq-topic-link]')];
+          this.picker = this.querySelector('[data-faq-picker]');
+          this.pickerLabel = this.querySelector('[data-faq-picker-label]');
+
+          this.links.forEach((link) =>
+            link.addEventListener('click', (event) => {
+              event.preventDefault();
+              this.show(link.dataset.faqTopicLink, true);
+              this.picker?.setAttribute('aria-expanded', 'false');
+            })
+          );
+
+          this.picker?.addEventListener('click', () => {
+            const open = this.picker.getAttribute('aria-expanded') === 'true';
+            this.picker.setAttribute('aria-expanded', String(!open));
+          });
+
+          // One question open at a time (optional)
+          if (this.dataset.singleOpen === 'true') {
+            this.addEventListener(
+              'toggle',
+              (event) => {
+                const item = event.target;
+                if (!(item instanceof HTMLDetailsElement) || !item.open) return;
+                this.querySelectorAll(`details[open][data-faq-topic="${item.dataset.faqTopic}"]`).forEach((other) => {
+                  if (other !== item) other.open = false;
+                });
+              },
+              true
+            );
+          }
+
+          // Theme editor: show the topic of the block being edited
+          document.addEventListener('shopify:block:select', (event) => {
+            if (!this.contains(event.target)) return;
+            const id = event.target.dataset?.faqTopic || event.target.dataset?.faqTopicLink;
+            if (id) this.show(id, false);
+            if (event.target instanceof HTMLDetailsElement) event.target.open = true;
+          });
+
+          window.addEventListener('hashchange', () => this.fromHash());
+          this.fromHash(true);
+        }
+
+        /** Opens the topic (or question) named in the URL, e.g. /pages/faq#delivery */
+        fromHash(initial = false) {
+          const hash = decodeURIComponent(location.hash.slice(1));
+          const target = hash && this.querySelector(`#${CSS.escape(hash)}`);
+          this.show(target?.dataset?.faqTopic || this.topics[0], false);
+          if (target instanceof HTMLDetailsElement) {
+            target.open = true;
+            target.scrollIntoView({ block: 'center' });
+          } else if (initial && this.dataset.openFirst === 'true') {
+            const firstQuestion = this.querySelector('details[data-faq-topic]:not([hidden])');
+            if (firstQuestion) firstQuestion.open = true;
+          }
+        }
+
+        show(id, updateUrl) {
+          if (!id) return;
+          this.items.forEach((item) => (item.hidden = item.dataset.faqTopic !== id));
+          this.links.forEach((link) => {
+            const active = link.dataset.faqTopicLink === id;
+            link.classList.toggle('is-active', active);
+            if (active) link.setAttribute('aria-current', 'true');
+            else link.removeAttribute('aria-current');
+          });
+          const title = this.items.find((item) => item.matches('[data-faq-title]') && item.dataset.faqTopic === id);
+          if (this.pickerLabel) this.pickerLabel.textContent = title?.textContent.trim() || '';
+          if (updateUrl) history.replaceState(null, '', `#${id}`);
+        }
+      }
+    );
+  }
+</script>
+
+{% stylesheet %}
+  .faq-editorial {
+    display: block;
+    padding-block: var(--faq-padding-top) var(--faq-padding-bottom);
+    background: var(--faq-background);
+    color: var(--faq-text);
+    font-family: var(--font-body--family);
+  }
+
+  .faq-editorial__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-inline-size: 1240px;
+    margin-inline: auto;
+    padding-inline: 16px;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .faq-editorial__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-block-end: 24px;
+    color: inherit;
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .faq-editorial__picker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    inline-size: 100%;
+    padding: 16px 20px;
+    border: 0;
+    background: var(--faq-card);
+    color: inherit;
+    font-family: var(--font-heading--family);
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    text-align: start;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .faq-editorial__picker[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+  }
+
+  .faq-editorial__menu {
+    display: none;
+    padding: 8px 20px 20px;
+    background: var(--faq-card);
+  }
+
+  .faq-editorial__picker[aria-expanded='true'] + .faq-editorial__menu {
+    display: block;
+  }
+
+  .faq-editorial__group {
+    margin: 24px 0 8px;
+    font-family: var(--font-heading--family);
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    line-height: 22px;
+    text-transform: uppercase;
+  }
+
+  .faq-editorial__group:first-child {
+    margin-block-start: 12px;
+  }
+
+  .faq-editorial__topic {
+    display: block;
+    inline-size: fit-content;
+    padding-block: 8px;
+    color: var(--faq-muted);
+    font-size: 14px;
+    line-height: 22px;
+    text-decoration: none;
+  }
+
+  .faq-editorial__topic:hover,
+  .faq-editorial__topic.is-active {
+    color: var(--faq-text);
+  }
+
+  .faq-editorial__topic.is-active {
+    font-weight: 700;
+  }
+
+  /* ---------- Questions ---------- */
+  .faq-editorial__content [hidden] {
+    display: none;
+  }
+
+  .faq-editorial__title {
+    margin: 0 0 24px;
+    padding-inline: 24px;
+    font-family: var(--font-heading--family);
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .faq-editorial__item {
+    background: var(--faq-card);
+  }
+
+  .faq-editorial__item + .faq-editorial__item {
+    margin-block-start: 1px;
+  }
+
+  .faq-editorial__item[hidden] + .faq-editorial__item,
+  .faq-editorial__title + .faq-editorial__item {
+    margin-block-start: 0;
+  }
+
+  .faq-editorial__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-block-size: 56px;
+    padding: 14px 24px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq-editorial__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-editorial__question-text {
+    margin: 0;
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 22px;
+    text-transform: none;
+  }
+
+  /* Plus that turns into a minus */
+  .faq-editorial__icon {
+    position: relative;
+    flex: none;
+    inline-size: 14px;
+    block-size: 14px;
+  }
+
+  .faq-editorial__icon::before,
+  .faq-editorial__icon::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 0;
+    inline-size: 100%;
+    block-size: 1px;
+    background: currentColor;
+    transition: transform 0.25s ease;
+  }
+
+  .faq-editorial__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .faq-editorial__item[open] .faq-editorial__icon::after {
+    transform: rotate(0deg);
+  }
+
+  .faq-editorial__answer {
+    padding: 0 24px 24px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .faq-editorial__answer > :first-child {
+    margin-block-start: 0;
+  }
+
+  .faq-editorial__answer > :last-child {
+    margin-block-end: 0;
+  }
+
+  .faq-editorial__empty {
+    padding: 24px;
+    background: var(--faq-card);
+  }
+
+  /* ---------- Contact box ---------- */
+  .faq-editorial__contact {
+    display: grid;
+    justify-items: center;
+    gap: 16px;
+    max-inline-size: 1006px;
+    margin: 64px auto 0;
+    padding: 56px 24px;
+    background: var(--faq-card);
+    text-align: center;
+  }
+
+  .faq-editorial__contact-heading {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .faq-editorial__contact-text {
+    max-inline-size: 520px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .faq-editorial__contact-text p {
+    margin: 0;
+  }
+
+  .faq-editorial__contact-button {
+    margin-block-start: 8px;
+    padding-block-end: 4px;
+    border-block-end: 1px solid currentColor;
+    color: inherit;
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Desktop: sidebar left, questions right ---------- */
+  @media screen and (min-width: 990px) {
+    .faq-editorial__inner {
+      grid-template-columns: 300px minmax(0, 1fr);
+      gap: 64px;
+      padding-inline: 40px;
+    }
+
+    .faq-editorial__sidebar {
+      position: sticky;
+      inset-block-start: 32px;
+      align-self: start;
+    }
+
+    .faq-editorial__picker {
+      display: none;
+    }
+
+    .faq-editorial__menu {
+      display: block;
+      padding: 0;
+      background: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ (Hermès style)",
+  "tag": "section",
+  "class": "faq-editorial-section",
+  "max_blocks": 50,
+  "blocks": [
+    {
+      "type": "group",
+      "name": "Group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Group heading",
+          "default": "Online shopping",
+          "info": "Shown in the sidebar. Add Topics after it."
+        }
+      ]
+    },
+    {
+      "type": "topic",
+      "name": "Topic",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Topic",
+          "default": "Delivery",
+          "info": "A link in the sidebar and the title above its questions. Add Questions after it. Link to it with #topic-name, e.g. /pages/faq#delivery"
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How much is delivery?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Write the answer here.</p>"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Build the FAQ with blocks in this order: Group (sidebar heading) → Topic (sidebar link + title) → Questions. Questions belong to the Topic above them."
+    },
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_label",
+      "label": "Sidebar name (for screen readers)",
+      "default": "FAQ topics"
+    },
+    {
+      "type": "text",
+      "id": "back_label",
+      "label": "Back link text",
+      "default": "Back"
+    },
+    {
+      "type": "url",
+      "id": "back_link",
+      "label": "Back link",
+      "info": "Leave empty to hide the back link"
+    },
+    {
+      "type": "header",
+      "content": "Questions"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first",
+      "label": "Open the first question",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "single_open",
+      "label": "Only one question open at a time",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Contact box"
+    },
+    {
+      "type": "text",
+      "id": "contact_heading",
+      "label": "Heading",
+      "default": "More questions?"
+    },
+    {
+      "type": "richtext",
+      "id": "contact_text",
+      "label": "Text",
+      "default": "<p>Do you need to contact our team? We'll be delighted to answer your questions.</p>"
+    },
+    {
+      "type": "text",
+      "id": "contact_button_label",
+      "label": "Button label",
+      "default": "Contact us"
+    },
+    {
+      "type": "url",
+      "id": "contact_button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "{{ settings.color_palette.background }}"
+    },
+    {
+      "type": "color",
+      "id": "card_color",
+      "label": "Question and box background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "{{ settings.color_palette.color1 }}"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Sidebar links",
+      "default": "#696969"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ (Hermès style)",
+      "category": "t:categories.text",
+      "blocks": {
+        "group_1": { "type": "group", "settings": { "title": "Online shopping" } },
+        "topic_1": { "type": "topic", "settings": { "title": "Delivery" } },
+        "q_1": { "type": "question", "settings": { "question": "How much is delivery?", "answer": "<p>Write the answer here.</p>" } },
+        "q_2": { "type": "question", "settings": { "question": "How long will delivery take?", "answer": "<p>Write the answer here.</p>" } },
+        "topic_2": { "type": "topic", "settings": { "title": "Returns and exchanges" } },
+        "q_3": { "type": "question", "settings": { "question": "How do I return an item?", "answer": "<p>Write the answer here.</p>" } }
+      },
+      "block_order": ["group_1", "topic_1", "q_1", "q_2", "topic_2", "q_3"]
+    }
+  ]
+}
+{% endschema %}

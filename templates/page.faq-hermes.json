@@ -1,0 +1,128 @@
+{
+  "sections": {
+    "faq": {
+      "type": "faq-editorial",
+      "blocks": {
+        "g1": {
+          "type": "group",
+          "settings": {
+            "title": "Online shopping"
+          }
+        },
+        "t1": {
+          "type": "topic",
+          "settings": {
+            "title": "Orders"
+          }
+        },
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "How do I place an order?",
+            "answer": "<p>Add your products to the bag and go to checkout. You'll receive an email confirmation as soon as your order is placed.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Can I change or cancel my order?",
+            "answer": "<p>Write the answer here.</p>"
+          }
+        },
+        "t2": {
+          "type": "topic",
+          "settings": {
+            "title": "Delivery"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "How much is delivery?",
+            "answer": "<p>Write the answer here, e.g. your delivery prices and the free shipping minimum.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "How long will delivery take?",
+            "answer": "<p>Write the answer here.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "How can I track my order?",
+            "answer": "<p>Write the answer here.</p>"
+          }
+        },
+        "t3": {
+          "type": "topic",
+          "settings": {
+            "title": "Returns and exchanges"
+          }
+        },
+        "q6": {
+          "type": "question",
+          "settings": {
+            "question": "How do I return an item?",
+            "answer": "<p>Write the answer here.</p>"
+          }
+        },
+        "g2": {
+          "type": "group",
+          "settings": {
+            "title": "The Townhouse"
+          }
+        },
+        "t4": {
+          "type": "topic",
+          "settings": {
+            "title": "Grooming"
+          }
+        },
+        "q7": {
+          "type": "question",
+          "settings": {
+            "question": "How do I book a grooming appointment?",
+            "answer": "<p>Write the answer here.</p>"
+          }
+        },
+        "t5": {
+          "type": "topic",
+          "settings": {
+            "title": "Dog daycare"
+          }
+        },
+        "q8": {
+          "type": "question",
+          "settings": {
+            "question": "What does a day at daycare include?",
+            "answer": "<p>Write the answer here.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "g1",
+        "t1",
+        "q1",
+        "q2",
+        "t2",
+        "q3",
+        "q4",
+        "q5",
+        "t3",
+        "q6",
+        "g2",
+        "t4",
+        "q7",
+        "t5",
+        "q8"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "faq"
+  ]
+}
