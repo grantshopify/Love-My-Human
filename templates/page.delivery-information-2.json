@@ -97,8 +97,8 @@
         "question_6inb73": {
           "type": "question",
           "settings": {
-            "question": "How long will delivery take?",
-            "answer": "<p>Orders are usually dispatched within [1–2] working days. Once on its way, standard UK delivery takes [2–4] working days and express [1–2] working days.</p>",
+            "question": "How much does delivery cost?",
+            "answer": "<p>Royal Mail Tracked 24 is £5, while Royal Mail Tracked 48 is £3.50 for UK orders.</p><p>All our orders are sent using tracked delivery services, so you can follow your parcel's journey from dispatch to delivery.</p><p>International shipping costs vary depending on your destination and the available service. All applicable charges will be displayed at checkout before you complete your purchase.</p>",
             "bullets": "",
             "answer_after": ""
           }
