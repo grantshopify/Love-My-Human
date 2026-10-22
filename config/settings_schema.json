@@ -1622,6 +1622,206 @@
     ]
   },
   {
+    "name": "Cart progress bar",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "A bar in the cart that shows how close the customer is to each reward, like popcyclingco.com. Each goal is the cart total needed, e.g. 50 for free shipping. Add more goals (e.g. 100 for a free gift) and each must be higher than the one before it. The bar only shows progress: set up the actual reward as a discount in Shopify admin → Discounts."
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_progress_enable",
+        "label": "Show cart progress bar",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_progress_show_page",
+        "label": "Show on cart page",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_progress_show_drawer",
+        "label": "Show in cart drawer",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_progress_show_empty",
+        "label": "Show when the cart is empty",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "cart_progress_basis",
+        "label": "Count towards goals",
+        "options": [
+          {
+            "value": "total",
+            "label": "Cart total after discounts"
+          },
+          {
+            "value": "subtotal",
+            "label": "Items subtotal before discounts"
+          }
+        ],
+        "default": "total"
+      },
+      {
+        "type": "header",
+        "content": "Goal 1"
+      },
+      {
+        "type": "number",
+        "id": "cart_progress_goal_1_amount",
+        "label": "Cart total needed",
+        "info": "In your store currency, e.g. 50. Must match the minimum purchase amount of your discount (Shopify admin → Discounts), e.g. the Free shipping minimum. The two are not linked: change both together.",
+        "default": 50
+      },
+      {
+        "type": "text",
+        "id": "cart_progress_goal_1_label",
+        "label": "Reward",
+        "placeholder": "e.g. Free gift",
+        "default": "Free shipping"
+      },
+      {
+        "type": "header",
+        "content": "Goal 2"
+      },
+      {
+        "type": "number",
+        "id": "cart_progress_goal_2_amount",
+        "label": "Cart total needed",
+        "info": "Leave empty to turn this goal off. Must match the minimum of the discount it represents."
+      },
+      {
+        "type": "text",
+        "id": "cart_progress_goal_2_label",
+        "label": "Reward",
+        "placeholder": "e.g. Free gift"
+      },
+      {
+        "type": "header",
+        "content": "Goal 3"
+      },
+      {
+        "type": "number",
+        "id": "cart_progress_goal_3_amount",
+        "label": "Cart total needed",
+        "info": "Leave empty to turn this goal off. Must match the minimum of the discount it represents."
+      },
+      {
+        "type": "text",
+        "id": "cart_progress_goal_3_label",
+        "label": "Reward",
+        "placeholder": "e.g. Free gift"
+      },
+      {
+        "type": "header",
+        "content": "Goal 4"
+      },
+      {
+        "type": "number",
+        "id": "cart_progress_goal_4_amount",
+        "label": "Cart total needed",
+        "info": "Leave empty to turn this goal off. Must match the minimum of the discount it represents."
+      },
+      {
+        "type": "text",
+        "id": "cart_progress_goal_4_label",
+        "label": "Reward",
+        "placeholder": "e.g. Free gift"
+      },
+      {
+        "type": "header",
+        "content": "Goal 5"
+      },
+      {
+        "type": "number",
+        "id": "cart_progress_goal_5_amount",
+        "label": "Cart total needed",
+        "info": "Leave empty to turn this goal off. Must match the minimum of the discount it represents."
+      },
+      {
+        "type": "text",
+        "id": "cart_progress_goal_5_label",
+        "label": "Reward",
+        "placeholder": "e.g. Free gift"
+      },
+      {
+        "type": "header",
+        "content": "Text"
+      },
+      {
+        "type": "text",
+        "id": "cart_progress_remaining_text",
+        "label": "Under each goal (not reached)",
+        "default": "Spend [amount] more",
+        "info": "[amount] becomes what is left to spend, e.g. £12"
+      },
+      {
+        "type": "text",
+        "id": "cart_progress_unlocked_text",
+        "label": "Under each goal (reached)",
+        "default": "Unlocked"
+      },
+      {
+        "type": "text",
+        "id": "cart_progress_message",
+        "label": "Message above the bar",
+        "info": "[amount] and [reward] are the next goal, e.g. You're £20 away from free shipping. Leave empty to hide.",
+        "default": "You're [amount] away from [reward]"
+      },
+      {
+        "type": "text",
+        "id": "cart_progress_complete_message",
+        "label": "Message when every goal is reached",
+        "info": "Shown when every goal is reached. Leave empty to hide.",
+        "default": "You've unlocked free shipping"
+      },
+      {
+        "type": "header",
+        "content": "Style"
+      },
+      {
+        "type": "range",
+        "id": "cart_progress_bar_height",
+        "label": "Bar height",
+        "min": 2,
+        "max": 12,
+        "step": 1,
+        "unit": "px",
+        "default": 4
+      },
+      {
+        "type": "color",
+        "id": "cart_progress_fill_color",
+        "label": "Bar fill",
+        "default": "{{ settings.color_palette.foreground }}"
+      },
+      {
+        "type": "color",
+        "id": "cart_progress_track_color",
+        "label": "Bar background",
+        "default": "{{ settings.color_palette.color3 }}"
+      },
+      {
+        "type": "color",
+        "id": "cart_progress_text_color",
+        "label": "Reward text",
+        "default": "{{ settings.color_palette.color1 }}"
+      },
+      {
+        "type": "color",
+        "id": "cart_progress_note_color",
+        "label": "Amount left text",
+        "default": "#5E5E59"
+      }
+    ]
+  },
+  {
     "name": "t:names.drawers",
     "settings": [
       {

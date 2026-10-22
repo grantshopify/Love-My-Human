@@ -1,0 +1,217 @@
+{%- doc -%}
+  Cart rewards progress bar: one segment per goal set in Theme settings → Cart progress bar
+  (e.g. £50 free shipping, £100 free gift). Each segment fills from the previous goal to its own.
+  Rendered inside the cart products list, so it re-renders with the cart after every change.
+
+  @param {string} [context] - 'drawer' when rendered inside the cart drawer
+{%- enddoc -%}
+
+{%- liquid
+  assign show_progress = settings.cart_progress_enable
+  if context == 'drawer' and settings.cart_progress_show_drawer == false
+    assign show_progress = false
+  endif
+  if context != 'drawer' and settings.cart_progress_show_page == false
+    assign show_progress = false
+  endif
+  if cart.empty? and settings.cart_progress_show_empty == false
+    assign show_progress = false
+  endif
+
+  if settings.cart_progress_basis == 'subtotal'
+    assign cart_value = cart.items_subtotal_price
+  else
+    assign cart_value = cart.total_price
+  endif
+
+  # Collect valid goals: an amount, a reward name, and higher than the goal before it
+  assign last_amount = 0
+  assign goal_count = 0
+  assign goal_amounts = ''
+  assign goal_labels = ''
+  for i in (1..5)
+    assign amount_key = 'cart_progress_goal_' | append: i | append: '_amount'
+    assign label_key = 'cart_progress_goal_' | append: i | append: '_label'
+    assign amount = settings[amount_key] | default: 0 | times: 100 | round
+    assign label = settings[label_key] | strip
+    if amount > last_amount and label != blank
+      assign last_amount = amount
+      assign goal_count = goal_count | plus: 1
+      assign goal_amounts = goal_amounts | append: amount | append: '|'
+      assign goal_labels = goal_labels | append: label | append: '|~|'
+    endif
+  endfor
+
+  if goal_count == 0
+    assign show_progress = false
+  endif
+
+  assign goal_amounts = goal_amounts | split: '|'
+  assign goal_labels = goal_labels | split: '|~|'
+
+  # The message above the bar talks about the next goal not yet reached
+  assign next_amount = 0
+  assign next_label = ''
+  for amount_text in goal_amounts
+    assign amount = amount_text | plus: 0
+    if cart_value < amount
+      assign next_amount = amount
+      assign next_label = goal_labels[forloop.index0]
+      break
+    endif
+  endfor
+-%}
+
+{%- if show_progress -%}
+<div
+  class="cart-progress{% if context == 'drawer' %} cart-progress--drawer{% endif %}"
+  style="
+    --cart-progress-track: {{ settings.cart_progress_track_color }};
+    --cart-progress-fill: {{ settings.cart_progress_fill_color }};
+    --cart-progress-text: {{ settings.cart_progress_text_color }};
+    --cart-progress-note: {{ settings.cart_progress_note_color }};
+    --cart-progress-height: {{ settings.cart_progress_bar_height }}px;
+  "
+>
+  {%- if next_amount > 0 and settings.cart_progress_message != blank -%}
+    {%- assign remaining = next_amount | minus: cart_value | money_without_trailing_zeros -%}
+    {%- comment -%} Mid-sentence the reward reads lower-case: "away from free shipping" {%- endcomment -%}
+    {%- assign reward_in_sentence = next_label | downcase -%}
+    <p class="cart-progress__message">
+      {{
+        settings.cart_progress_message
+        | replace: '[amount]', remaining
+        | replace: '[reward]', reward_in_sentence
+      }}
+    </p>
+  {%- elsif next_amount == 0 and settings.cart_progress_complete_message != blank -%}
+    <p class="cart-progress__message">{{ settings.cart_progress_complete_message }}</p>
+  {%- endif -%}
+
+  <ol class="cart-progress__goals list-unstyled" role="list">
+    {%- assign from = 0 -%}
+    {%- for amount_text in goal_amounts -%}
+      {%- liquid
+        assign to = amount_text | plus: 0
+        assign span = to | minus: from
+        assign progressed = cart_value | minus: from
+        if progressed < 0
+          assign progressed = 0
+        endif
+        if span > 0
+          assign percent = progressed | times: 100.0 | divided_by: span
+        else
+          assign percent = 100
+        endif
+        if percent > 100
+          assign percent = 100
+        endif
+        assign done = false
+        if cart_value >= to
+          assign done = true
+        endif
+        assign remaining = to | minus: cart_value | money_without_trailing_zeros
+        assign label = goal_labels[forloop.index0]
+      -%}
+      <li class="cart-progress__goal{% if done %} cart-progress__goal--done{% endif %}">
+        <span
+          class="cart-progress__track"
+          role="progressbar"
+          aria-label="{{ label | escape }}"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="{{ percent | round }}"
+        >
+          <span class="cart-progress__fill" style="width: {{ percent | round: 1 }}%;"></span>
+        </span>
+        <span class="cart-progress__text">
+          <strong class="cart-progress__label">{{ label }}</strong>
+          <span class="cart-progress__note">
+            {%- if done -%}
+              {{ settings.cart_progress_unlocked_text }}
+            {%- else -%}
+              {{ settings.cart_progress_remaining_text | replace: '[amount]', remaining }}
+            {%- endif -%}
+          </span>
+        </span>
+      </li>
+      {%- assign from = to -%}
+    {%- endfor -%}
+  </ol>
+</div>
+{%- endif -%}
+
+{% stylesheet %}
+  .cart-progress {
+    padding-block: 18px 20px;
+    color: var(--cart-progress-text);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .cart-progress--drawer {
+    padding-inline: var(--drawer-padding, 0);
+  }
+
+  .cart-progress__message {
+    margin: 0 0 12px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .cart-progress__goals {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 6px;
+    margin: 0;
+  }
+
+  .cart-progress__goal {
+    min-width: 0;
+  }
+
+  .cart-progress__track {
+    display: block;
+    position: relative;
+    block-size: var(--cart-progress-height);
+    overflow: hidden;
+    background: var(--cart-progress-track);
+  }
+
+  .cart-progress__fill {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    background: var(--cart-progress-fill);
+    transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .cart-progress__text {
+    display: block;
+    padding-block-start: 10px;
+  }
+
+  .cart-progress__label {
+    display: block;
+    overflow: hidden;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cart-progress__note {
+    display: block;
+    color: var(--cart-progress-note);
+  }
+
+  .cart-progress__goal--done .cart-progress__note {
+    color: var(--cart-progress-text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cart-progress__fill {
+      transition: none;
+    }
+  }
+{% endstylesheet %}

@@ -57,6 +57,9 @@
     {{- custom_style -}}
   "
 >
+  {%- unless force_empty -%}
+    {% render 'cart-progress', context: context %}
+  {%- endunless -%}
   {% if cart.empty? or force_empty %}
     {%- if shop.customer_accounts_enabled and customer == null -%}
       <p>
