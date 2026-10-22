@@ -150,8 +150,8 @@
         "question_kUw7Xe": {
           "type": "question",
           "settings": {
-            "question": "What does a day at daycare include?",
-            "answer": "<p>Our order cut-off time is 4.00pm,.</p>",
+            "question": "What is your cut-off time for same-day dispatch?",
+            "answer": "<p>Our order cut-off time is 4.00pm, Monday to Friday. Orders placed before 4.00pm on a working day will be dispatched the same day. Orders placed after 4.00pm wll be dispatched the next working day.</p><p>We dispatch Monday to Friday only, so orders placed over the weekend will be dispatched on Monday, provided it is a working day.</p>",
             "bullets": "",
             "answer_after": ""
           }
