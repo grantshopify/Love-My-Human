@@ -57,8 +57,11 @@
     {{- custom_style -}}
   "
 >
+  {%- comment -%} Cart page: on/off with the Cart products block's "Show progress bar" option {%- endcomment -%}
   {%- unless force_empty -%}
-    {% render 'cart-progress', context: context %}
+    {%- if context == 'drawer' or block_settings.show_progress_bar != false -%}
+      {% render 'cart-progress', context: context %}
+    {%- endif -%}
   {%- endunless -%}
   {% if cart.empty? or force_empty %}
     {%- if shop.customer_accounts_enabled and customer == null -%}

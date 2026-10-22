@@ -1638,7 +1638,8 @@
         "type": "checkbox",
         "id": "cart_progress_show_page",
         "label": "Show on cart page",
-        "default": true
+        "default": true,
+        "info": "It can also be turned off on the Cart page itself: Cart page → Cart products block → Show progress bar."
       },
       {
         "type": "checkbox",
