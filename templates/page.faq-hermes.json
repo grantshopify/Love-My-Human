@@ -72,12 +72,14 @@
         },
         "topic_grooming": {
           "type": "topic",
+          "disabled": true,
           "settings": {
             "title": "Grooming and daycare"
           }
         },
         "q_book_groom": {
           "type": "question",
+          "disabled": true,
           "settings": {
             "question": "How do I book a grooming appointment?",
             "answer": "<p>You can book online or by phone. We recommend booking [2 weeks] ahead, especially at weekends.</p>",
@@ -87,6 +89,7 @@
         },
         "q_groom_includes": {
           "type": "question",
+          "disabled": true,
           "settings": {
             "question": "What does a full groom include?",
             "answer": "<p>Every full groom is tailored to your dog's coat and includes:</p>",
