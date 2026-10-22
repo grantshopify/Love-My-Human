@@ -11,6 +11,60 @@
   "type": "footer",
   "name": "t:names.footer",
   "sections": {
+    "reassurance_columns_GFxKPK": {
+      "type": "reassurance-columns",
+      "blocks": {
+        "column_6pW67R": {
+          "type": "column",
+          "settings": {
+            "icon": "truck",
+            "title": "Standard delivery",
+            "text": "<p>Free standard delivery on UK orders over £50.</p>"
+          }
+        },
+        "column_6TxdyL": {
+          "type": "column",
+          "settings": {
+            "icon": "returns",
+            "title": "Returns",
+            "text": "<p>See conditions and procedure in our <a href=\"#returns-and-exchanges\">returns FAQs</a>.</p>"
+          }
+        },
+        "column_YGpzUh": {
+          "type": "column",
+          "settings": {
+            "icon": "phone",
+            "title": "Customer service",
+            "text": "<p>Monday to Friday 9 AM – 6 PM, Saturday 9 AM – 5 PM</p><p><a href=\"tel:+442000000000\" title=\"tel:+442000000000\">+44 (0)20 0000 0000</a>  |  <a href=\"/pages/contact\" title=\"/pages/contact\">Contact us</a></p>"
+          }
+        },
+        "column_xMe4NG": {
+          "type": "column",
+          "settings": {
+            "icon": "card",
+            "title": "Secured payment",
+            "text": "<p>All transactions on our website are secure.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "column_6pW67R",
+        "column_6TxdyL",
+        "column_YGpzUh",
+        "column_xMe4NG"
+      ],
+      "settings": {
+        "columns_desktop": 4,
+        "mobile_two_columns": true,
+        "show_divider": true,
+        "padding_top": 32,
+        "padding_bottom": 32,
+        "color_style": "brand",
+        "background_color": "{{ settings.color_palette.background }}",
+        "text_color": "{{ settings.color_palette.foreground }}",
+        "divider_color": "{{ settings.color_palette.color3 }}"
+      }
+    },
     "footer_editorial": {
       "type": "footer-editorial",
       "settings": {
@@ -70,60 +124,6 @@
         "divider_color": "{{ settings.color_palette.color3 }}",
         "signature_background_color": "{{ settings.color_palette.color2 }}",
         "wordmark_color": "{{ settings.color_palette.foreground }}"
-      }
-    },
-    "reassurance_columns_GFxKPK": {
-      "type": "reassurance-columns",
-      "blocks": {
-        "column_6pW67R": {
-          "type": "column",
-          "settings": {
-            "icon": "truck",
-            "title": "Standard delivery",
-            "text": "<p>Free standard delivery on UK orders over £50.</p>"
-          }
-        },
-        "column_6TxdyL": {
-          "type": "column",
-          "settings": {
-            "icon": "returns",
-            "title": "Returns",
-            "text": "<p>See conditions and procedure in our <a href=\"#returns-and-exchanges\">returns FAQs</a>.</p>"
-          }
-        },
-        "column_YGpzUh": {
-          "type": "column",
-          "settings": {
-            "icon": "phone",
-            "title": "Customer service",
-            "text": "<p>Monday to Friday 9 AM – 6 PM, Saturday 9 AM – 5 PM</p><p><a href=\"tel:+442000000000\" title=\"tel:+442000000000\">+44 (0)20 0000 0000</a>  |  <a href=\"/pages/contact\" title=\"/pages/contact\">Contact us</a></p>"
-          }
-        },
-        "column_xMe4NG": {
-          "type": "column",
-          "settings": {
-            "icon": "card",
-            "title": "Secured payment",
-            "text": "<p>All transactions on our website are secure.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "column_6pW67R",
-        "column_6TxdyL",
-        "column_YGpzUh",
-        "column_xMe4NG"
-      ],
-      "settings": {
-        "columns_desktop": 4,
-        "mobile_two_columns": true,
-        "show_divider": true,
-        "padding_top": 20,
-        "padding_bottom": 20,
-        "color_style": "brand",
-        "background_color": "{{ settings.color_palette.background }}",
-        "text_color": "{{ settings.color_palette.foreground }}",
-        "divider_color": "{{ settings.color_palette.color3 }}"
       }
     }
   },
