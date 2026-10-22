@@ -55,8 +55,8 @@
       ],
       "settings": {
         "columns_desktop": 4,
-        "mobile_two_columns": true,
-        "show_divider": true,
+        "mobile_two_columns": false,
+        "show_divider": false,
         "padding_top": 32,
         "padding_bottom": 32,
         "color_style": "brand",
