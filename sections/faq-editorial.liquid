@@ -156,7 +156,19 @@
                 <span class="faq-editorial__icon" aria-hidden="true"></span>
               </summary>
               <div class="faq-editorial__answer" data-faq-collapsible>
-                <div class="faq-editorial__answer-inner rte">{{ block.settings.answer }}</div>
+                <div class="faq-editorial__answer-inner rte">
+                  {{ block.settings.answer }}
+                  {%- assign bullet_lines = block.settings.bullets | newline_to_br | split: '<br />' -%}
+                  {%- if block.settings.bullets != blank -%}
+                    <ul class="faq-editorial__bullets">
+                      {%- for line in bullet_lines -%}
+                        {%- assign bullet_text = line | strip -%}
+                        {%- if bullet_text != blank -%}<li>{{ bullet_text }}</li>{%- endif -%}
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                  {{ block.settings.answer_after }}
+                </div>
               </div>
             </details>
         {%- endcase -%}
@@ -595,6 +607,29 @@
     margin-block-end: 0;
   }
 
+  /* Indented bullet list, like Hermès (also applies to lists pasted into the answer) */
+  .faq-editorial__answer-inner ul,
+  .faq-editorial__answer-inner ol {
+    margin: 12px 0;
+    padding-inline-start: 22px;
+  }
+
+  .faq-editorial__answer-inner ul {
+    list-style: disc;
+  }
+
+  .faq-editorial__answer-inner li {
+    padding-inline-start: 4px;
+  }
+
+  .faq-editorial__answer-inner li + li {
+    margin-block-start: 4px;
+  }
+
+  .faq-editorial__answer-inner li::marker {
+    font-size: 0.9em;
+  }
+
   .faq-editorial__empty {
     padding: 24px;
     background: var(--faq-card);
@@ -842,6 +877,18 @@
           "id": "answer",
           "label": "Answer",
           "default": "<p>Write the answer here.</p>"
+        },
+        {
+          "type": "textarea",
+          "id": "bullets",
+          "label": "Bullet points",
+          "info": "Optional. One per line, shown as an indented list under the answer."
+        },
+        {
+          "type": "richtext",
+          "id": "answer_after",
+          "label": "Text after the list",
+          "info": "Optional."
         }
       ]
     }

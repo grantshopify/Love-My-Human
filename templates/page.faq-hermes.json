@@ -37,7 +37,9 @@
           "type": "question",
           "settings": {
             "question": "Can I change or cancel my order?",
-            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p><p>• Dolor sit amet, consectetur adipiscing<br>• Integer posuere erat a ante venenatis<br>• Donec ullamcorper nulla non metus</p><p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
+            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>",
+            "bullets": "Dolor sit amet, consectetur adipiscing\nInteger posuere erat a ante venenatis\nDonec ullamcorper nulla non metus",
+            "answer_after": "<p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
           }
         },
         "question_3": {
@@ -57,7 +59,9 @@
           "type": "question",
           "settings": {
             "question": "How much is delivery?",
-            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p><p><em>Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</em></p>"
+            "answer": "<p>Lorem ipsum dolor sit amet (options subject to availability at the time of purchase):<br>The delivery costs are as follows:</p>",
+            "bullets": "Standard delivery: free on orders over £50\nExpress delivery: lorem ipsum at a cost of £5\nCollection from the Townhouse: free",
+            "answer_after": ""
           }
         },
         "question_5": {
@@ -91,7 +95,9 @@
           "type": "question",
           "settings": {
             "question": "How do I return an item?",
-            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p><p>• Dolor sit amet, consectetur adipiscing<br>• Integer posuere erat a ante venenatis<br>• Donec ullamcorper nulla non metus</p><p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
+            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>",
+            "bullets": "Dolor sit amet, consectetur adipiscing\nInteger posuere erat a ante venenatis\nDonec ullamcorper nulla non metus",
+            "answer_after": "<p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
           }
         },
         "question_9": {
@@ -153,7 +159,9 @@
           "type": "question",
           "settings": {
             "question": "I forgot my password, what should I do?",
-            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p><p>• Dolor sit amet, consectetur adipiscing<br>• Integer posuere erat a ante venenatis<br>• Donec ullamcorper nulla non metus</p><p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
+            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>",
+            "bullets": "Dolor sit amet, consectetur adipiscing\nInteger posuere erat a ante venenatis\nDonec ullamcorper nulla non metus",
+            "answer_after": "<p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
           }
         },
         "question_15": {
@@ -215,7 +223,9 @@
           "type": "question",
           "settings": {
             "question": "Are your treats suitable for puppies?",
-            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p><p>• Dolor sit amet, consectetur adipiscing<br>• Integer posuere erat a ante venenatis<br>• Donec ullamcorper nulla non metus</p><p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
+            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>",
+            "bullets": "Dolor sit amet, consectetur adipiscing\nInteger posuere erat a ante venenatis\nDonec ullamcorper nulla non metus",
+            "answer_after": "<p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
           }
         },
         "group_4": {
@@ -283,7 +293,9 @@
           "type": "question",
           "settings": {
             "question": "Are dogs allowed in the café?",
-            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p><p>• Dolor sit amet, consectetur adipiscing<br>• Integer posuere erat a ante venenatis<br>• Donec ullamcorper nulla non metus</p><p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
+            "answer": "<p><strong>Lorem ipsum:</strong> Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum. Donec ullamcorper nulla non metus auctor fringilla.</p>",
+            "bullets": "Dolor sit amet, consectetur adipiscing\nInteger posuere erat a ante venenatis\nDonec ullamcorper nulla non metus",
+            "answer_after": "<p>Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Etiam porta sem malesuada magna mollis euismod.</p>"
           }
         },
         "question_27": {
