@@ -15,7 +15,8 @@
         "g1": {
           "type": "group",
           "settings": {
-            "title": "Online shopping"
+            "title": "Online shopping",
+            "icon": "bag"
           }
         },
         "t1": {
@@ -81,7 +82,8 @@
         "g2": {
           "type": "group",
           "settings": {
-            "title": "The Townhouse"
+            "title": "The Townhouse",
+            "icon": "home"
           }
         },
         "t4": {
@@ -140,14 +142,64 @@
         "contact_button_link": "",
         "background_color": "{{ settings.color_palette.background }}",
         "card_color": "#ffffff",
-        "text_color": "{{ settings.color_palette.color1 }}",
-        "muted_color": "#696969",
+        "text_color": "{{ settings.color_palette.foreground }}",
+        "muted_color": "{{ settings.color_palette.foreground }}",
         "padding_top": 48,
-        "padding_bottom": 80
+        "padding_bottom": 80,
+        "contact_image": "shopify://shop_images/lmh-there-is-no-such-thing-as-a-luxury-groom-main-header_76e28ba3-8653-4e89-9cde-0ef62eefb5d1_1.webp",
+        "contact_image_height": 300,
+        "color_style": "brand"
+      }
+    },
+    "reassurance": {
+      "type": "reassurance-columns",
+      "blocks": {
+        "c1": {
+          "type": "column",
+          "settings": {
+            "icon": "truck",
+            "title": "Standard delivery",
+            "text": "<p>Free standard delivery on UK orders over £50.</p>"
+          }
+        },
+        "c2": {
+          "type": "column",
+          "settings": {
+            "icon": "returns",
+            "title": "Returns",
+            "text": "<p>See conditions and procedure in our <a href=\"#returns-and-exchanges\">returns FAQs</a>.</p>"
+          }
+        },
+        "c3": {
+          "type": "column",
+          "settings": {
+            "icon": "phone",
+            "title": "Customer service",
+            "text": "<p>Monday to Friday 9 AM – 6 PM, Saturday 9 AM – 5 PM</p><p><a href=\"tel:+442000000000\" title=\"tel:+442000000000\">+44 (0)20 0000 0000</a>  |  <a href=\"/pages/contact\" title=\"/pages/contact\">Contact us</a></p>"
+          }
+        },
+        "c4": {
+          "type": "column",
+          "settings": {
+            "icon": "card",
+            "title": "Secured payment",
+            "text": "<p>All transactions on our website are secure.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "settings": {
+        "color_style": "brand"
       }
     }
   },
   "order": [
-    "faq"
+    "faq",
+    "reassurance"
   ]
 }

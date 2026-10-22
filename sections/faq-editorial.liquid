@@ -10,6 +10,27 @@
 
 {%- liquid
   assign s = section.settings
+
+  # Colours: two presets from the theme palette, or the custom pickers
+  assign palette = settings.color_palette
+  case s.color_style
+    when 'neutral'
+      assign faq_background = palette.background
+      assign faq_card = '#FFFFFF'
+      assign faq_text = palette.color1
+      assign faq_muted = palette.color1
+    when 'custom'
+      assign faq_background = s.background_color
+      assign faq_card = s.card_color
+      assign faq_text = s.text_color
+      assign faq_muted = s.muted_color
+    else
+      assign faq_background = palette.background
+      assign faq_card = '#FFFFFF'
+      assign faq_text = palette.foreground
+      assign faq_muted = palette.foreground
+  endcase
+
   assign has_topic = false
   for block in section.blocks
     if block.type == 'topic'
@@ -23,12 +44,14 @@
   class="faq-editorial"
   data-single-open="{{ s.single_open }}"
   data-open-first="{{ s.open_first }}"
+  data-single-group="{{ s.single_group }}"
   style="
-    --faq-background: {{ s.background_color }};
-    --faq-card: {{ s.card_color }};
-    --faq-text: {{ s.text_color }};
-    --faq-muted: {{ s.muted_color }};
+    --faq-background: {{ faq_background }};
+    --faq-card: {{ faq_card }};
+    --faq-text: {{ faq_text }};
+    --faq-muted: {{ faq_muted }};
     --faq-padding-top: {{ s.padding_top }}px;
+    --faq-column-gap: {{ s.column_gap }}px;
     --faq-padding-bottom: {{ s.padding_bottom }}px;
   "
 >
@@ -49,21 +72,54 @@
         </button>
 
         <div class="faq-editorial__menu" data-faq-menu>
+          {%- comment -%} Topics placed before any Group are listed on their own {%- endcomment -%}
           {%- for block in section.blocks -%}
-            {%- case block.type -%}
-              {%- when 'group' -%}
-                <p class="faq-editorial__group" {{ block.shopify_attributes }}>{{ block.settings.title }}</p>
-              {%- when 'topic' -%}
-                {%- assign topic_id = block.settings.title | handleize -%}
-                <a
-                  class="faq-editorial__topic"
-                  href="#{{ topic_id }}"
-                  data-faq-topic-link="{{ topic_id }}"
-                  {{ block.shopify_attributes }}
-                >
-                  {{- block.settings.title -}}
-                </a>
-            {%- endcase -%}
+            {%- if block.type == 'group' -%}{%- break -%}{%- endif -%}
+            {%- if block.type == 'topic' -%}
+              {%- assign topic_id = block.settings.title | handleize -%}
+              <a class="faq-editorial__topic" href="#{{ topic_id }}" data-faq-topic-link="{{ topic_id }}" {{ block.shopify_attributes }}>
+                {{- block.settings.title -}}
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- comment -%} Each Group is an accordion card holding the Topics that follow it {%- endcomment -%}
+          {%- for group in section.blocks -%}
+            {%- if group.type != 'group' -%}{%- continue -%}{%- endif -%}
+            {%- assign group_index = forloop.index0 -%}
+            <details class="faq-editorial__group-card" data-faq-group{% if group.settings.open %} open{% endif %} {{ group.shopify_attributes }}>
+              <summary class="faq-editorial__group">
+                {%- if group.settings.icon_image != blank or group.settings.icon != 'none' -%}
+                  <span class="faq-editorial__group-icon">
+                    {%- if group.settings.icon_image != blank -%}
+                      {{ group.settings.icon_image | image_url: width: 80 | image_tag: width: 20, height: 20, alt: '', loading: 'lazy' }}
+                    {%- else -%}
+                      {% render 'editorial-icon', icon: group.settings.icon, size: 20 %}
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+                <span class="faq-editorial__group-title">{{ group.settings.title }}</span>
+                <svg class="faq-editorial__chevron" aria-hidden="true" focusable="false" viewBox="0 0 20 20" width="14" height="14"><path d="m4 7 6 6 6-6" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+              </summary>
+              <div class="faq-editorial__group-topics" data-faq-collapsible>
+                <div class="faq-editorial__group-topics-inner">
+                {%- assign in_group = false -%}
+                {%- for block in section.blocks -%}
+                  {%- if forloop.index0 == group_index -%}
+                    {%- assign in_group = true -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                  {%- if in_group and block.type == 'group' -%}{%- break -%}{%- endif -%}
+                  {%- if in_group and block.type == 'topic' -%}
+                    {%- assign topic_id = block.settings.title | handleize -%}
+                    <a class="faq-editorial__topic" href="#{{ topic_id }}" data-faq-topic-link="{{ topic_id }}" {{ block.shopify_attributes }}>
+                      {{- block.settings.title -}}
+                    </a>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              </div>
+            </details>
           {%- endfor -%}
         </div>
       </nav>
@@ -99,7 +155,9 @@
                 <h3 class="faq-editorial__question-text">{{ block.settings.question }}</h3>
                 <span class="faq-editorial__icon" aria-hidden="true"></span>
               </summary>
-              <div class="faq-editorial__answer rte">{{ block.settings.answer }}</div>
+              <div class="faq-editorial__answer" data-faq-collapsible>
+                <div class="faq-editorial__answer-inner rte">{{ block.settings.answer }}</div>
+              </div>
             </details>
         {%- endcase -%}
       {%- endfor -%}
@@ -110,7 +168,22 @@
     </div>
   </div>
 
-  {%- if s.contact_heading != blank or s.contact_text != blank -%}
+  {%- if s.contact_heading != blank or s.contact_text != blank or s.contact_image != blank -%}
+    <div class="faq-editorial__contact-wrap{% if s.contact_image != blank %} faq-editorial__contact-wrap--image{% endif %}" style="--faq-banner-height: {{ s.contact_image_height }}px;">
+    {%- if s.contact_image != blank -%}
+      {%- capture banner_style -%}object-position: {{ s.contact_image.presentation.focal_point | default: 'center' }};{%- endcapture -%}
+      {{
+        s.contact_image
+        | image_url: width: 2400
+        | image_tag:
+          widths: '750, 1100, 1500, 1920, 2400',
+          sizes: '(min-width: 1340px) 1260px, 100vw',
+          alt: s.contact_image.alt,
+          loading: 'lazy',
+          class: 'faq-editorial__banner',
+          style: banner_style
+      }}
+    {%- endif -%}
     <div class="faq-editorial__contact">
       {%- if s.contact_heading != blank -%}
         <h2 class="faq-editorial__contact-heading">{{ s.contact_heading }}</h2>
@@ -119,8 +192,9 @@
         <div class="faq-editorial__contact-text rte">{{ s.contact_text }}</div>
       {%- endif -%}
       {%- if s.contact_button_label != blank and s.contact_button_link != blank -%}
-        <a class="faq-editorial__contact-button" href="{{ s.contact_button_link }}">{{ s.contact_button_label }}</a>
+        <a class="button faq-editorial__contact-button" href="{{ s.contact_button_link }}">{{ s.contact_button_label }}</a>
       {%- endif -%}
+    </div>
     </div>
   {%- endif -%}
 </faq-editorial>
@@ -150,20 +224,28 @@
             this.picker.setAttribute('aria-expanded', String(!open));
           });
 
-          // One question open at a time (optional)
-          if (this.dataset.singleOpen === 'true') {
-            this.addEventListener(
-              'toggle',
-              (event) => {
-                const item = event.target;
-                if (!(item instanceof HTMLDetailsElement) || !item.open) return;
-                this.querySelectorAll(`details[open][data-faq-topic="${item.dataset.faqTopic}"]`).forEach((other) => {
-                  if (other !== item) other.open = false;
-                });
-              },
-              true
-            );
-          }
+          // Smooth accordions: questions and sidebar groups slide open and closed
+          this.addEventListener('click', (event) => {
+            const summary = event.target.closest('summary');
+            const details = summary?.parentElement;
+            if (!(details instanceof HTMLDetailsElement) || !this.contains(details)) return;
+            if (!details.querySelector(':scope > [data-faq-collapsible]')) return;
+            event.preventDefault();
+            const opening = !details.open;
+            this.animate(details, opening);
+            // Sidebar: only one group card open at a time
+            if (opening && details.matches('[data-faq-group]') && this.dataset.singleGroup === 'true') {
+              this.querySelectorAll('details[data-faq-group][open]').forEach((other) => {
+                if (other !== details) this.animate(other, false);
+              });
+            }
+            // One question open at a time (optional)
+            if (opening && this.dataset.singleOpen === 'true' && details.dataset.faqTopic) {
+              this.querySelectorAll(`details[open][data-faq-topic="${details.dataset.faqTopic}"]`).forEach((other) => {
+                if (other !== details) this.animate(other, false);
+              });
+            }
+          });
 
           // Theme editor: show the topic of the block being edited
           document.addEventListener('shopify:block:select', (event) => {
@@ -191,6 +273,52 @@
           }
         }
 
+        /** Slides a <details> open or closed by animating its collapsible content's height */
+        animate(details, open) {
+          const content = details.querySelector(':scope > [data-faq-collapsible]');
+          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          content?.getAnimations().forEach((animation) => animation.cancel());
+          if (!content || reduce) {
+            details.open = open;
+            return;
+          }
+          const easing = 'cubic-bezier(0.2, 0, 0, 1)';
+          // Each call gets a token so a late "close" never shuts a details that was re-opened
+          const token = (details.faqToken = Symbol());
+          if (open) {
+            details.open = true;
+            const height = content.scrollHeight;
+            const animation = content.animate(
+              [
+                { height: '0px', opacity: 0 },
+                { height: `${height}px`, opacity: 1 },
+              ],
+              { duration: 350, easing }
+            );
+            // Backup: if the animation stalls, never leave the content hidden
+            setTimeout(() => {
+              if (details.faqToken === token) animation.cancel();
+            }, 400);
+          } else {
+            const height = content.offsetHeight;
+            const animation = content.animate(
+              [
+                { height: `${height}px`, opacity: 1 },
+                { height: '0px', opacity: 0 },
+              ],
+              { duration: 280, easing }
+            );
+            const finish = () => {
+              if (details.faqToken !== token) return;
+              details.open = false;
+              animation.cancel();
+            };
+            animation.onfinish = finish;
+            // Backup: animations can stall (background tabs), so close when the time is up anyway
+            setTimeout(finish, 320);
+          }
+        }
+
         show(id, updateUrl) {
           if (!id) return;
           this.items.forEach((item) => (item.hidden = item.dataset.faqTopic !== id));
@@ -200,6 +328,15 @@
             if (active) link.setAttribute('aria-current', 'true');
             else link.removeAttribute('aria-current');
           });
+          // Open the sidebar group that holds the current topic
+          const activeLink = this.links.find((link) => link.dataset.faqTopicLink === id);
+          const group = activeLink?.closest('[data-faq-group]');
+          if (group && !group.open) group.open = true;
+          if (group && this.dataset.singleGroup === 'true') {
+            this.querySelectorAll('details[data-faq-group][open]').forEach((other) => {
+              if (other !== group) other.open = false;
+            });
+          }
           const title = this.items.find((item) => item.matches('[data-faq-title]') && item.dataset.faqTopic === id);
           if (this.pickerLabel) this.pickerLabel.textContent = title?.textContent.trim() || '';
           if (updateUrl) history.replaceState(null, '', `#${id}`);
@@ -264,25 +401,78 @@
 
   .faq-editorial__menu {
     display: none;
-    padding: 8px 20px 20px;
-    background: var(--faq-card);
+    margin-block-start: 1px;
   }
 
   .faq-editorial__picker[aria-expanded='true'] + .faq-editorial__menu {
     display: block;
   }
 
+  /* Sidebar groups: accordion cards with a round icon badge (Hermès) */
+  .faq-editorial__group-card {
+    background: var(--faq-card);
+  }
+
+  .faq-editorial__group-card + .faq-editorial__group-card {
+    margin-block-start: 1px;
+  }
+
   .faq-editorial__group {
-    margin: 24px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-block-size: 57px;
+    padding: 8px 24px 8px 24px;
     font-family: var(--font-heading--family);
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 0.04em;
     line-height: 22px;
     text-transform: uppercase;
+    list-style: none;
+    cursor: pointer;
   }
 
-  .faq-editorial__group:first-child {
-    margin-block-start: 12px;
+  .faq-editorial__group::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-editorial__group-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    inline-size: 40px;
+    block-size: 40px;
+    border-radius: 50%;
+    background: var(--faq-background);
+  }
+
+  .faq-editorial__group-icon img {
+    display: block;
+    inline-size: 20px;
+    block-size: 20px;
+    object-fit: contain;
+  }
+
+  .faq-editorial__group-title {
+    flex: 1;
+  }
+
+  .faq-editorial__chevron {
+    flex: none;
+    transition: transform 0.3s ease;
+  }
+
+  .faq-editorial__group-card[open] .faq-editorial__chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-editorial__group-topics-inner {
+    padding: 0 24px 12px 26px;
+  }
+
+  /* Smooth open/close: the script animates the height of these */
+  [data-faq-collapsible] {
+    overflow: hidden;
   }
 
   .faq-editorial__topic {
@@ -290,6 +480,8 @@
     inline-size: fit-content;
     padding-block: 8px;
     color: var(--faq-muted);
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
     font-size: 14px;
     line-height: 22px;
     text-decoration: none;
@@ -297,7 +489,7 @@
 
   .faq-editorial__topic:hover,
   .faq-editorial__topic.is-active {
-    color: var(--faq-text);
+    opacity: 1;
   }
 
   .faq-editorial__topic.is-active {
@@ -310,10 +502,12 @@
   }
 
   .faq-editorial__title {
-    margin: 0 0 24px;
-    padding-inline: 24px;
+    margin: 0;
+    padding: 24px;
+    border-block-end: 1px solid var(--faq-background);
+    background: var(--faq-card);
     font-family: var(--font-heading--family);
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 400;
     letter-spacing: 0.04em;
     line-height: 1.2;
@@ -386,17 +580,18 @@
     transform: rotate(0deg);
   }
 
-  .faq-editorial__answer {
+  /* The outer box is what animates, so it has no padding (padding can't shrink to 0 smoothly) */
+  .faq-editorial__answer-inner {
     padding: 0 24px 24px;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.6;
   }
 
-  .faq-editorial__answer > :first-child {
+  .faq-editorial__answer-inner > :first-child {
     margin-block-start: 0;
   }
 
-  .faq-editorial__answer > :last-child {
+  .faq-editorial__answer-inner > :last-child {
     margin-block-end: 0;
   }
 
@@ -406,13 +601,53 @@
   }
 
   /* ---------- Contact box ---------- */
+  /* Banner image with the contact box overlapping its bottom (Hermès) */
+  .faq-editorial__contact-wrap {
+    max-inline-size: 1260px;
+    margin: 64px auto 0;
+    padding-inline: 16px;
+  }
+
+  .faq-editorial__banner {
+    display: block;
+    inline-size: 100%;
+    block-size: calc(var(--faq-banner-height) * 0.6);
+    object-fit: cover;
+  }
+
+  .faq-editorial__contact-wrap--image .faq-editorial__contact {
+    position: relative;
+    inline-size: calc(100% - 32px);
+    margin-block-start: -48px;
+  }
+
+  @media screen and (min-width: 990px) {
+    .faq-editorial__contact-wrap {
+      padding-inline: 40px;
+    }
+
+    .faq-editorial__banner {
+      block-size: var(--faq-banner-height);
+    }
+
+    .faq-editorial__contact-heading {
+      font-size: 34px;
+    }
+
+    .faq-editorial__contact-wrap--image .faq-editorial__contact {
+      inline-size: 80%;
+      margin-block-start: calc(var(--faq-banner-height) * -0.37);
+    }
+  }
+
   .faq-editorial__contact {
     display: grid;
     justify-items: center;
     gap: 16px;
     max-inline-size: 1006px;
-    margin: 64px auto 0;
-    padding: 56px 24px;
+    margin: 0 auto;
+    /* Roomy like Hermès: about 270px tall with the heading and a line of text */
+    padding: 88px 24px 72px;
     background: var(--faq-card);
     text-align: center;
   }
@@ -420,15 +655,18 @@
   .faq-editorial__contact-heading {
     margin: 0;
     font-family: var(--font-heading--family);
-    font-size: 32px;
+    font-size: 26px;
     font-weight: 400;
     line-height: 1.1;
     text-transform: uppercase;
   }
 
   .faq-editorial__contact-text {
-    max-inline-size: 520px;
-    font-size: 14px;
+    /* Wide enough that the text stays on one or two lines, like Hermès */
+    inline-size: 100%;
+    min-inline-size: min(100%, 440px);
+    max-inline-size: 560px;
+    font-size: 13px;
     line-height: 1.6;
   }
 
@@ -436,23 +674,16 @@
     margin: 0;
   }
 
+  /* Uses the theme's primary button style (Theme settings → Buttons) */
   .faq-editorial__contact-button {
     margin-block-start: 8px;
-    padding-block-end: 4px;
-    border-block-end: 1px solid currentColor;
-    color: inherit;
-    font-family: var(--font-heading--family);
-    font-size: 14px;
-    letter-spacing: 0.06em;
-    text-decoration: none;
-    text-transform: uppercase;
   }
 
   /* ---------- Desktop: sidebar left, questions right ---------- */
   @media screen and (min-width: 990px) {
     .faq-editorial__inner {
       grid-template-columns: 300px minmax(0, 1fr);
-      gap: 64px;
+      gap: var(--faq-column-gap);
       padding-inline: 40px;
     }
 
@@ -490,7 +721,96 @@
           "id": "title",
           "label": "Group heading",
           "default": "Online shopping",
-          "info": "Shown in the sidebar. Add Topics after it."
+          "info": "Shown in the sidebar as an accordion card. Add Topics after it."
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "bag",
+              "label": "Shopping bag"
+            },
+            {
+              "value": "user",
+              "label": "Account"
+            },
+            {
+              "value": "box",
+              "label": "Parcel"
+            },
+            {
+              "value": "paw",
+              "label": "Paw"
+            },
+            {
+              "value": "home",
+              "label": "Home"
+            },
+            {
+              "value": "truck",
+              "label": "Delivery"
+            },
+            {
+              "value": "returns",
+              "label": "Returns"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "card",
+              "label": "Secure payment"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "question",
+              "label": "Question"
+            },
+            {
+              "value": "scissors",
+              "label": "Grooming"
+            },
+            {
+              "value": "cup",
+              "label": "Café"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "store",
+              "label": "Shop"
+            }
+          ],
+          "default": "bag"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom icon",
+          "info": "Optional. Replaces the icon above. Use a small square image or SVG."
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": false,
+          "info": "The group of the topic being viewed always opens."
         }
       ]
     },
@@ -554,6 +874,12 @@
       "info": "Leave empty to hide the back link"
     },
     {
+      "type": "checkbox",
+      "id": "single_group",
+      "label": "Only one sidebar group open at a time",
+      "default": true
+    },
+    {
       "type": "header",
       "content": "Questions"
     },
@@ -572,6 +898,23 @@
     {
       "type": "header",
       "content": "Contact box"
+    },
+    {
+      "type": "image_picker",
+      "id": "contact_image",
+      "label": "Banner image",
+      "info": "Optional. Wide image above the box, like Hermès. The box overlaps its bottom."
+    },
+    {
+      "type": "range",
+      "id": "contact_image_height",
+      "label": "Banner height (desktop)",
+      "min": 160,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 300,
+      "visible_if": "{{ section.settings.contact_image != blank }}"
     },
     {
       "type": "text",
@@ -601,32 +944,68 @@
       "content": "Colors"
     },
     {
+      "type": "select",
+      "id": "color_style",
+      "label": "Colour style",
+      "options": [
+        {
+          "value": "brand",
+          "label": "Website red (Love My Human)"
+        },
+        {
+          "value": "neutral",
+          "label": "Neutral: black on cream (Hermès)"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "brand",
+      "info": "The two presets use your theme colour palette, so they follow the website."
+    },
+    {
       "type": "color",
       "id": "background_color",
       "label": "Background",
-      "default": "{{ settings.color_palette.background }}"
+      "default": "{{ settings.color_palette.background }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
     },
     {
       "type": "color",
       "id": "card_color",
       "label": "Question and box background",
-      "default": "#FFFFFF"
+      "default": "#FFFFFF",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
     },
     {
       "type": "color",
       "id": "text_color",
-      "label": "Text",
-      "default": "{{ settings.color_palette.color1 }}"
+      "label": "Text, headings and icons",
+      "default": "{{ settings.color_palette.foreground }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
     },
     {
       "type": "color",
       "id": "muted_color",
       "label": "Sidebar links",
-      "default": "#696969"
+      "default": "{{ settings.color_palette.foreground }}",
+      "info": "Shown lighter until selected",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
     },
     {
       "type": "header",
       "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Space between sidebar and questions (desktop)",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 20
     },
     {
       "type": "range",
@@ -654,14 +1033,54 @@
       "name": "FAQ (Hermès style)",
       "category": "t:categories.text",
       "blocks": {
-        "group_1": { "type": "group", "settings": { "title": "Online shopping" } },
-        "topic_1": { "type": "topic", "settings": { "title": "Delivery" } },
-        "q_1": { "type": "question", "settings": { "question": "How much is delivery?", "answer": "<p>Write the answer here.</p>" } },
-        "q_2": { "type": "question", "settings": { "question": "How long will delivery take?", "answer": "<p>Write the answer here.</p>" } },
-        "topic_2": { "type": "topic", "settings": { "title": "Returns and exchanges" } },
-        "q_3": { "type": "question", "settings": { "question": "How do I return an item?", "answer": "<p>Write the answer here.</p>" } }
+        "group_1": {
+          "type": "group",
+          "settings": {
+            "title": "Online shopping"
+          }
+        },
+        "topic_1": {
+          "type": "topic",
+          "settings": {
+            "title": "Delivery"
+          }
+        },
+        "q_1": {
+          "type": "question",
+          "settings": {
+            "question": "How much is delivery?",
+            "answer": "<p>Write the answer here.</p>"
+          }
+        },
+        "q_2": {
+          "type": "question",
+          "settings": {
+            "question": "How long will delivery take?",
+            "answer": "<p>Write the answer here.</p>"
+          }
+        },
+        "topic_2": {
+          "type": "topic",
+          "settings": {
+            "title": "Returns and exchanges"
+          }
+        },
+        "q_3": {
+          "type": "question",
+          "settings": {
+            "question": "How do I return an item?",
+            "answer": "<p>Write the answer here.</p>"
+          }
+        }
       },
-      "block_order": ["group_1", "topic_1", "q_1", "q_2", "topic_2", "q_3"]
+      "block_order": [
+        "group_1",
+        "topic_1",
+        "q_1",
+        "q_2",
+        "topic_2",
+        "q_3"
+      ]
     }
   ]
 }

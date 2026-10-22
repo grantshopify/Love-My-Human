@@ -1,0 +1,390 @@
+{%- comment -%}
+  Reassurance columns (Hermès style): a full-width row of icon + title + short text,
+  e.g. Standard delivery / Returns / Customer service / Secured payment.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign columns = section.blocks.size | at_most: s.columns_desktop
+
+  assign palette = settings.color_palette
+  case s.color_style
+    when 'neutral'
+      assign r_background = palette.background
+      assign r_text = palette.color1
+      assign r_divider = palette.color3
+    when 'custom'
+      assign r_background = s.background_color
+      assign r_text = s.text_color
+      assign r_divider = s.divider_color
+    else
+      assign r_background = palette.background
+      assign r_text = palette.foreground
+      assign r_divider = palette.color3
+  endcase
+-%}
+
+<div
+  class="reassurance{% if s.show_divider %} reassurance--divider{% endif %}"
+  style="
+    --reassurance-background: {{ r_background }};
+    --reassurance-text: {{ r_text }};
+    --reassurance-divider: {{ r_divider }};
+    --reassurance-columns: {{ columns | at_least: 1 }};
+    --reassurance-padding-top: {{ s.padding_top }}px;
+    --reassurance-padding-bottom: {{ s.padding_bottom }}px;
+  "
+>
+  <ul class="reassurance__list list-unstyled{% if s.mobile_two_columns %} reassurance__list--mobile-two{% endif %}" role="list">
+    {%- for block in section.blocks -%}
+      <li class="reassurance__item" {{ block.shopify_attributes }}>
+        {%- if block.settings.icon_image != blank -%}
+          <span class="reassurance__icon">
+            {{ block.settings.icon_image | image_url: width: 96 | image_tag: width: 24, height: 24, alt: '', loading: 'lazy' }}
+          </span>
+        {%- elsif block.settings.icon != 'none' -%}
+          <span class="reassurance__icon">{% render 'editorial-icon', icon: block.settings.icon, size: 24 %}</span>
+        {%- endif -%}
+        {%- if block.settings.title != blank -%}
+          <h3 class="reassurance__title">{{ block.settings.title }}</h3>
+        {%- endif -%}
+        {%- if block.settings.text != blank -%}
+          <div class="reassurance__text">{{ block.settings.text }}</div>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% stylesheet %}
+  .reassurance {
+    padding: var(--reassurance-padding-top) 16px var(--reassurance-padding-bottom);
+    background: var(--reassurance-background);
+    color: var(--reassurance-text);
+    font-family: var(--font-body--family);
+    text-align: center;
+  }
+
+  .reassurance--divider {
+    border-block-start: 1px solid var(--reassurance-divider);
+  }
+
+  .reassurance__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px 24px;
+    max-inline-size: 1400px;
+    margin: 0 auto;
+  }
+
+  .reassurance__list--mobile-two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .reassurance__item {
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: 12px;
+  }
+
+  .reassurance__icon {
+    display: grid;
+    place-items: center;
+    block-size: 24px;
+  }
+
+  .reassurance__icon img {
+    display: block;
+    inline-size: 24px;
+    block-size: 24px;
+    object-fit: contain;
+  }
+
+  .reassurance__title {
+    margin: 4px 0 0;
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .reassurance__text {
+    max-inline-size: 320px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .reassurance__text p {
+    margin: 0;
+  }
+
+  .reassurance__text a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .reassurance {
+      padding-inline: 24px;
+    }
+
+    .reassurance__list,
+    .reassurance__list--mobile-two {
+      grid-template-columns: repeat(var(--reassurance-columns), minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Reassurance columns",
+  "tag": "section",
+  "class": "reassurance-section",
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "truck",
+              "label": "Delivery"
+            },
+            {
+              "value": "returns",
+              "label": "Returns"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "card",
+              "label": "Secure payment"
+            },
+            {
+              "value": "bag",
+              "label": "Shopping bag"
+            },
+            {
+              "value": "user",
+              "label": "Account"
+            },
+            {
+              "value": "box",
+              "label": "Parcel"
+            },
+            {
+              "value": "paw",
+              "label": "Paw"
+            },
+            {
+              "value": "home",
+              "label": "Home"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "question",
+              "label": "Question"
+            },
+            {
+              "value": "scissors",
+              "label": "Grooming"
+            },
+            {
+              "value": "cup",
+              "label": "Café"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "store",
+              "label": "Shop"
+            }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom icon",
+          "info": "Optional. Replaces the icon above. Use a small square image or SVG."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Standard delivery"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Write a short line here. You can add links.</p>"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_two_columns",
+      "label": "Two columns on mobile",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Line above the section",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "color_style",
+      "label": "Colour style",
+      "options": [
+        {
+          "value": "brand",
+          "label": "Website red (Love My Human)"
+        },
+        {
+          "value": "neutral",
+          "label": "Neutral: black on cream (Hermès)"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "brand",
+      "info": "The two presets use your theme colour palette, so they follow the website."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "{{ settings.color_palette.background }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text and icons",
+      "default": "{{ settings.color_palette.foreground }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Line",
+      "default": "{{ settings.color_palette.color3 }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reassurance columns",
+      "category": "t:categories.text",
+      "blocks": {
+        "c1": {
+          "type": "column",
+          "settings": {
+            "icon": "truck",
+            "title": "Standard delivery",
+            "text": "<p>Write your delivery promise here.</p>"
+          }
+        },
+        "c2": {
+          "type": "column",
+          "settings": {
+            "icon": "returns",
+            "title": "Returns",
+            "text": "<p>Write your returns promise here.</p>"
+          }
+        },
+        "c3": {
+          "type": "column",
+          "settings": {
+            "icon": "phone",
+            "title": "Customer service",
+            "text": "<p>Write your opening hours and contact details here.</p>"
+          }
+        },
+        "c4": {
+          "type": "column",
+          "settings": {
+            "icon": "card",
+            "title": "Secured payment",
+            "text": "<p>All transactions on our website are secure.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ]
+    }
+  ]
+}
+{% endschema %}
