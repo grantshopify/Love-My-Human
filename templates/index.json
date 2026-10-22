@@ -588,7 +588,7 @@
                   "type": "image",
                   "name": "t:names.image",
                   "settings": {
-                    "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-london-main-head-poodle-finished-groom_f3960ddd-c51e-4e56-99ac-e0c800078d43_1.webp",
+                    "image": "shopify://shop_images/LMH_Logo.jpg",
                     "link": "shopify://pages/dog-grooming-chelsea-premium-pet-grooming-services-love-my-human",
                     "image_ratio": "portrait",
                     "width": "fill",
