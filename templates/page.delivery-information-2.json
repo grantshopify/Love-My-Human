@@ -79,10 +79,10 @@
         "question_UAHWRy": {
           "type": "question",
           "settings": {
-            "question": "Can I change or cancel my order?",
-            "answer": "<p>Yes, as long as your order hasn't been dispatched yet. Get in touch as soon as possible with your order number and we'll do our best to help.</p>",
+            "question": "What delivery services do you offer?",
+            "answer": "<p>We offer Royal Mail Tracked 24 and Royal Mail Tracked for UK deliveries. All our orders are sent using tracked delivery services, so you can follow your parcel's journey from dispatch to delivery.</p><p>For international orders, available tracked delivery options and prices are displayed at checkout.</p>",
             "bullets": "",
-            "answer_after": "<p><a href=\"/pages/contact\" title=\"Contact us\">Contact our team</a></p>"
+            "answer_after": ""
           }
         },
         "question_Mtt33U": {
