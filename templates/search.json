@@ -14,6 +14,7 @@
       "blocks": {
         "heading": {
           "type": "_heading",
+          "disabled": true,
           "static": true,
           "settings": {
             "type_preset": "h2",
@@ -346,7 +347,7 @@
         "padding-inline-start": 0,
         "padding-inline-end": 0,
         "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 36,
+        "padding-block-start": 0,
         "padding-block-end": 0
       }
     }
