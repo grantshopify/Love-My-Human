@@ -53,6 +53,7 @@
     --faq-muted: {{ faq_muted }};
     --faq-padding-top: {{ s.padding_top }}px;
     --faq-column-gap: {{ s.column_gap }}px;
+    --faq-form-width: {% if s.form_columns == 'two' %}640px{% else %}480px{% endif %};
     --faq-simple-width: {{ s.simple_width }}px;
     --faq-padding-bottom: {{ s.padding_bottom }}px;
   "
@@ -220,7 +221,7 @@
                 {{ form.errors | default_errors }}
               </div>
             {%- endif -%}
-            <div class="faq-editorial__fields">
+            <div class="faq-editorial__fields{% if s.form_columns == 'two' %} faq-editorial__fields--two{% endif %}">
               {%- if s.form_show_name -%}
                 <div class="faq-editorial__field">
                   <label for="{{ form_id }}-name">{{ s.form_name_label }}{% if s.form_name_required %} *{% endif %}</label>
@@ -259,7 +260,7 @@
             {%- if s.form_note != blank -%}
               <div class="faq-editorial__form-note rte">{{ s.form_note }}</div>
             {%- endif -%}
-            <button type="submit" class="button faq-editorial__form-submit">{{ s.form_submit_label }}</button>
+            <button type="submit" class="button faq-editorial__form-submit{% if s.form_columns != 'two' %} faq-editorial__form-submit--full{% endif %}">{{ s.form_submit_label }}</button>
           {%- endif -%}
         {%- endform -%}
       {%- endif -%}
@@ -771,7 +772,7 @@
   /* ---------- Contact form ---------- */
   .faq-editorial__form {
     inline-size: 100%;
-    max-inline-size: 640px;
+    max-inline-size: var(--faq-form-width, 480px);
     margin-block-start: 8px;
     text-align: start;
   }
@@ -872,6 +873,10 @@
     margin-block-start: 20px;
   }
 
+  .faq-editorial__form-submit--full {
+    inline-size: 100%;
+  }
+
   .faq-editorial__form-status {
     margin: 0 0 16px;
     padding: 12px 16px;
@@ -881,7 +886,7 @@
   }
 
   @media screen and (min-width: 750px) {
-    .faq-editorial__fields {
+    .faq-editorial__fields--two {
       grid-template-columns: 1fr 1fr;
     }
 
@@ -1222,6 +1227,23 @@
       "label": "Show contact form in the box",
       "default": true,
       "info": "Messages are emailed to your store's contact email (Settings → Store details)."
+    },
+    {
+      "type": "select",
+      "id": "form_columns",
+      "label": "Form layout",
+      "options": [
+        {
+          "value": "one",
+          "label": "One column"
+        },
+        {
+          "value": "two",
+          "label": "Two columns"
+        }
+      ],
+      "default": "one",
+      "visible_if": "{{ section.settings.show_form }}"
     },
     {
       "type": "checkbox",
