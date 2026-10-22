@@ -341,7 +341,11 @@ export class ThemeDrawer extends Component {
       panel.classList.remove('theme-drawer__dialog--opening', 'theme-drawer__dialog--opening-inline-start');
 
       panel.classList.add('theme-drawer__dialog--closing');
-      await onAnimationEnd(panel, undefined, { subtree: false });
+      // Backup timer: if the browser pauses animations (e.g. a background tab), never leave the drawer stuck closing
+      await Promise.race([
+        onAnimationEnd(panel, undefined, { subtree: false }),
+        new Promise((resolve) => setTimeout(resolve, 800)),
+      ]);
       panel.classList.remove('theme-drawer__dialog--closing');
     }
 
