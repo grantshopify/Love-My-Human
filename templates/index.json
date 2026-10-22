@@ -1019,7 +1019,7 @@
       "settings": {
         "columns": 4,
         "mobile_columns": "1",
-        "section_width": "page-width",
+        "section_width": "full-width",
         "columns_gap": 12,
         "background_color": "",
         "icons_style": "arrow",
