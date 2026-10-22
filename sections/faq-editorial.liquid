@@ -41,9 +41,10 @@
 -%}
 
 <faq-editorial
-  class="faq-editorial"
+  class="faq-editorial{% if s.layout == 'simple' %} faq-editorial--simple{% endif %}"
   data-single-open="{{ s.single_open }}"
   data-open-first="{{ s.open_first }}"
+  data-layout="{{ s.layout }}"
   data-single-group="{{ s.single_group }}"
   style="
     --faq-background: {{ faq_background }};
@@ -52,11 +53,12 @@
     --faq-muted: {{ faq_muted }};
     --faq-padding-top: {{ s.padding_top }}px;
     --faq-column-gap: {{ s.column_gap }}px;
+    --faq-simple-width: {{ s.simple_width }}px;
     --faq-padding-bottom: {{ s.padding_bottom }}px;
   "
 >
   <div class="faq-editorial__inner">
-    {%- if has_topic -%}
+    {%- if has_topic and s.layout != 'simple' -%}
       <nav class="faq-editorial__sidebar" aria-label="{{ s.sidebar_label | escape }}">
         {%- if s.back_label != blank and s.back_link != blank -%}
           <a class="faq-editorial__back" href="{{ s.back_link }}">
@@ -206,6 +208,61 @@
       {%- if s.contact_button_label != blank and s.contact_button_link != blank -%}
         <a class="button faq-editorial__contact-button" href="{{ s.contact_button_link }}">{{ s.contact_button_label }}</a>
       {%- endif -%}
+
+      {%- if s.show_form -%}
+        {%- assign form_id = 'FaqContactForm-' | append: section.id -%}
+        {%- form 'contact', id: form_id, class: 'faq-editorial__form' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="faq-editorial__form-status" role="status">{{ s.form_success }}</p>
+          {%- else -%}
+            {%- if form.errors -%}
+              <div class="faq-editorial__form-status faq-editorial__form-status--error" role="alert">
+                {{ form.errors | default_errors }}
+              </div>
+            {%- endif -%}
+            <div class="faq-editorial__fields">
+              {%- if s.form_show_name -%}
+                <div class="faq-editorial__field">
+                  <label for="{{ form_id }}-name">{{ s.form_name_label }}{% if s.form_name_required %} *{% endif %}</label>
+                  <input id="{{ form_id }}-name" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}" placeholder="{{ s.form_name_placeholder | escape }}"{% if s.form_name_required %} required{% endif %}>
+                </div>
+              {%- endif -%}
+              <div class="faq-editorial__field">
+                <label for="{{ form_id }}-email">{{ s.form_email_label }} *</label>
+                <input id="{{ form_id }}-email" type="email" name="contact[email]" autocomplete="email" autocapitalize="off" spellcheck="false" value="{{ form.email }}" placeholder="{{ s.form_email_placeholder | escape }}" required>
+              </div>
+              {%- if s.form_show_phone -%}
+                <div class="faq-editorial__field">
+                  <label for="{{ form_id }}-phone">{{ s.form_phone_label }}{% if s.form_phone_required %} *{% endif %}</label>
+                  <input id="{{ form_id }}-phone" type="tel" name="contact[phone]" autocomplete="tel" value="{{ form.phone }}" placeholder="{{ s.form_phone_placeholder | escape }}"{% if s.form_phone_required %} required{% endif %}>
+                </div>
+              {%- endif -%}
+              {%- assign topic_options = s.form_topic_options | newline_to_br | split: '<br />' -%}
+              {%- if s.form_show_topic and s.form_topic_options != blank -%}
+                <div class="faq-editorial__field">
+                  <label for="{{ form_id }}-topic">{{ s.form_topic_label }}</label>
+                  <div class="faq-editorial__select">
+                  <select id="{{ form_id }}-topic" name="contact[{{ s.form_topic_label | escape }}]">
+                    {%- for option in topic_options -%}
+                      {%- assign option_text = option | strip -%}
+                      {%- if option_text != blank -%}<option value="{{ option_text | escape }}">{{ option_text }}</option>{%- endif -%}
+                    {%- endfor -%}
+                  </select>
+                  </div>
+                </div>
+              {%- endif -%}
+              <div class="faq-editorial__field faq-editorial__field--full">
+                <label for="{{ form_id }}-message">{{ s.form_message_label }} *</label>
+                <textarea id="{{ form_id }}-message" name="contact[body]" rows="5" placeholder="{{ s.form_message_placeholder | escape }}" required>{{ form.body }}</textarea>
+              </div>
+            </div>
+            {%- if s.form_note != blank -%}
+              <div class="faq-editorial__form-note rte">{{ s.form_note }}</div>
+            {%- endif -%}
+            <button type="submit" class="button faq-editorial__form-submit">{{ s.form_submit_label }}</button>
+          {%- endif -%}
+        {%- endform -%}
+      {%- endif -%}
     </div>
     </div>
   {%- endif -%}
@@ -333,6 +390,8 @@
 
         show(id, updateUrl) {
           if (!id) return;
+          // "Questions only" layout: every topic stays visible, there is nothing to switch
+          if (this.dataset.layout === 'simple') return;
           this.items.forEach((item) => (item.hidden = item.dataset.faqTopic !== id));
           this.links.forEach((link) => {
             const active = link.dataset.faqTopicLink === id;
@@ -709,14 +768,145 @@
     margin: 0;
   }
 
+  /* ---------- Contact form ---------- */
+  .faq-editorial__form {
+    inline-size: 100%;
+    max-inline-size: 640px;
+    margin-block-start: 8px;
+    text-align: start;
+  }
+
+  .faq-editorial__fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .faq-editorial__field {
+    display: grid;
+    gap: 6px;
+  }
+
+  .faq-editorial__field label {
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .faq-editorial__field input,
+  .faq-editorial__field select,
+  .faq-editorial__field textarea {
+    /* Safari (desktop and iOS) adds its own rounded, shadowed control styles; switch them off */
+    -webkit-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    inline-size: 100%;
+    margin: 0;
+    padding: 12px 14px;
+    line-height: 20px;
+    box-shadow: none;
+    border: 1px solid color-mix(in srgb, var(--faq-text) 35%, transparent);
+    border-radius: 0;
+    background: var(--faq-card);
+    color: var(--faq-text);
+    font: inherit;
+    font-size: 14px;
+  }
+
+  .faq-editorial__field input,
+  .faq-editorial__field select {
+    block-size: 46px;
+  }
+
+  .faq-editorial__field textarea {
+    resize: vertical;
+  }
+
+  /* Dropdown: our own single arrow instead of Safari's double arrow */
+  .faq-editorial__select {
+    position: relative;
+  }
+
+  .faq-editorial__select select {
+    padding-inline-end: 40px;
+    cursor: pointer;
+  }
+
+  .faq-editorial__select::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: 16px;
+    inline-size: 7px;
+    block-size: 7px;
+    border-inline-end: 1px solid var(--faq-text);
+    border-block-end: 1px solid var(--faq-text);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  .faq-editorial__field input::placeholder,
+  .faq-editorial__field textarea::placeholder {
+    color: var(--faq-text);
+    opacity: 0.5;
+  }
+
+  .faq-editorial__field :is(input, select, textarea):focus-visible {
+    outline: 1px solid var(--faq-text);
+    outline-offset: 1px;
+  }
+
+  .faq-editorial__form-note {
+    margin-block-start: 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    opacity: 0.8;
+  }
+
+  .faq-editorial__form-note p {
+    margin: 0;
+  }
+
+  .faq-editorial__form-submit {
+    margin-block-start: 20px;
+  }
+
+  .faq-editorial__form-status {
+    margin: 0 0 16px;
+    padding: 12px 16px;
+    border: 1px solid currentColor;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .faq-editorial__fields {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .faq-editorial__field--full {
+      grid-column: 1 / -1;
+    }
+  }
+
   /* Uses the theme's primary button style (Theme settings → Buttons) */
   .faq-editorial__contact-button {
     margin-block-start: 8px;
   }
 
+  /* ---------- "Questions only" layout ---------- */
+  .faq-editorial--simple .faq-editorial__inner {
+    max-inline-size: var(--faq-simple-width, 900px);
+  }
+
+  .faq-editorial--simple .faq-editorial__item + .faq-editorial__title {
+    margin-block-start: 24px;
+  }
+
   /* ---------- Desktop: sidebar left, questions right ---------- */
   @media screen and (min-width: 990px) {
-    .faq-editorial__inner {
+    .faq-editorial:not(.faq-editorial--simple) .faq-editorial__inner {
       grid-template-columns: 300px minmax(0, 1fr);
       gap: var(--faq-column-gap);
       padding-inline: 40px;
@@ -900,31 +1090,67 @@
     },
     {
       "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "sidebar",
+          "label": "With sidebar (Hermès)"
+        },
+        {
+          "value": "simple",
+          "label": "Questions only"
+        }
+      ],
+      "default": "sidebar",
+      "info": "Questions only: no sidebar, every topic is shown as a heading with its questions. Groups are ignored."
+    },
+    {
+      "type": "range",
+      "id": "simple_width",
+      "label": "Width (questions only)",
+      "min": 600,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "default": 900,
+      "visible_if": "{{ section.settings.layout == 'simple' }}"
+    },
+    {
+      "type": "header",
       "content": "Sidebar"
     },
     {
       "type": "text",
       "id": "sidebar_label",
       "label": "Sidebar name (for screen readers)",
-      "default": "FAQ topics"
+      "default": "FAQ topics",
+      "visible_if": "{{ section.settings.layout != 'simple' }}"
     },
     {
       "type": "text",
       "id": "back_label",
       "label": "Back link text",
-      "default": "Back"
+      "default": "Back",
+      "visible_if": "{{ section.settings.layout != 'simple' }}"
     },
     {
       "type": "url",
       "id": "back_link",
       "label": "Back link",
-      "info": "Leave empty to hide the back link"
+      "info": "Leave empty to hide the back link",
+      "visible_if": "{{ section.settings.layout != 'simple' }}"
     },
     {
       "type": "checkbox",
       "id": "single_group",
       "label": "Only one sidebar group open at a time",
-      "default": true
+      "default": true,
+      "visible_if": "{{ section.settings.layout != 'simple' }}"
     },
     {
       "type": "header",
@@ -985,6 +1211,127 @@
       "type": "url",
       "id": "contact_button_link",
       "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Contact form"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_form",
+      "label": "Show contact form in the box",
+      "default": true,
+      "info": "Messages are emailed to your store's contact email (Settings → Store details)."
+    },
+    {
+      "type": "checkbox",
+      "id": "form_show_name",
+      "label": "Name field",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "form_name_label",
+      "label": "Name label",
+      "default": "Name"
+    },
+    {
+      "type": "text",
+      "id": "form_name_placeholder",
+      "label": "Name placeholder",
+      "default": "Your name"
+    },
+    {
+      "type": "checkbox",
+      "id": "form_name_required",
+      "label": "Name required",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "form_email_label",
+      "label": "Email label",
+      "default": "Email",
+      "info": "Email is always required so you can reply."
+    },
+    {
+      "type": "text",
+      "id": "form_email_placeholder",
+      "label": "Email placeholder",
+      "default": "you@example.com"
+    },
+    {
+      "type": "checkbox",
+      "id": "form_show_phone",
+      "label": "Phone field",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "form_phone_label",
+      "label": "Phone label",
+      "default": "Phone"
+    },
+    {
+      "type": "text",
+      "id": "form_phone_placeholder",
+      "label": "Phone placeholder",
+      "default": "+44"
+    },
+    {
+      "type": "checkbox",
+      "id": "form_phone_required",
+      "label": "Phone required",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "form_show_topic",
+      "label": "Topic dropdown",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "form_topic_label",
+      "label": "Topic label",
+      "default": "Topic"
+    },
+    {
+      "type": "textarea",
+      "id": "form_topic_options",
+      "label": "Topic options",
+      "default": "Orders\nDelivery\nReturns and exchanges\nGrooming\nDog daycare\nOther",
+      "info": "One per line."
+    },
+    {
+      "type": "text",
+      "id": "form_message_label",
+      "label": "Message label",
+      "default": "Message"
+    },
+    {
+      "type": "text",
+      "id": "form_message_placeholder",
+      "label": "Message placeholder",
+      "default": "How can we help?"
+    },
+    {
+      "type": "richtext",
+      "id": "form_note",
+      "label": "Note under the form",
+      "default": "<p>We usually reply within one working day. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+    },
+    {
+      "type": "text",
+      "id": "form_submit_label",
+      "label": "Send button",
+      "default": "Send message"
+    },
+    {
+      "type": "text",
+      "id": "form_success",
+      "label": "Message after sending",
+      "default": "Thank you, your message has been sent. We'll be in touch soon."
     },
     {
       "type": "header",
@@ -1127,6 +1474,53 @@
         "q_2",
         "topic_2",
         "q_3"
+      ]
+    },
+    {
+      "name": "FAQ (questions only)",
+      "category": "t:categories.text",
+      "settings": {
+        "layout": "simple",
+        "show_form": false,
+        "contact_heading": "",
+        "contact_text": "",
+        "contact_button_label": ""
+      },
+      "blocks": {
+        "t1": {
+          "type": "topic",
+          "settings": {
+            "title": "Frequently asked questions"
+          }
+        },
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Lorem ipsum dolor sit amet?",
+            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Consectetur adipiscing elit?",
+            "answer": "<p>Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>",
+            "bullets": "Dolor sit amet\nConsectetur adipiscing\nInteger posuere erat"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Integer posuere erat a ante?",
+            "answer": "<p>Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "q1",
+        "q2",
+        "q3"
       ]
     }
   ]

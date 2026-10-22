@@ -47,6 +47,14 @@ export class ThemeDrawer extends Component {
   #modalQuery = window.matchMedia(`(max-width: ${MODAL_BREAKPOINT - 1}px)`);
 
   /**
+   * True when the drawer should open as a modal overlay with a backdrop: always for drawers
+   * with the `overlay` attribute (e.g. the cart drawer, Dawn style), otherwise below the breakpoint.
+   */
+  get #isModal() {
+    return this.hasAttribute('overlay') || this.#isModal;
+  }
+
+  /**
    * @returns {boolean} Whether the drawer is currently open.
    */
   get isOpen() {
@@ -79,7 +87,7 @@ export class ThemeDrawer extends Component {
    */
   #onRestore() {
     const { panel } = this.refs;
-    if (this.#modalQuery.matches) {
+    if (this.#isModal) {
       lockScroll(panel);
     }
 
@@ -132,7 +140,7 @@ export class ThemeDrawer extends Component {
    * crosses the modal breakpoint while the drawer is open.
    */
   #onModalBreakpointChange = () => {
-    if (!this.isOpen) return;
+    if (!this.isOpen || this.hasAttribute('overlay')) return;
 
     const { panel } = this.refs;
     const nestedDialog = this.#getOpenNestedDialog();
@@ -146,7 +154,7 @@ export class ThemeDrawer extends Component {
     panel.close();
     removeTrapFocus();
 
-    if (this.#modalQuery.matches) {
+    if (this.#isModal) {
       lockScroll(panel);
       panel.showModal();
     } else {
@@ -216,7 +224,7 @@ export class ThemeDrawer extends Component {
 
     this.#previouslyFocused = /** @type {HTMLElement | null} */ (document.activeElement);
 
-    if (this.#modalQuery.matches) {
+    if (this.#isModal) {
       lockScroll(panel);
       panel.showModal();
     } else {
@@ -252,7 +260,7 @@ export class ThemeDrawer extends Component {
     // In modal mode, dialogs live in the browser's top layer where z-index
     // is ignored — stacking follows showModal() call order. Re-calling
     // showModal() moves this dialog to the top of the stack.
-    if (this.#modalQuery.matches && panel.open) {
+    if (this.#isModal && panel.open) {
       lockScroll(panel);
       panel.close();
       panel.showModal();
@@ -320,7 +328,7 @@ export class ThemeDrawer extends Component {
     // closing the dialog, and restoring focus can each move the root scroller,
     // leaving the shopper at the top of the page instead of where they were
     // browsing. Capture the offset up front and re-apply it once the drawer is gone.
-    const closingAsModal = this.#modalQuery.matches;
+    const closingAsModal = this.#isModal;
     const scrollTopWhileLocked = closingAsModal ? getScrollTop() : null;
 
     this.removeAttribute('open');

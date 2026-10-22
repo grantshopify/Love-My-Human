@@ -43,10 +43,14 @@
   <theme-drawer
     id="cart-drawer"
     data-skip-node-update
+    {% unless settings.cart_drawer_style == 'push' %}
+      overlay
+    {% endunless %}
   >
     <dialog
       ref="panel"
       class="theme-drawer__dialog color-custom-drawer"
+      style="--drawer-backdrop-opacity: {{ settings.cart_drawer_backdrop | default: 50 | divided_by: 100.0 }};"
       aria-labelledby="cart-drawer-heading"
       cart-summary-sticky="true"
     >

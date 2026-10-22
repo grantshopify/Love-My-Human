@@ -36,6 +36,8 @@
     for (var i = 0; i < drawerIds.length; i++) {
       var drawer = document.getElementById(drawerIds[i]);
       if (!drawer) continue;
+      // Overlay drawers (cart, Dawn style) start closed after navigation, like on mobile
+      if (drawer.hasAttribute('overlay')) continue;
 
       drawer.setAttribute('open', '');
 
@@ -87,22 +89,24 @@
 
   // ── Squeeze coordination ──
   // Listens to all drawers. Only squeezes on wide viewports.
-  document.addEventListener('theme-drawer:open', () => {
+  // Overlay drawers (the `overlay` attribute) float over the page instead of squeezing it.
+  const squeezingDrawerOpen = () => Boolean(document.querySelector('theme-drawer[open]:not([overlay])'));
+
+  document.addEventListener('theme-drawer:open', (event) => {
+    if (event.target instanceof Element && event.target.hasAttribute('overlay')) return;
     if (squeezeQuery.matches) {
       pageWrapper?.classList.add('page-wrapper--drawer-open');
     }
   });
 
   document.addEventListener('theme-drawer:close', () => {
-    const openDrawer = document.querySelector('theme-drawer[open]');
-    if (!openDrawer) {
+    if (!squeezingDrawerOpen()) {
       pageWrapper?.classList.remove('page-wrapper--drawer-open');
     }
   });
 
   squeezeQuery.addEventListener('change', () => {
-    const openDrawer = document.querySelector('theme-drawer[open]');
-    pageWrapper?.classList.toggle('page-wrapper--drawer-open', Boolean(openDrawer) && squeezeQuery.matches);
+    pageWrapper?.classList.toggle('page-wrapper--drawer-open', squeezingDrawerOpen() && squeezeQuery.matches);
   });
 
   // ── State persistence ──

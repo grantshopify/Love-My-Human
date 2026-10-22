@@ -1526,6 +1526,34 @@
         "visible_if": "{{ settings.cart_type == 'drawer' }}"
       },
       {
+        "type": "select",
+        "id": "cart_drawer_style",
+        "label": "Cart drawer style",
+        "options": [
+          {
+            "value": "overlay",
+            "label": "Overlay: slides over the page with a dark background (Dawn)"
+          },
+          {
+            "value": "push",
+            "label": "Push: moves the page aside"
+          }
+        ],
+        "default": "overlay",
+        "visible_if": "{{ settings.cart_type == 'drawer' }}"
+      },
+      {
+        "type": "range",
+        "id": "cart_drawer_backdrop",
+        "label": "Cart drawer backdrop darkness",
+        "min": 0,
+        "max": 80,
+        "step": 5,
+        "unit": "%",
+        "default": 50,
+        "visible_if": "{{ settings.cart_type == 'drawer' }}"
+      },
+      {
         "type": "header",
         "content": "t:content.cart_features"
       },

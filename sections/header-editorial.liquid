@@ -144,7 +144,18 @@
       </a>
 
       <div class="he__end">
-        {% render 'header-actions', section: section, display_style: 'icon', customer_account_menu: s.customer_account_menu %}
+        {%- liquid
+          assign cart_icon_to_page = true
+          if s.cart_icon_action == 'drawer'
+            assign cart_icon_to_page = false
+          endif
+        -%}
+        {% render 'header-actions',
+          section: section,
+          display_style: 'icon',
+          customer_account_menu: s.customer_account_menu,
+          cart_icon_to_page: cart_icon_to_page
+        %}
       </div>
     </div>
 
@@ -1045,7 +1056,9 @@
   "tag": "div",
   "class": "header-editorial-section",
   "enabled_on": {
-    "groups": ["header"]
+    "groups": [
+      "header"
+    ]
   },
   "max_blocks": 12,
   "blocks": [
@@ -1145,6 +1158,23 @@
       "id": "customer_account_menu",
       "label": "Customer account menu",
       "default": "customer-account-main-menu"
+    },
+    {
+      "type": "select",
+      "id": "cart_icon_action",
+      "label": "Bag icon",
+      "options": [
+        {
+          "value": "page",
+          "label": "Go to the cart page"
+        },
+        {
+          "value": "drawer",
+          "label": "Open the cart drawer"
+        }
+      ],
+      "default": "page",
+      "info": "Adding a product still opens the cart drawer when Theme settings → Cart → Cart type is Drawer and 'Open cart drawer' is on."
     },
     {
       "type": "header",

@@ -83,8 +83,80 @@
     }
   }
 
+  /* Overlay drawers (cart, Dawn style): a smoother slide using transform + a fading backdrop.
+     The script waits for these animations to end before closing, so longer timings are safe. */
+  theme-drawer[overlay] .theme-drawer__dialog--opening {
+    animation: overlay-drawer-in var(--overlay-drawer-in-duration, 450ms) cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  theme-drawer[overlay] .theme-drawer__dialog--closing {
+    animation: overlay-drawer-out var(--overlay-drawer-out-duration, 300ms) cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+
+  theme-drawer[overlay] .theme-drawer__dialog--opening::backdrop {
+    animation: overlay-backdrop-in var(--overlay-drawer-in-duration, 450ms) ease;
+  }
+
+  theme-drawer[overlay] .theme-drawer__dialog--closing::backdrop {
+    animation: overlay-backdrop-out var(--overlay-drawer-out-duration, 300ms) ease forwards;
+  }
+
+  @keyframes overlay-drawer-in {
+    from {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes overlay-drawer-out {
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  [dir='rtl'] theme-drawer[overlay] .theme-drawer__dialog--opening {
+    animation-name: overlay-drawer-in-rtl;
+  }
+
+  [dir='rtl'] theme-drawer[overlay] .theme-drawer__dialog--closing {
+    animation-name: overlay-drawer-out-rtl;
+  }
+
+  @keyframes overlay-drawer-in-rtl {
+    from {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes overlay-drawer-out-rtl {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes overlay-backdrop-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes overlay-backdrop-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    theme-drawer[overlay] .theme-drawer__dialog--opening,
+    theme-drawer[overlay] .theme-drawer__dialog--closing,
+    theme-drawer[overlay] .theme-drawer__dialog--opening::backdrop,
+    theme-drawer[overlay] .theme-drawer__dialog--closing::backdrop {
+      animation-duration: 1ms;
+    }
+  }
+
   .theme-drawer__dialog::backdrop {
-    background: rgb(var(--backdrop-color-rgb) / var(--backdrop-opacity));
+    /* Fallback to black: --color-shadow-rgb (used by --backdrop-color-rgb) isn't defined in this theme */
+    background: rgb(var(--backdrop-color-rgb, 0 0 0) / var(--drawer-backdrop-opacity, var(--backdrop-opacity)));
   }
 
   /* Exclude open drawers from the page navigation cross-fade so they
