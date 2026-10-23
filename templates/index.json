@@ -1617,7 +1617,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h2>Our signature product</h2>",
+                "text": "<h2>Our Story</h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -1667,7 +1667,7 @@
             "button_86CrAw": {
               "type": "button",
               "settings": {
-                "label": "Shop now",
+                "label": "Discover More",
                 "link": "shopify://collections/all",
                 "open_in_new_tab": false,
                 "style_class": "button",
