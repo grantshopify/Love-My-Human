@@ -1686,9 +1686,9 @@
       "name": "t:names.blog_posts_grid",
       "settings": {
         "blog": "news",
-        "layout_type": "grid",
+        "layout_type": "carousel",
         "carousel_on_mobile": false,
-        "post_limit": 3,
+        "post_limit": 6,
         "columns": 3,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
