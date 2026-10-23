@@ -1400,20 +1400,21 @@
         "padding-block-end": 48
       }
     },
-    "section_69RFQN": {
+    "section_fHLH8k": {
       "type": "section",
       "blocks": {
-        "image_PPMKPW": {
-          "type": "image",
+        "video_Lp7XaK": {
+          "type": "video",
+          "name": "t:names.video",
           "settings": {
-            "image": "shopify://shop_images/lmh-product-selection-retail-main-header-store-display_9c49c0ab-f3bb-4c5f-bfe2-16639a123876_1.webp",
-            "link": "",
-            "image_ratio": "square",
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
+            "source": "uploaded",
+            "video": "shopify://files/videos/LMH About us vid (1).mp4",
+            "video_autoplay": true,
+            "video_loop": true,
+            "alt": "",
+            "custom_width": 50,
             "custom_width_mobile": 100,
-            "height": "fit",
+            "aspect_ratio": "16/9",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
@@ -1426,18 +1427,19 @@
           },
           "blocks": {}
         },
-        "group_b9RXUt": {
+        "group_NGWbpj": {
           "type": "group",
+          "name": "t:names.caption",
           "settings": {
-            "content_direction": "column",
+            "content_direction": "row",
             "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "flex-end",
+            "align_baseline": true,
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "center",
             "gap": 12,
-            "width": "custom",
+            "width": "fill",
             "custom_width": 100,
             "width_mobile": "fill",
             "custom_width_mobile": 100,
@@ -1465,42 +1467,18 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "text_TgCaQf": {
+            "text_rQaJFj": {
               "type": "text",
-              "name": "t:names.heading",
+              "name": "t:names.text",
+              "disabled": true,
               "settings": {
-                "text": "<h2>Our Story</h2>",
+                "text": "<p>Take a look behind the scenes of our latest product launch.</p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "h3",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_MRqzdz": {
-              "type": "text",
-              "settings": {
-                "text": "<p>Made with care and unconditionally loved by our customers, this signature bestseller exceeds all expectations.</p>",
-                "width": "fit-content",
-                "max_width": "narrow",
-                "alignment": "left",
                 "type_preset": "rte",
                 "font": "var(--font-body--family)",
-                "font_size": "1rem",
+                "font_size": "",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -1516,13 +1494,15 @@
               },
               "blocks": {}
             },
-            "button_iw9y9C": {
+            "button_m8T8JK": {
               "type": "button",
+              "name": "t:names.button",
+              "disabled": true,
               "settings": {
-                "label": "Shop now",
+                "label": "Discover the collection",
                 "link": "shopify://collections/all",
                 "open_in_new_tab": false,
-                "style_class": "button",
+                "style_class": "button-unstyled",
                 "custom_button_background": "{{ settings.color_palette.foreground }}",
                 "custom_button_text": "{{ settings.color_palette.background }}",
                 "custom_button_border": "{{ settings.color_palette.background }}",
@@ -1536,26 +1516,25 @@
             }
           },
           "block_order": [
-            "text_TgCaQf",
-            "text_MRqzdz",
-            "button_iw9y9C"
+            "text_rQaJFj",
+            "button_m8T8JK"
           ]
         }
       },
       "block_order": [
-        "image_PPMKPW",
-        "group_b9RXUt"
+        "video_Lp7XaK",
+        "group_NGWbpj"
       ],
-      "name": "t:names.image_with_text",
+      "name": "t:names.video_section",
       "settings": {
-        "content_direction": "row",
+        "content_direction": "column",
         "vertical_on_mobile": true,
-        "horizontal_alignment": "center",
+        "horizontal_alignment": "flex-start",
         "vertical_alignment": "center",
         "align_baseline": false,
         "horizontal_alignment_flex_direction_column": "flex-start",
         "vertical_alignment_flex_direction_column": "center",
-        "gap": 32,
+        "gap": 16,
         "section_width": "page-width",
         "section_height": "",
         "section_height_custom": 50,
@@ -1572,8 +1551,8 @@
         "border_opacity": 100,
         "border_color": "",
         "border_radius": 0,
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "padding-block-start": 32,
+        "padding-block-end": 32
       }
     }
   },
@@ -1582,6 +1561,6 @@
     "carousel_UgQmzP",
     "collection_list_MLLzbB",
     "product_list_XPKFNn",
-    "section_69RFQN"
+    "section_fHLH8k"
   ]
 }
