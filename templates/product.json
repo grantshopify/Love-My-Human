@@ -46,7 +46,7 @@
             "thumbnail_width": 72,
             "thumbnail_radius": 12,
             "aspect_ratio": "1",
-            "constrain_to_viewport": true,
+            "constrain_to_viewport": false,
             "media_fit": "cover",
             "media_radius": 16,
             "extend_media": false,
@@ -115,18 +115,6 @@
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "reviews": {
-              "type": "review",
-              "settings": {
-                "stars_style": "shaded",
-                "show_number": true,
-                "text_color": "",
-                "type_preset": "paragraph",
-                "width": "100%",
-                "alignment": "left"
               },
               "blocks": {}
             },
@@ -200,7 +188,10 @@
                     "style_class": "button-custom",
                     "custom_button_background": "{{ settings.color_palette.foreground }}",
                     "custom_button_text": "{{ settings.color_palette.background }}",
-                    "custom_button_border": "{{ settings.color_palette.background }}"
+                    "custom_button_border": "{{ settings.color_palette.background }}",
+                    "show_icon": false,
+                    "text_size": 18,
+                    "bold_text": true
                   },
                   "blocks": {}
                 },
@@ -219,7 +210,7 @@
               "settings": {
                 "show_vendor": true,
                 "text": "",
-                "show_share": true,
+                "show_share": false,
                 "share_facebook": true,
                 "share_x": true,
                 "share_pinterest": true,
@@ -285,7 +276,7 @@
                 "content_direction": "row",
                 "vertical_on_mobile": false,
                 "horizontal_alignment": "space-between",
-                "vertical_alignment": "center",
+                "vertical_alignment": "flex-start",
                 "align_baseline": false,
                 "gap": 12,
                 "width": "fill",
@@ -293,28 +284,6 @@
                 "height": "fit"
               },
               "blocks": {
-                "price_a7krng": {
-                  "type": "price",
-                  "settings": {
-                    "show_sale_price_first": true,
-                    "show_installments": true,
-                    "show_tax_info": true,
-                    "type_preset": "h4",
-                    "width": "fit-content",
-                    "alignment": "left",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "line_height": "normal",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "text_color": "{{ settings.color_palette.foreground }}",
-                    "padding-block-start": 4,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
                 "lmh_availability": {
                   "type": "lmh-availability",
                   "settings": {
@@ -357,10 +326,60 @@
                     "dog_name",
                     "allergies"
                   ]
+                },
+                "lmh_price_stack": {
+                  "type": "group",
+                  "name": "Price and reviews",
+                  "settings": {
+                    "content_direction": "column",
+                    "vertical_on_mobile": true,
+                    "horizontal_alignment_flex_direction_column": "flex-start",
+                    "vertical_alignment_flex_direction_column": "flex-start",
+                    "gap": 6,
+                    "width": "fit-content",
+                    "width_mobile": "fit-content",
+                    "height": "fit"
+                  },
+                  "blocks": {
+                    "price_a7krng": {
+                      "type": "price",
+                      "settings": {
+                        "show_sale_price_first": true,
+                        "show_installments": true,
+                        "show_tax_info": false,
+                        "type_preset": "h4",
+                        "width": "fit-content",
+                        "alignment": "left",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "text_color": "{{ settings.color_palette.foreground }}",
+                        "padding-block-start": 4,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "lmh_reviews": {
+                      "type": "lmh-review-summary",
+                      "settings": {
+                        "empty_text": "Be the first to review",
+                        "link": "",
+                        "accent_color": "{{ settings.color_palette.foreground }}"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "price_a7krng",
+                    "lmh_reviews"
+                  ]
                 }
               },
               "block_order": [
-                "price_a7krng",
+                "lmh_price_stack",
                 "lmh_availability"
               ]
             }
@@ -368,7 +387,6 @@
           "block_order": [
             "lmh_meta",
             "text_tefwj7",
-            "reviews",
             "lmh_price_row",
             "variant_picker_R3rGDr",
             "lmh_benefits",
@@ -383,13 +401,14 @@
       "settings": {
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
-        "equal_columns": true,
+        "equal_columns": false,
         "limit_details_width": false,
         "gap": 12,
         "enable_sticky_add_to_cart": true,
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 20,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "sticky_show_icon": false
       }
     },
     "product_details_editorial": {
@@ -637,12 +656,34 @@
         "heading_rule": true,
         "grayscale": true
       }
+    },
+    "customer_reviews": {
+      "type": "reviews-editorial",
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ],
+      "settings": {
+        "eyebrow": "Reviews",
+        "heading": "What humans say",
+        "heading_size": 48,
+        "heading_rule": true,
+        "anchor": "reviews",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
     "main",
     "product_details_editorial",
     "editorial_video",
+    "customer_reviews",
     "image_grid_tv",
     "press_logos"
   ]

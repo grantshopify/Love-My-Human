@@ -1,0 +1,135 @@
+{%- comment -%}
+  Review summary for the buy box: stars and "3 reviews", linking down to the reviews.
+  Reads Shopify's standard rating fields, which review apps (Judge.me, Okendo, Yotpo…) fill in.
+  With no reviews yet it shows empty stars and an invitation to review.
+{%- endcomment -%}
+
+{%- liquid
+  assign b = block.settings
+  assign p = closest.product
+  assign rating = p.metafields.reviews.rating.value.rating | default: 0
+  assign scale_max = p.metafields.reviews.rating.value.scale_max | default: 5
+  assign count = p.metafields.reviews.rating_count.value | default: 0
+
+  # Width of the filled stars, as a percentage
+  assign fill = rating | times: 100.0 | divided_by: scale_max | round: 1
+-%}
+
+{%- if count > 0 or b.empty_text != blank -%}
+  <a
+    class="lmh-reviews"
+    href="{{ b.link | default: '#reviews' }}"
+    style="--lmh-accent: {{ b.accent_color | default: settings.color_palette.foreground }}; --lmh-fill: {{ fill }}%;"
+    {{ block.shopify_attributes }}
+  >
+    {%- comment -%} Five square tiles with a star in each, like the brief; each tile fills to its share of the rating {%- endcomment -%}
+    <span class="lmh-reviews__stars" aria-hidden="true">
+      {%- assign stars_rating = rating | times: 5.0 | divided_by: scale_max -%}
+      {%- for i in (1..5) -%}
+        {%- liquid
+          assign tile_fill = stars_rating | minus: forloop.index0 | times: 100 | at_least: 0 | at_most: 100
+        -%}
+        <span class="lmh-reviews__tile" style="--tile-fill: {{ tile_fill }}%;">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="m12 3.2 2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6-4.5-4.2 6.1-.7L12 3.2Z"/></svg>
+        </span>
+      {%- endfor -%}
+    </span>
+    <span class="lmh-reviews__text">
+      {%- if count > 0 -%}
+        <span class="visually-hidden">{{ rating | round: 1 }} out of {{ scale_max }} stars,</span>
+        {{ count }}
+        {% if count == 1 %}review{% else %}reviews{% endif %}
+      {%- else -%}
+        {{ b.empty_text }}
+      {%- endif -%}
+    </span>
+    <svg class="lmh-reviews__chevron" aria-hidden="true" focusable="false" viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="m2.5 4.5 3.5 3.5 3.5-3.5"/></svg>
+  </a>
+{%- endif -%}
+
+{% stylesheet %}
+  .lmh-reviews {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-foreground);
+    font-size: 13px;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .lmh-reviews__stars {
+    display: inline-flex;
+    gap: 2px;
+  }
+
+  /* Filled part in the accent colour, the rest a pale tint */
+  .lmh-reviews__tile {
+    display: grid;
+    place-items: center;
+    inline-size: 18px;
+    block-size: 18px;
+    background: linear-gradient(
+      90deg,
+      var(--lmh-accent) var(--tile-fill, 0%),
+      color-mix(in srgb, var(--lmh-accent) 22%, transparent) var(--tile-fill, 0%)
+    );
+    color: #fff;
+  }
+
+  .lmh-reviews__text {
+    color: var(--color-foreground);
+    font-size: 13px;
+    transition: color 0.3s ease;
+  }
+
+  .lmh-reviews:hover .lmh-reviews__text {
+    color: var(--lmh-accent);
+  }
+
+  .lmh-reviews__chevron {
+    transition: transform 0.3s ease;
+  }
+
+  .lmh-reviews:hover .lmh-reviews__chevron {
+    transform: translateY(2px);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Review summary",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows the star rating and number of reviews from your reviews app (e.g. Judge.me)."
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Text when there are no reviews",
+      "default": "Be the first to review",
+      "info": "Leave empty to hide the stars until the first review."
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link",
+      "info": "Where the stars link to, e.g. the reviews further down the page. Defaults to #reviews."
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Star colour",
+      "default": "{{ settings.color_palette.foreground }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Review summary",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

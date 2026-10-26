@@ -79,6 +79,13 @@
       "color1": "#000000",
       "color2": "#e8d5c7",
       "color3": "#e6e6e6"
+    },
+    "blocks": {
+      "judgeme_core": {
+        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {}
+      }
     }
   },
   "presets": {

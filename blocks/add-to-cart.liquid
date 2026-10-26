@@ -12,6 +12,12 @@
   assign scoped_class = block.settings.style_class | append: '--' | append: block.id
   assign class = 'add-to-cart-button ' | append: block.settings.style_class | append: ' ' | append: scoped_class
   assign id = 'BuyButtons-ProductSubmitButton-' | append: block.id
+
+  # LMH: the cart icon can be switched off in the block settings
+  assign show_icon = false
+  if can_add_to_cart and block.settings.show_icon != false
+    assign show_icon = true
+  endif
 %}
 {% render 'button-custom-styles', block_settings: block.settings, block_id: block.id %}
 {% render 'add-to-cart-button-styles' %}
@@ -19,24 +25,60 @@
 
 <span
   {{ block.shopify_attributes }}
-  style="--add-to-cart-font-case: {{ settings.button_text_case }};"
+  class="lmh-atc{% if block.settings.bold_text %} lmh-atc--bold{% endif %}"
+  style="--add-to-cart-font-case: {{ settings.button_text_case }};{% if block.settings.text_size > 0 %} --lmh-atc-size: {{ block.settings.text_size }}px;{% endif %}"
 >
   {% render 'add-to-cart-button',
     id: id,
     class: class,
     can_add_to_cart: can_add_to_cart,
-    show_icon: can_add_to_cart,
+    show_icon: show_icon,
     product: closest.product,
     add_to_cart_text: add_to_cart_text,
     data_testid: 'standalone-add-to-cart'
   %}
 </span>
 
+{% stylesheet %}
+  /* LMH: optional bigger / bolder button text */
+  .lmh-atc .add-to-cart-button {
+    font-size: var(--lmh-atc-size, inherit);
+  }
+
+  .lmh-atc--bold .add-to-cart-button {
+    letter-spacing: 0.06em;
+    -webkit-text-stroke: 0.35px currentColor;
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "t:names.add_to_cart",
   "tag": null,
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "Show cart icon",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "info": "0 uses the theme's button size.",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "bold_text",
+      "label": "Bolder text",
+      "default": false
+    },
     {
       "type": "select",
       "id": "style_class",

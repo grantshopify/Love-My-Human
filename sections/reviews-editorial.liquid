@@ -1,0 +1,310 @@
+{%- comment -%}
+  Customer reviews: a branded heading over the reviews app's widget (Judge.me's "Reviews" app block).
+  The section carries id="reviews", so the star summary under the price scrolls down to it.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  if s.animate
+    assign reveal = 'data-reveal'
+  endif
+-%}
+
+{%- if s.animate -%}{% render 'editorial-reveal' %}{%- endif -%}
+
+<div
+  id="{{ s.anchor | default: 'reviews' | handleize }}"
+  class="rv"
+  style="
+    --rv-background: {{ s.background_color | default: settings.color_palette.background }};
+    --rv-accent: {{ s.accent_color | default: settings.color_palette.foreground }};
+    --rv-text: {{ s.text_color | default: settings.color_palette.color1 }};
+    --rv-heading-size: {{ s.heading_size }}px;
+    --rv-width: {{ s.max_width }}px;
+    --rv-padding-top: {{ s.padding_top }}px;
+    --rv-padding-bottom: {{ s.padding_bottom }}px;
+  "
+>
+  <div class="rv__inner">
+    {%- if s.heading != blank or s.eyebrow != blank -%}
+      <div class="rv__intro" {{ reveal }}>
+        {%- if s.eyebrow != blank -%}
+          <p class="rv__eyebrow">{{ s.eyebrow }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="rv__heading{% if s.heading_rule %} rv__heading--rule{% endif %}">{{ s.heading }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="rv__widget">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .rv {
+    padding: var(--rv-padding-top) 16px var(--rv-padding-bottom);
+    background: var(--rv-background);
+    color: var(--rv-text);
+    font-family: var(--font-body--family);
+    scroll-margin-top: 120px;
+  }
+
+  .rv__inner {
+    max-inline-size: var(--rv-width);
+    margin: 0 auto;
+  }
+
+  .rv__intro {
+    margin-block-end: 32px;
+    text-align: center;
+  }
+
+  .rv__eyebrow {
+    margin: 0 0 8px;
+    color: var(--rv-accent);
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .rv__eyebrow::before,
+  .rv__eyebrow::after {
+    content: '';
+    display: inline-block;
+    inline-size: 24px;
+    block-size: 1px;
+    margin-inline: 12px;
+    background: currentColor;
+    vertical-align: middle;
+    opacity: 0.6;
+  }
+
+  .rv__heading {
+    margin: 0;
+    color: var(--rv-accent);
+    font-family: var(--font-heading--family);
+    font-size: min(calc(var(--rv-heading-size) * 0.85), 30px);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .rv__heading--rule::after {
+    content: '';
+    display: block;
+    inline-size: 56px;
+    block-size: 3px;
+    margin: 16px auto 0;
+    background: currentColor;
+  }
+
+  /* ---------- Judge.me widget in the LMH brand ----------
+     Judge.me's widget takes its colours from these variables; set here they apply only inside this section */
+  .rv .jdgm-widget,
+  .rv .jm-review-widget {
+    --jdgm-primary-color: var(--rv-accent) !important;
+    --jdgm-secondary-color: color-mix(in srgb, var(--rv-accent) 10%, transparent) !important;
+    --jdgm-star-color: var(--rv-accent) !important;
+    --jdgm-write-review-bg-color: var(--rv-accent) !important;
+    --jdgm-write-review-text-color: var(--rv-background) !important;
+    --jdgm-paginate-color: var(--rv-accent) !important;
+    --jdgm-reviewer-name-color: var(--rv-accent) !important;
+    --jm-review-widget-button-color: var(--rv-accent) !important;
+    --jm-review-widget-button-text-color: var(--rv-background) !important;
+    --jm-review-widget-star-color: var(--rv-accent) !important;
+    --jm-review-widget-text-color: var(--rv-text) !important;
+    font-family: var(--font-body--family);
+    color: var(--rv-text);
+  }
+
+  .rv .jdgm-widget * {
+    font-family: inherit;
+  }
+
+  /* Our heading above replaces the widget's own "Customer Reviews" title */
+  .rv .jm-review-widget-minimal-header__title,
+  .rv .jdgm-rev-widg__title {
+    display: none;
+  }
+
+  .rv .jm-button,
+  .rv .jdgm-write-rev-link,
+  .rv .jdgm-submit-rev {
+    padding: 12px 28px !important;
+    border: 1px solid var(--rv-accent) !important;
+    border-radius: 999px !important;
+    background: var(--rv-accent) !important;
+    color: var(--rv-background) !important;
+    font-family: var(--font-heading--family) !important;
+    font-size: 14px !important;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: opacity 0.3s ease;
+  }
+
+  .rv .jm-button:hover,
+  .rv .jdgm-write-rev-link:hover {
+    opacity: 0.85;
+  }
+
+  .rv .jm-no-reviews-state__text {
+    color: var(--rv-accent);
+    font-family: var(--font-heading--family);
+    font-size: 18px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  @media screen and (min-width: 750px) {
+    .rv {
+      padding-inline: 24px;
+    }
+
+    .rv__intro {
+      margin-block-end: 40px;
+    }
+
+    .rv__heading {
+      font-size: min(var(--rv-heading-size), 40px);
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .rv__heading {
+      font-size: var(--rv-heading-size);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .rv {
+      padding-block: min(var(--rv-padding-top), 48px) min(var(--rv-padding-bottom), 48px);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Customer reviews",
+  "tag": "section",
+  "class": "reviews-editorial-section",
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Add your reviews app's widget here (e.g. Judge.me > Reviews)."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small label above the heading",
+      "default": "Reviews"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What humans say"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_rule",
+      "label": "Short line under the heading",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor",
+      "default": "reviews",
+      "info": "The star summary under the price links to #reviews."
+    },
+    {
+      "type": "checkbox",
+      "id": "animate",
+      "label": "Animate on scroll",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 600,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1080
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "{{ settings.color_palette.background }}"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Stars, headings and buttons",
+      "default": "{{ settings.color_palette.foreground }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Review text",
+      "default": "{{ settings.color_palette.color1 }}"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer reviews",
+      "category": "t:categories.storytelling"
+    }
+  ]
+}
+{% endschema %}
