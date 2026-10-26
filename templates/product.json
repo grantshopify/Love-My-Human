@@ -308,9 +308,87 @@
         "padding-block-start": 20,
         "padding-block-end": 0
       }
+    },
+    "product_details_editorial": {
+      "type": "product-details-editorial",
+      "blocks": {
+        "care": {
+          "type": "tab",
+          "settings": {
+            "title": "Care",
+            "content": "<p>Look after it and it will look after your dog for years to come.</p><ul><li>Follow the care label on the product</li><li>Brush off hair and dirt regularly</li><li>Spot clean marks with a damp cloth and mild soap</li><li>Wash removable covers on a gentle cycle and air dry</li><li>Keep away from direct heat and strong sunlight</li></ul>",
+            "icon": "paw"
+          }
+        },
+        "delivery": {
+          "type": "tab",
+          "settings": {
+            "title": "Delivery & returns",
+            "content": "<p><strong>UK delivery</strong></p><ul><li>Orders under £50: Royal Mail 1st Class, £3.50, 2–3 working days</li><li>Orders over £50: courier, £6, 1–2 working days</li><li>Free delivery on orders over £75</li></ul><p><strong>Europe</strong></p><p>Tracked and signed courier from £25. For larger items such as dog beds, email <a href=\"mailto:hello@lovemyhuman.co.uk\">hello@lovemyhuman.co.uk</a> and we will arrange the best way to send them.</p><p><strong>Returns</strong></p><p>Changed your mind? We are happy to refund or exchange non-perishable items within 14 days, as long as they are new, unused and in their original packaging. Personalised and special-order items cannot be returned. This does not affect your statutory rights.</p>",
+            "icon": "truck"
+          }
+        },
+        "gifting": {
+          "type": "tab",
+          "settings": {
+            "title": "Gifting",
+            "content": "<p>Looking for something ready to give? Our XMAS Hamper is packed with treats and toys chosen by the team.</p><p>[Add your gift message and gift wrapping options here.]</p>",
+            "icon": "gift"
+          }
+        },
+        "h1": {
+          "type": "highlight",
+          "settings": {
+            "icon": "paw",
+            "title": "Chosen by Jenny",
+            "text": "Curated by our founder"
+          }
+        },
+        "h2": {
+          "type": "highlight",
+          "settings": {
+            "icon": "home",
+            "title": "Tested by our dogs",
+            "text": "At our London townhouse"
+          }
+        },
+        "h3": {
+          "type": "highlight",
+          "settings": {
+            "icon": "truck",
+            "title": "Fast UK delivery",
+            "text": "In 1–3 working days"
+          }
+        }
+      },
+      "block_order": [
+        "care",
+        "delivery",
+        "gifting",
+        "h1",
+        "h2",
+        "h3"
+      ],
+      "settings": {
+        "details": "<p>Every piece in our edit is chosen by our founder Jenny and tried and tested by the dogs of our London townhouse, so it works as hard for your dog as it looks in your home.</p><p>Designed for pets. Loved by humans.</p><p>Not sure about the size or fit? Our team is happy to help you choose the right one for your dog.</p>"
+      }
+    },
+    "editorial_video": {
+      "type": "editorial-video",
+      "settings": {
+        "heading": "Made for pets. Loved by humans.",
+        "text": "<p>Designed by our founder Jenny at our London townhouse, for dogs and the humans who love them.</p>",
+        "heading_uppercase": true,
+        "video_file": "https://www.lovemyhuman.co.uk/cdn/shop/videos/c/vp/a5f74f01a9ca4222a1e685ea0e4ed642/a5f74f01a9ca4222a1e685ea0e4ed642.HD-1080p-7.2Mbps-49327868.mp4",
+        "eyebrow": "Our story",
+        "button_label": "Discover our story",
+        "button_link": "shopify://pages/about-us-love-my-human-townhouse"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "product_details_editorial",
+    "editorial_video"
   ]
 }

@@ -1,0 +1,988 @@
+{%- comment -%}
+  Product details (Hermès style): the product description on the left and
+  accordions (Care / Delivery & returns / Gifting) on the right.
+  Mobile: one column, description first.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign p = product | default: s.product
+  assign variant = p.selected_or_first_available_variant
+
+  if s.description_source == 'custom'
+    assign description = s.custom_description
+  else
+    assign description = p.description
+  endif
+
+  # Scroll animation: content fades up as it comes into view
+  if s.animate
+    assign reveal = 'data-reveal'
+  endif
+
+  # Colours: two presets from the theme palette, or the custom pickers
+  assign palette = settings.color_palette
+  case s.color_style
+    when 'neutral'
+      assign pd_background = palette.background
+      assign pd_text = palette.color1
+      assign pd_heading = palette.color1
+    when 'custom'
+      assign pd_background = s.background_color
+      assign pd_text = s.text_color
+      assign pd_heading = s.heading_color
+    else
+      assign pd_background = palette.background
+      assign pd_text = palette.foreground
+      assign pd_heading = palette.foreground
+  endcase
+-%}
+
+{%- if s.animate -%}{% render 'editorial-reveal' %}{%- endif -%}
+
+<product-details-editorial
+  class="pd-editorial"
+  data-single-open="{{ s.single_open }}"
+  style="
+    --pd-background: {{ pd_background }};
+    --pd-text: {{ pd_text }};
+    --pd-heading: {{ pd_heading }};
+    --pd-text-size: {{ s.text_size }}px;
+    --pd-title-size: {{ s.title_size }}px;
+    --pd-padding-top: {{ s.padding_top }}px;
+    --pd-padding-bottom: {{ s.padding_bottom }}px;
+  "
+>
+  <div class="pd-editorial__grid">
+    <div class="pd-editorial__info" {{ reveal }}>
+      {%- if s.heading != blank -%}
+        <h2 class="pd-editorial__heading">{{ s.heading }}</h2>
+      {%- endif -%}
+
+      {%- if description != blank -%}
+        <div class="pd-editorial__description">{{ description }}</div>
+      {%- endif -%}
+
+      {%- if s.details != blank -%}
+        <div class="pd-editorial__details">{{ s.details }}</div>
+      {%- endif -%}
+
+      {%- liquid
+        # Liquid reads and/or right to left, so work the flags out one at a time
+        assign show_sku = false
+        if s.show_sku and variant.sku != blank
+          assign show_sku = true
+        endif
+        assign show_footer = show_sku
+        if s.contact_link_label != blank
+          assign show_footer = true
+        endif
+      -%}
+      {%- if show_footer -%}
+        <div class="pd-editorial__footer">
+          {%- if show_sku -%}
+            <p class="pd-editorial__sku">
+              {{ s.sku_label }}
+              <span data-pd-sku>{{ variant.sku }}</span>
+            </p>
+          {%- endif -%}
+          {%- if s.contact_link_label != blank -%}
+            <p class="pd-editorial__contact">
+              {%- if s.contact_text != blank -%}<span>{{ s.contact_text }}</span> {% endif -%}
+              <a href="{{ s.contact_link | default: '/pages/contact' }}">{{ s.contact_link_label }}</a>
+            </p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- liquid
+        assign highlights = section.blocks | where: 'type', 'highlight'
+      -%}
+      {%- if highlights.size > 0 -%}
+        <ul class="pd-editorial__highlights list-unstyled" role="list">
+          {%- for block in highlights -%}
+            <li class="pd-editorial__highlight" {{ block.shopify_attributes }}>
+              {%- if block.settings.icon != 'none' -%}
+                <span class="pd-editorial__highlight-icon">{% render 'editorial-icon', icon: block.settings.icon, size: 22 %}</span>
+              {%- endif -%}
+              <span class="pd-editorial__highlight-text">
+                {%- if block.settings.title != blank -%}
+                  <strong>{{ block.settings.title }}</strong>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <span>{{ block.settings.text }}</span>
+                {%- endif -%}
+              </span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    {%- assign tabs = section.blocks | where: 'type', 'tab' -%}
+    {%- if tabs.size > 0 -%}
+      <div class="pd-editorial__tabs">
+        {%- for block in tabs -%}
+          {%- liquid
+            assign b = block.settings
+            if b.page != blank
+              assign tab_content = b.page.content
+            else
+              assign tab_content = b.content
+            endif
+          -%}
+          <details
+            class="pd-editorial__tab"
+            {{ reveal }}
+            {% if b.open %}
+              open
+            {% endif %}
+            {{ block.shopify_attributes }}
+          >
+            <summary class="pd-editorial__tab-title">
+              {%- if b.icon != blank and b.icon != 'none' -%}
+                <span class="pd-editorial__tab-icon">{% render 'editorial-icon', icon: b.icon, size: 20 %}</span>
+              {%- endif -%}
+              <span class="pd-editorial__tab-label">{{ b.title }}</span>
+              <svg class="pd-editorial__chevron" aria-hidden="true" focusable="false" viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m1.5 4.5 5.5 5 5.5-5"/>
+              </svg>
+            </summary>
+            <div class="pd-editorial__tab-content" data-pd-collapsible>
+              <div class="pd-editorial__tab-inner">
+                {{ tab_content }}
+                {%- if b.link_label != blank -%}
+                  <p><a href="{{ b.link | default: '#' }}">{{ b.link_label }}</a></p>
+                {%- endif -%}
+              </div>
+            </div>
+          </details>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- if s.show_sku and p.variants.size > 1 -%}
+    <script type="application/json" data-pd-skus>
+      {
+        {%- for v in p.variants -%}
+          {{ v.id | json }}: {{ v.sku | json }}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      }
+    </script>
+  {%- endif -%}
+</product-details-editorial>
+
+<script>
+  if (!customElements.get('product-details-editorial')) {
+    customElements.define(
+      'product-details-editorial',
+      class extends HTMLElement {
+        connectedCallback() {
+          // Smooth accordions
+          this.addEventListener('click', (event) => {
+            const summary = event.target.closest('summary');
+            const details = summary?.parentElement;
+            if (!(details instanceof HTMLDetailsElement) || !this.contains(details)) return;
+            event.preventDefault();
+            const opening = !details.open;
+            this.animate(details, opening);
+            if (opening && this.dataset.singleOpen === 'true') {
+              this.querySelectorAll('details[open]').forEach((other) => {
+                if (other !== details) this.animate(other, false);
+              });
+            }
+          });
+
+          // Product reference follows the selected variant
+          const skus = this.querySelector('[data-pd-skus]');
+          const sku = this.querySelector('[data-pd-sku]');
+          if (skus && sku) {
+            const map = JSON.parse(skus.textContent);
+            document.addEventListener('change', (event) => {
+              if (!event.target.closest?.('variant-picker')) return;
+              // The variant picker updates the URL after its fetch, so read it a moment later
+              setTimeout(() => {
+                const id = new URL(location.href).searchParams.get('variant');
+                if (id && map[id]) sku.textContent = map[id];
+              }, 400);
+            });
+          }
+        }
+
+        /** Slides a <details> open or closed by animating its content's height */
+        animate(details, open) {
+          const content = details.querySelector(':scope > [data-pd-collapsible]');
+          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          content?.getAnimations().forEach((animation) => animation.cancel());
+          if (!content || reduce) {
+            details.open = open;
+            return;
+          }
+          const easing = 'cubic-bezier(0.2, 0, 0, 1)';
+          // Each call gets a token so a late "close" never shuts a details that was re-opened
+          const token = (details.pdToken = Symbol());
+          if (open) {
+            details.open = true;
+            const height = content.scrollHeight;
+            const animation = content.animate(
+              [
+                { height: '0px', opacity: 0 },
+                { height: `${height}px`, opacity: 1 },
+              ],
+              { duration: 350, easing }
+            );
+            // Backup: if the animation stalls, never leave the content hidden
+            setTimeout(() => {
+              if (details.pdToken === token) animation.cancel();
+            }, 400);
+          } else {
+            const height = content.offsetHeight;
+            const animation = content.animate(
+              [
+                { height: `${height}px`, opacity: 1 },
+                { height: '0px', opacity: 0 },
+              ],
+              { duration: 280, easing }
+            );
+            const finish = () => {
+              if (details.pdToken !== token) return;
+              details.open = false;
+              animation.cancel();
+            };
+            animation.onfinish = finish;
+            // Backup: animations can stall (background tabs), so close when the time is up anyway
+            setTimeout(finish, 320);
+          }
+        }
+      }
+    );
+  }
+</script>
+
+{% stylesheet %}
+  .pd-editorial {
+    display: block;
+    padding: var(--pd-padding-top) 15px var(--pd-padding-bottom);
+    background: var(--pd-background);
+    color: var(--pd-text);
+    font-family: var(--font-body--family);
+    font-size: var(--pd-text-size);
+    line-height: 1.65;
+  }
+
+  .pd-editorial__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    max-inline-size: 1400px;
+    margin: 0 auto;
+  }
+
+  .pd-editorial__heading {
+    margin: 0 0 16px;
+    color: var(--pd-heading);
+    font-family: var(--font-heading--family);
+    font-size: var(--pd-title-size);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  .pd-editorial__description > :first-child,
+  .pd-editorial__details > :first-child,
+  .pd-editorial__tab-inner > :first-child {
+    margin-block-start: 0;
+  }
+
+  .pd-editorial__description > :last-child,
+  .pd-editorial__details > :last-child,
+  .pd-editorial__tab-inner > :last-child {
+    margin-block-end: 0;
+  }
+
+  .pd-editorial__description p,
+  .pd-editorial__details p {
+    margin: 0;
+  }
+
+  .pd-editorial__description p + p,
+  .pd-editorial__details p + p {
+    margin-block-start: 0.6em;
+  }
+
+  .pd-editorial__description ul,
+  .pd-editorial__details ul,
+  .pd-editorial__tab-inner ul,
+  .pd-editorial__tab-inner ol {
+    margin: 0;
+    padding-inline-start: 18px;
+  }
+
+  .pd-editorial__description ul,
+  .pd-editorial__details ul,
+  .pd-editorial__tab-inner ul {
+    list-style: disc;
+  }
+
+  /* A blank line between the description and the details, like Hermès; none when the details come first,
+     so the first line lines up with the first accordion title */
+  .pd-editorial__description + .pd-editorial__details {
+    margin-block-start: calc(var(--pd-text-size) * 1.65);
+  }
+
+  .pd-editorial__footer {
+    margin-block-start: 24px;
+    color: color-mix(in srgb, var(--pd-text) 62%, transparent);
+  }
+
+  .pd-editorial__footer p {
+    margin: 0;
+  }
+
+  .pd-editorial a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .pd-editorial__contact a:hover,
+  .pd-editorial__tab-inner a:hover {
+    color: var(--pd-heading);
+  }
+
+  /* ---------- Accordions ---------- */
+  .pd-editorial__tabs {
+    display: grid;
+    gap: 24px;
+    align-content: start;
+  }
+
+  .pd-editorial__tab-title {
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 12px;
+    /* The theme pads summaries; zero at the top keeps the first title level with the text on the left */
+    padding: 0 0 8px;
+    border-block-end: 1px solid color-mix(in srgb, var(--pd-heading) 22%, transparent);
+    color: var(--pd-heading);
+    font-family: var(--font-heading--family);
+    font-size: var(--pd-title-size);
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  /* A red line draws across under the title on hover, and stays while the accordion is open */
+  .pd-editorial__tab-title::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 -1px;
+    block-size: 1px;
+    background: var(--pd-heading);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .pd-editorial__tab-title:hover::after,
+  .pd-editorial__tab[open] > .pd-editorial__tab-title::after {
+    transform: scaleX(1);
+  }
+
+  .pd-editorial__tab-label {
+    flex: 1;
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .pd-editorial__tab-title:hover .pd-editorial__tab-label {
+    transform: translateX(4px);
+  }
+
+  .pd-editorial__tab-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+  }
+
+  .pd-editorial__tab-title::-webkit-details-marker {
+    display: none;
+  }
+
+  .pd-editorial__tab-title:focus-visible {
+    outline: 1px solid var(--pd-heading);
+    outline-offset: 4px;
+  }
+
+  .pd-editorial__chevron {
+    flex: none;
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .pd-editorial__tab[open] .pd-editorial__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* ---------- Highlights (small icon points under the description) ---------- */
+  .pd-editorial__highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px 24px;
+    margin: 32px 0 0;
+    padding: 24px 0 0;
+    border-block-start: 1px solid color-mix(in srgb, var(--pd-heading) 22%, transparent);
+  }
+
+  .pd-editorial__highlight {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: var(--pd-heading);
+  }
+
+  .pd-editorial__highlight-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    inline-size: 40px;
+    block-size: 40px;
+    border: 1px solid color-mix(in srgb, var(--pd-heading) 35%, transparent);
+    border-radius: 50%;
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease,
+      transform 0.6s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .pd-editorial__highlight:hover .pd-editorial__highlight-icon {
+    background: var(--pd-heading);
+    color: var(--pd-background);
+    transform: rotate(-8deg) scale(1.05);
+  }
+
+  .pd-editorial__highlight-text {
+    display: grid;
+    gap: 2px;
+    padding-block-start: 2px;
+    font-size: calc(var(--pd-text-size) - 1px);
+    line-height: 1.45;
+  }
+
+  .pd-editorial__highlight-text strong {
+    font-family: var(--font-heading--family);
+    font-size: calc(var(--pd-text-size) + 1px);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Contact link: underline slides in from the left */
+  .pd-editorial__contact a {
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) left bottom / 100% 1px no-repeat;
+    transition: background-size 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .pd-editorial__contact a:hover {
+    background-size: 0 1px;
+    background-position: right bottom;
+  }
+
+  /* The outer box is what animates, so it has no padding (padding can't shrink to 0 smoothly) */
+  .pd-editorial__tab-content {
+    overflow: hidden;
+  }
+
+  .pd-editorial__tab-inner {
+    padding-block-start: 17px;
+  }
+
+  .pd-editorial__tab-inner p,
+  .pd-editorial__tab-inner ul,
+  .pd-editorial__tab-inner ol {
+    margin: 0 0 calc(var(--pd-text-size) * 0.8);
+  }
+
+  @media screen and (min-width: 750px) {
+    .pd-editorial {
+      padding-inline: 24px;
+    }
+
+    .pd-editorial__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    /* The description stays in view while long accordions are read */
+    .pd-editorial__info {
+      position: sticky;
+      top: 120px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pd-editorial__tab-title::after,
+    .pd-editorial__tab-label,
+    .pd-editorial__highlight-icon {
+      transition: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .pd-editorial {
+      padding-block: min(var(--pd-padding-top), 32px) min(var(--pd-padding-bottom), 32px);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product details (Hermès)",
+  "tag": "section",
+  "class": "pd-editorial-section",
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Accordion",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "paw",
+              "label": "Paw"
+            },
+            {
+              "value": "truck",
+              "label": "Delivery"
+            },
+            {
+              "value": "returns",
+              "label": "Returns"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "scissors",
+              "label": "Grooming"
+            },
+            {
+              "value": "home",
+              "label": "Home"
+            },
+            {
+              "value": "box",
+              "label": "Parcel"
+            },
+            {
+              "value": "bag",
+              "label": "Shopping bag"
+            },
+            {
+              "value": "card",
+              "label": "Secure payment"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "question",
+              "label": "Question"
+            },
+            {
+              "value": "cup",
+              "label": "Caf\u00e9"
+            },
+            {
+              "value": "store",
+              "label": "Shop"
+            },
+            {
+              "value": "user",
+              "label": "Account"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Care"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Write the care instructions here. You can add bullet lists and links.</p>"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Or show a page",
+          "info": "Optional. Shows the page's content instead of the text above (useful for Delivery & returns)."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "info": "Optional, e.g. \"Find out more\""
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "highlight",
+      "name": "Highlight",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "A small icon point shown under the description, e.g. \"Tested by our dogs\"."
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "paw",
+              "label": "Paw"
+            },
+            {
+              "value": "truck",
+              "label": "Delivery"
+            },
+            {
+              "value": "returns",
+              "label": "Returns"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "scissors",
+              "label": "Grooming"
+            },
+            {
+              "value": "home",
+              "label": "Home"
+            },
+            {
+              "value": "box",
+              "label": "Parcel"
+            },
+            {
+              "value": "bag",
+              "label": "Shopping bag"
+            },
+            {
+              "value": "card",
+              "label": "Secure payment"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "question",
+              "label": "Question"
+            },
+            {
+              "value": "cup",
+              "label": "Caf\u00e9"
+            },
+            {
+              "value": "store",
+              "label": "Shop"
+            },
+            {
+              "value": "user",
+              "label": "Account"
+            }
+          ],
+          "default": "paw"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Tested by our dogs"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Tried at our London townhouse"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "info": "Only used outside product pages. On a product page the section always shows that product."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Optional, e.g. \"Product description\""
+    },
+    {
+      "type": "select",
+      "id": "description_source",
+      "label": "Description",
+      "options": [
+        {
+          "value": "product",
+          "label": "Product description"
+        },
+        {
+          "value": "custom",
+          "label": "Custom text"
+        }
+      ],
+      "default": "product"
+    },
+    {
+      "type": "richtext",
+      "id": "custom_description",
+      "label": "Custom text",
+      "visible_if": "{{ section.settings.description_source == 'custom' }}"
+    },
+    {
+      "type": "richtext",
+      "id": "details",
+      "label": "Details",
+      "info": "Shown under the description, e.g. materials, size, Made in the UK. Connect a product metafield to make it different per product."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sku",
+      "label": "Show product reference (SKU)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "sku_label",
+      "label": "Product reference label",
+      "default": "Product reference:",
+      "visible_if": "{{ section.settings.show_sku }}"
+    },
+    {
+      "type": "text",
+      "id": "contact_text",
+      "label": "Contact text",
+      "default": "Like to know more?"
+    },
+    {
+      "type": "text",
+      "id": "contact_link_label",
+      "label": "Contact link label",
+      "default": "Contact Customer Service",
+      "info": "Leave empty to hide the contact line."
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "Contact link"
+    },
+    {
+      "type": "header",
+      "content": "Accordions"
+    },
+    {
+      "type": "checkbox",
+      "id": "animate",
+      "label": "Animate on scroll",
+      "info": "The description and accordions fade up as they come into view.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "single_open",
+      "label": "Only one accordion open at a time",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Accordion title size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "color_style",
+      "label": "Colour style",
+      "options": [
+        {
+          "value": "brand",
+          "label": "Website red (Love My Human)"
+        },
+        {
+          "value": "neutral",
+          "label": "Neutral: black on cream (Hermès)"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "brand",
+      "info": "The two presets use your theme colour palette, so they follow the website."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "{{ settings.color_palette.background }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Titles and lines",
+      "default": "{{ settings.color_palette.foreground }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "{{ settings.color_palette.color1 }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product details (Hermès)",
+      "category": "t:categories.product",
+      "blocks": {
+        "care": {
+          "type": "tab",
+          "settings": {
+            "title": "Care",
+            "content": "<p>[Care instructions for this product.]</p><ul><li>[Machine washable at 30°C]</li><li>[Remove the cover before washing]</li><li>[Do not tumble dry]</li></ul>"
+          }
+        },
+        "delivery": {
+          "type": "tab",
+          "settings": {
+            "title": "Delivery & returns",
+            "content": "<p>Free standard delivery on UK orders over £50.</p><p>[Write your delivery times and returns policy here.]</p>"
+          }
+        },
+        "gifting": {
+          "type": "tab",
+          "settings": {
+            "title": "Gifting",
+            "content": "<p>[Write how gifting works here, e.g. gift wrapping and gift messages.]</p>"
+          }
+        }
+      },
+      "block_order": [
+        "care",
+        "delivery",
+        "gifting"
+      ]
+    }
+  ]
+}
+{% endschema %}

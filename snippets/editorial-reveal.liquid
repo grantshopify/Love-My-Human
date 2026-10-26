@@ -1,0 +1,29 @@
+{%- doc -%}
+  Loads the scroll reveal for the editorial sections (assets/editorial-reveal.js).
+  Render it once in any section that uses data-reveal attributes; the browser only loads the script once.
+{%- enddoc -%}
+
+<script src="{{ 'editorial-reveal.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{% stylesheet %}
+  .reveal-ready {
+    transition:
+      opacity 0.9s cubic-bezier(0.2, 0, 0, 1),
+      transform 0.9s cubic-bezier(0.2, 0, 0, 1),
+      clip-path 1.3s cubic-bezier(0.65, 0, 0.35, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-ready:not(.is-revealed):is([data-reveal=''], [data-reveal='fade-up']) {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  .reveal-ready:not(.is-revealed)[data-reveal='fade'] {
+    opacity: 0;
+  }
+
+  .reveal-ready:not(.is-revealed)[data-reveal='clip'] {
+    clip-path: inset(7% 9%);
+  }
+{% endstylesheet %}
