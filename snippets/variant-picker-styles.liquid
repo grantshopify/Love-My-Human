@@ -161,6 +161,24 @@
     color: var(--variant-option-label-color-subdued, var(--color-foreground-subdued));
   }
 
+  /* LMH: swatch label reads "COLOUR | PUMPKIN VELVET", like the product page brief */
+  .variant-option--swatches legend {
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .variant-option--swatches .variant-option__swatch-value {
+    padding-inline-start: 0;
+  }
+
+  .variant-option--swatches .variant-option__swatch-value::before {
+    content: '|';
+    margin-inline: 8px;
+    opacity: 0.5;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     .variant-option__button-label,
     .variant-option__select-wrapper,

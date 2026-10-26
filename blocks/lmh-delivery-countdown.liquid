@@ -1,0 +1,217 @@
+{%- comment -%}
+  Delivery countdown: "Want it by Tuesday? Order within 3 hrs 12 mins 05 secs & select Next Day Delivery".
+  Worked out in UK time from the order cut-off. Orders are dispatched Monday to Friday.
+  Hidden when the product is sold out.
+{%- endcomment -%}
+
+{%- liquid
+  assign b = block.settings
+  assign p = closest.product
+-%}
+
+{%- if p.available -%}
+  <lmh-delivery-countdown
+    class="lmh-delivery{% if b.boxed %} lmh-delivery--boxed{% endif %}"
+    style="--lmh-accent: {{ block.settings.accent_color | default: settings.color_palette.foreground }};"
+    data-cutoff="{{ b.cutoff_hour }}"
+    data-days="{{ b.delivery_days }}"
+    data-saturday="{{ b.saturday_delivery }}"
+    data-message="{{ b.message | escape }}"
+    {{ block.shopify_attributes }}
+  >
+    <span class="lmh-delivery__icon" aria-hidden="true">{% render 'editorial-icon', icon: 'truck', size: 20 %}</span>
+    <p class="lmh-delivery__text" data-lmh-delivery-text>
+      {{- b.fallback -}}
+    </p>
+  </lmh-delivery-countdown>
+
+  <script>
+    if (!customElements.get('lmh-delivery-countdown')) {
+      customElements.define(
+        'lmh-delivery-countdown',
+        class extends HTMLElement {
+          connectedCallback() {
+            this.text = this.querySelector('[data-lmh-delivery-text]');
+            this.render();
+            this.timer = setInterval(() => this.render(), 1000);
+          }
+
+          disconnectedCallback() {
+            clearInterval(this.timer);
+          }
+
+          /** The current date and time in the UK, as plain numbers */
+          ukNow() {
+            const parts = Object.fromEntries(
+              new Intl.DateTimeFormat('en-GB', {
+                timeZone: 'Europe/London',
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                hourCycle: 'h23',
+              })
+                .formatToParts(new Date())
+                .map((part) => [part.type, Number(part.value)])
+            );
+            // Work in "UK wall clock" time: the same numbers, read as UTC
+            return new Date(Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second));
+          }
+
+          render() {
+            const now = this.ukNow();
+            const cutoffHour = Number(this.dataset.cutoff);
+            const transitDays = Number(this.dataset.days) || 1;
+            const saturday = this.dataset.saturday === 'true';
+            const isWeekday = (date) => date.getUTCDay() >= 1 && date.getUTCDay() <= 5;
+            const addDays = (date, days) => new Date(date.getTime() + days * 86400000);
+
+            // Dispatch today if it's a weekday before the cut-off, otherwise on the next weekday
+            let dispatch = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), cutoffHour));
+            if (!isWeekday(dispatch) || now >= dispatch) {
+              do dispatch = addDays(dispatch, 1);
+              while (!isWeekday(dispatch));
+            }
+
+            // Delivery: count working days in transit (Sundays never, Saturdays only if switched on)
+            let delivery = dispatch;
+            for (let left = transitDays; left > 0; ) {
+              delivery = addDays(delivery, 1);
+              const day = delivery.getUTCDay();
+              if (day === 0 || (day === 6 && !saturday)) continue;
+              left -= 1;
+            }
+
+            const seconds = Math.max(0, Math.floor((dispatch - now) / 1000));
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            const pad = (n) => String(n).padStart(2, '0');
+            const unit = (label) => `<span class="lmh-delivery__unit">${label}</span>`;
+            const time = `<strong>${hrs}</strong> ${unit('hrs')} <strong>${pad(mins)}</strong> ${unit('mins')} <strong>${pad(secs)}</strong> ${unit('secs')}`;
+            const tomorrow = addDays(new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())), 1);
+            const sameDay = (a, c) =>
+              a.getUTCFullYear() === c.getUTCFullYear() && a.getUTCMonth() === c.getUTCMonth() && a.getUTCDate() === c.getUTCDate();
+            const day = sameDay(delivery, tomorrow)
+              ? 'tomorrow'
+              : delivery.toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'UTC' });
+
+            this.text.innerHTML = this.dataset.message
+              .replace('[day]', `<strong>${day}</strong>`)
+              .replace('[time]', time);
+          }
+        }
+      );
+    }
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .lmh-delivery {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    inline-size: 100%;
+    color: var(--lmh-accent);
+  }
+
+  .lmh-delivery--boxed {
+    padding: 14px 16px;
+    border: 1px dashed color-mix(in srgb, var(--lmh-accent) 40%, transparent);
+    border-radius: 12px;
+  }
+
+  .lmh-delivery__unit {
+    font-size: 0.78em;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .lmh-delivery__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+  }
+
+  .lmh-delivery__text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .lmh-delivery__text strong {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Delivery countdown",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Message",
+      "default": "Want it by [day]? Order within [time] & select Next Day Delivery",
+      "info": "[day] is the delivery day, [time] is the countdown to the cut-off."
+    },
+    {
+      "type": "range",
+      "id": "cutoff_hour",
+      "label": "Order cut-off (UK time)",
+      "info": "Orders before this hour on a weekday are dispatched the same day. 14 = 2 pm.",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "h",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "delivery_days",
+      "label": "Days in transit",
+      "info": "1 for next day delivery.",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "saturday_delivery",
+      "label": "Delivers on Saturdays",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "boxed",
+      "label": "Show in a box",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "fallback",
+      "label": "Text before the countdown loads",
+      "default": "Order today for fast UK delivery"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent colour",
+      "default": "{{ settings.color_palette.foreground }}",
+      "info": "Icons, lines and buttons. Defaults to the brand red."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Delivery countdown",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

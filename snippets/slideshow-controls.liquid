@@ -125,8 +125,13 @@
                 %}
                 {{
                   media.preview_image
-                  | image_url: width: 144
-                  | image_tag: loading: 'lazy', alt: media.alt, style: focal_point_style
+                  | image_url: width: 600
+                  | image_tag:
+                    loading: 'lazy',
+                    alt: media.alt,
+                    style: focal_point_style,
+                    widths: '144, 300, 450, 600',
+                    sizes: '(min-width: 750px) 250px, 34vw'
                   | escape
                 }}
 

@@ -1,0 +1,20 @@
+{%- doc -%}
+  Looks up a colour in the variant picker's "Swatch colours" list (one per line, "Name: #hex")
+  and outputs the colour, or nothing when the name isn't in the list.
+
+  @param {string} name - The option value, e.g. "Pumpkin Velvet"
+  @param {string} list - The list from the block setting
+{%- enddoc -%}
+
+{%- liquid
+  assign wanted = name | downcase | strip
+  assign lines = list | newline_to_br | split: '<br />'
+  for line in lines
+    assign parts = line | split: ':'
+    assign key = parts[0] | downcase | strip
+    if key == wanted and parts.size > 1
+      echo parts[1] | strip
+      break
+    endif
+  endfor
+-%}

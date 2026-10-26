@@ -1,0 +1,48 @@
+{%- comment -%} One benefit point (icon + label) inside the "Benefits" block {%- endcomment -%}
+
+<li class="lmh-benefit" {{ block.shopify_attributes }}>
+  {%- if block.settings.icon != 'none' -%}
+    <span class="lmh-benefit__icon">{% render 'editorial-icon', icon: block.settings.icon, size: 18 %}</span>
+  {%- endif -%}
+  <span class="lmh-benefit__text">{{ block.settings.text }}</span>
+</li>
+
+{% schema %}
+{
+  "name": "Benefit",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "paw", "label": "Paw" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "home", "label": "Home" },
+        { "value": "truck", "label": "Delivery" },
+        { "value": "returns", "label": "Returns" },
+        { "value": "gift", "label": "Gift" },
+        { "value": "scissors", "label": "Grooming" },
+        { "value": "box", "label": "Parcel" },
+        { "value": "bag", "label": "Shopping bag" },
+        { "value": "card", "label": "Secure payment" },
+        { "value": "chat", "label": "Chat" },
+        { "value": "question", "label": "Question" },
+        { "value": "cup", "label": "Café" },
+        { "value": "store", "label": "Shop" },
+        { "value": "user", "label": "Account" },
+        { "value": "phone", "label": "Phone" }
+      ],
+      "default": "paw"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Tested by our dogs"
+    }
+  ]
+}
+{% endschema %}

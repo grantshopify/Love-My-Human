@@ -361,7 +361,7 @@
         media-gallery--extend
       {% endif %}
     "
-    style="{% render 'spacing-style', settings: block_settings %} --thumbnail-width: {{ block_settings.thumbnail_width }}px; --media-radius: {{ block_settings.media_radius }}px;{% if block_settings.icons_style contains 'large' %} --slideshow-icon-padding: 0px;{% endif %}--image-gap: {{ block_settings.image_gap }}px;{% unless block_settings.aspect_ratio == 'adapt' %} --gallery-aspect-ratio: {{ block_settings.aspect_ratio }};{% endunless %}"
+    style="{% render 'spacing-style', settings: block_settings %} --thumbnail-width: {{ block_settings.thumbnail_width }}px; --media-radius: {{ block_settings.media_radius }}px; --lmh-brand: {{ settings.color_palette.foreground }};{% if block_settings.icons_style contains 'large' %} --slideshow-icon-padding: 0px;{% endif %}--image-gap: {{ block_settings.image_gap }}px;{% unless block_settings.aspect_ratio == 'adapt' %} --gallery-aspect-ratio: {{ block_settings.aspect_ratio }};{% endunless %}"
     data-presentation="{{ media_presentation }}"
     {{ block_shopify_attributes }}
   >
@@ -444,6 +444,65 @@
         {% render 'slideshow-arrows', class: 'mobile:hidden', icon_style: block_settings.icons_style %}
       {% endcapture %}
     {% endif %}
+
+    {%- comment -%} LMH: sale badge and "Watch video" button over the main image {%- endcomment -%}
+    {%- liquid
+      assign lmh_variant = closest.product.selected_or_first_available_variant
+      assign lmh_on_sale = false
+      if block_settings.show_sale_badge and lmh_variant.compare_at_price > lmh_variant.price
+        assign lmh_on_sale = true
+      endif
+
+      assign lmh_video = blank
+      assign lmh_video_url = blank
+      if block_settings.watch_video == 'product'
+        assign lmh_video = closest.product.media | where: 'media_type', 'video' | first
+        if lmh_video == blank
+          assign lmh_video = closest.product.media | where: 'media_type', 'external_video' | first
+        endif
+      elsif block_settings.watch_video == 'link'
+        assign lmh_video_url = block_settings.watch_video_url
+      endif
+    -%}
+    {% capture lmh_overlay %}
+      {%- if lmh_on_sale or lmh_video != blank or lmh_video_url != blank -%}
+        <div class="lmh-gallery-overlay" style="--lmh-brand: {{ settings.color_palette.foreground }};">
+          {%- if lmh_on_sale and block_settings.sale_badge_text != blank -%}
+            <span class="lmh-sale-badge">{{ block_settings.sale_badge_text }}</span>
+          {%- endif -%}
+          {%- if lmh_video != blank or lmh_video_url != blank -%}
+            <lmh-watch-video class="lmh-watch">
+              <button type="button" class="lmh-watch__button" data-lmh-watch-open>
+                <span class="lmh-watch__play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5.5v13l10.5-6.5L8 5.5Z"/></svg>
+                </span>
+                <span>{{ block_settings.watch_video_label | default: 'Watch video' }}</span>
+              </button>
+              <dialog class="lmh-watch__dialog" aria-label="{{ block_settings.watch_video_label | default: 'Watch video' | escape }}">
+                <button type="button" class="lmh-watch__close" data-lmh-watch-close aria-label="{{ 'actions.close' | t }}">
+                  <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg>
+                </button>
+                <div class="lmh-watch__frame">
+                  {%- if lmh_video_url != blank -%}
+                    <video src="{{ lmh_video_url }}" controls playsinline preload="none"></video>
+                  {%- elsif lmh_video.media_type == 'video' -%}
+                    {{ lmh_video | video_tag: controls: true, playsinline: true, preload: 'none', image_size: '1600x' }}
+                  {%- else -%}
+                    {%- if lmh_video.host == 'youtube' -%}
+                      {%- capture lmh_embed -%}https://www.youtube.com/embed/{{ lmh_video.external_id }}?autoplay=1&rel=0&playsinline=1{%- endcapture -%}
+                    {%- else -%}
+                      {%- capture lmh_embed -%}https://player.vimeo.com/video/{{ lmh_video.external_id }}?autoplay=1&dnt=1{%- endcapture -%}
+                    {%- endif -%}
+                    <iframe data-src="{{ lmh_embed }}" title="{{ closest.product.title | escape }}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+                  {%- endif -%}
+                </div>
+              </dialog>
+            </lmh-watch-video>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {% endcapture %}
+    {% assign slideshow_arrows = slideshow_arrows | append: lmh_overlay %}
 
     {% render 'slideshow',
       ref: 'slideshow',
@@ -651,6 +710,42 @@
 
 {% render 'product-media-container-styles' %}
 {% render 'product-media-gallery-content-styles' %}
+
+{%- if lmh_video != blank or lmh_video_url != blank -%}
+  <script>
+    if (!customElements.get('lmh-watch-video')) {
+      customElements.define(
+        'lmh-watch-video',
+        class extends HTMLElement {
+          connectedCallback() {
+            this.dialog = this.querySelector('dialog');
+            this.querySelector('[data-lmh-watch-open]')?.addEventListener('click', () => this.open());
+            this.querySelector('[data-lmh-watch-close]')?.addEventListener('click', () => this.dialog.close());
+            // Click outside the video closes it
+            this.dialog.addEventListener('click', (event) => {
+              if (event.target === this.dialog) this.dialog.close();
+            });
+            this.dialog.addEventListener('close', () => this.stop());
+          }
+
+          open() {
+            this.dialog.showModal();
+            const video = this.dialog.querySelector('video');
+            if (video) video.play().catch(() => {});
+            const iframe = this.dialog.querySelector('iframe[data-src]');
+            if (iframe) iframe.src = iframe.dataset.src;
+          }
+
+          stop() {
+            this.dialog.querySelector('video')?.pause();
+            const iframe = this.dialog.querySelector('iframe[data-src]');
+            if (iframe) iframe.removeAttribute('src');
+          }
+        }
+      );
+    }
+  </script>
+{%- endif -%}
 
 {% stylesheet %}
   .dialog-thumbnails-list-container {
@@ -1085,5 +1180,254 @@
 
   slideshow-slide.product-media-container--tallest {
     content-visibility: visible;
+  }
+
+  /* ---------- LMH: sale badge and "Watch video" button over the main image ---------- */
+  .lmh-gallery-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .lmh-gallery-overlay > * {
+    pointer-events: auto;
+  }
+
+  .lmh-sale-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: grid;
+    place-items: center;
+    inline-size: 56px;
+    block-size: 56px;
+    border-radius: 50%;
+    background: var(--color-background);
+    color: var(--lmh-brand);
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.08);
+  }
+
+  .lmh-watch__button {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 18px 6px 6px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.12);
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .lmh-watch__button:hover {
+    transform: translateY(-2px);
+  }
+
+  .lmh-watch__button:focus-visible {
+    outline: 2px solid var(--color-background);
+    outline-offset: 3px;
+  }
+
+  .lmh-watch__play {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: 32px;
+    block-size: 32px;
+    border-radius: 50%;
+    background: var(--lmh-brand);
+    color: #fff;
+  }
+
+  /* A soft ring pulses out from the play button */
+  .lmh-watch__play::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    animation: lmh-watch-ring 2s ease-out infinite;
+  }
+
+  @keyframes lmh-watch-ring {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--lmh-brand) 50%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 10px color-mix(in srgb, var(--lmh-brand) 0%, transparent);
+    }
+  }
+
+  .lmh-watch__dialog {
+    inline-size: min(1000px, 92vw);
+    max-inline-size: none;
+    padding: 0;
+    border: 0;
+    border-radius: 16px;
+    background: #000;
+    overflow: visible;
+  }
+
+  .lmh-watch__dialog::backdrop {
+    background: rgb(0 0 0 / 0.75);
+  }
+
+  .lmh-watch__dialog[open] {
+    animation: lmh-watch-in 0.35s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  @keyframes lmh-watch-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  .lmh-watch__frame {
+    overflow: hidden;
+    border-radius: 16px;
+    aspect-ratio: 16 / 9;
+  }
+
+  .lmh-watch__frame :is(video, iframe) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    border: 0;
+    background: #000;
+  }
+
+  .lmh-watch__close {
+    position: absolute;
+    top: -48px;
+    right: 0;
+    display: grid;
+    place-items: center;
+    inline-size: 40px;
+    block-size: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.15);
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .lmh-watch__close:hover {
+    background: rgb(255 255 255 / 0.3);
+  }
+
+  /* Thumbnails: three across, lined up with the main image's edges; the rest slide in with a gentle snap.
+     No border on the selected one; the large image above already shows which is chosen */
+  media-gallery.media-gallery--carousel .slideshow-controls__thumbnails-container {
+    /* The scroll-hint component fades the edges with an inline style; keep the thumbnails crisp instead */
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+  }
+
+  media-gallery.media-gallery--carousel .slideshow-controls__thumbnails {
+    inline-size: 100%;
+    margin-inline: 0;
+    padding: 10px 0 0;
+    gap: 8px;
+  }
+
+  media-gallery.media-gallery--carousel .slideshow-controls__thumbnails .slideshow-controls__thumbnail {
+    position: relative;
+    flex: 0 0 calc((100% - 16px) / 3);
+    inline-size: auto;
+    width: auto;
+    aspect-ratio: 5 / 4;
+    overflow: hidden;
+    border: 0;
+    outline: none;
+    scroll-snap-align: start;
+    transition:
+      opacity 0.4s ease,
+      transform 0.5s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  media-gallery.media-gallery--carousel .slideshow-controls__thumbnails .slideshow-controls__thumbnail img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  media-gallery.media-gallery--carousel .slideshow-controls__thumbnails .slideshow-controls__thumbnail::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    border-radius: inherit;
+    pointer-events: none;
+    transition: border-color 0.4s ease;
+  }
+
+  media-gallery.media-gallery--carousel .slideshow-controls__thumbnails .slideshow-controls__thumbnail:hover img {
+    transform: scale(1.04);
+  }
+
+  media-gallery.media-gallery--carousel .slideshow-controls__thumbnails .slideshow-controls__thumbnail[aria-selected='true'] {
+    border: 0;
+    outline: none;
+    opacity: 1;
+  }
+
+  media-gallery.media-gallery--carousel .slideshow-controls__thumbnails .slideshow-controls__thumbnail:focus-visible {
+    outline: 2px solid var(--lmh-brand);
+    outline-offset: -4px;
+  }
+
+  /* Phones: the gallery sits inside the page margins with rounded corners, like the product page brief */
+  @media screen and (max-width: 749px) {
+    media-gallery.media-gallery--carousel {
+      /* Same 16px margin as the text below; three thumbnails fill the width under the image */
+      --thumbnail-width: calc((100vw - 32px - 16px) / 3);
+      padding-inline: 16px;
+    }
+
+    media-gallery.media-gallery--carousel slideshow-container {
+      overflow: hidden;
+      border-radius: var(--media-radius);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .lmh-sale-badge {
+      top: 12px;
+      left: 12px;
+      inline-size: 48px;
+      block-size: 48px;
+      font-size: 12px;
+    }
+
+    .lmh-watch__button {
+      left: 12px;
+      bottom: 12px;
+      font-size: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lmh-watch__play::after,
+    .lmh-watch__dialog[open] {
+      animation: none;
+    }
   }
 {% endstylesheet %}

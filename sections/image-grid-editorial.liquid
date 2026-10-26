@@ -229,7 +229,7 @@
     color: var(--ig-heading);
     font-family: var(--font-heading--family);
     /* Big headings scale down on phones so they stay on one or two lines */
-    font-size: min(calc(var(--ig-heading-size) * 0.85), 10vw);
+    font-size: min(calc(var(--ig-heading-size) * 0.85), 30px);
     font-weight: 400;
     letter-spacing: 0.04em;
     line-height: 1.1;
@@ -417,7 +417,8 @@
 
     .ig__heading {
       margin: 0 24px;
-      font-size: var(--ig-heading-size);
+      /* Tablets get a capped size; full size from 990px */
+      font-size: min(var(--ig-heading-size), 40px);
     }
 
     .ig__text {
@@ -666,6 +667,19 @@
     .ig--style-onair .ig__media::after,
     .ig__onair::before {
       animation: none !important;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .ig__heading {
+      font-size: var(--ig-heading-size);
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    .ig__card-title {
+      padding: 10px 12px;
+      font-size: 13px;
     }
   }
 {% endstylesheet %}

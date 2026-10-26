@@ -1,0 +1,330 @@
+{%- comment -%}
+  Stock & personalise: a stock badge (In stock / Only 3 left / Sold out) and a "Personalise me" button
+  that opens personalisation fields. The fields are "Custom property" blocks added inside this block;
+  what the customer types is saved on the order.
+{%- endcomment -%}
+
+{%- liquid
+  assign b = block.settings
+  assign p = closest.product
+  assign v = p.selected_or_first_available_variant
+
+  # Stock state for the selected variant
+  assign state = 'in'
+  assign stock_text = b.in_stock_text
+  if v.available == false
+    assign state = 'out'
+    assign stock_text = b.sold_out_text
+  elsif v.inventory_management == 'shopify' and v.inventory_quantity <= 0
+    assign state = 'order'
+    assign stock_text = b.backorder_text
+  elsif v.inventory_management == 'shopify' and v.inventory_quantity <= b.low_stock_threshold
+    assign state = 'low'
+    assign stock_text = b.low_stock_text | replace: '[count]', v.inventory_quantity
+  endif
+
+  assign panel_id = 'LmhPersonalise-' | append: block.id
+-%}
+
+<script src="{{ 'lmh-availability.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+<lmh-availability class="lmh-avail{% if b.show_personalise %} lmh-avail--full{% endif %}" style="--lmh-accent: {{ block.settings.accent_color | default: settings.color_palette.foreground }};" data-block-id="{{ block.id }}" data-product-id="{{ p.id }}" {{ block.shopify_attributes }}>
+  <div class="lmh-avail__row">
+    {%- if b.show_stock and stock_text != blank -%}
+      <p class="lmh-avail__stock lmh-avail__stock--{{ state }}" data-lmh-stock>
+        <span class="lmh-avail__dot" aria-hidden="true">
+          {%- if state == 'out' -%}
+            <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m5 5 6 6m0-6-6 6"/></svg>
+          {%- else -%}
+            <svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 8.5 2.5 2.5L12 5.5"/></svg>
+          {%- endif -%}
+        </span>
+        {{ stock_text }}
+      </p>
+    {%- endif -%}
+
+    {%- if b.show_personalise and b.personalise_label != blank -%}
+      <button
+        type="button"
+        class="lmh-avail__toggle"
+        aria-expanded="{% if b.open_personalise %}true{% else %}false{% endif %}"
+        aria-controls="{{ panel_id }}"
+        data-lmh-toggle
+      >
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4 20 1-4L16 5l3 3L8 19l-4 1Z"/><path d="m14 7 3 3"/></svg>
+        <span>{{ b.personalise_label }}</span>
+      </button>
+    {%- endif -%}
+  </div>
+
+  {%- if b.show_personalise -%}
+    <div class="lmh-avail__panel" id="{{ panel_id }}" data-lmh-panel {% unless b.open_personalise %}hidden{% endunless %}>
+      <div class="lmh-avail__panel-inner">
+        {%- if b.personalise_intro != blank -%}
+          <p class="lmh-avail__intro">{{ b.personalise_intro }}</p>
+        {%- endif -%}
+        {% content_for 'blocks' %}
+      </div>
+    </div>
+  {%- endif -%}
+</lmh-availability>
+
+{% stylesheet %}
+  .lmh-avail {
+    display: block;
+  }
+
+  .lmh-avail--full {
+    inline-size: 100%;
+  }
+
+  .lmh-avail__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .lmh-avail__stock {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    white-space: nowrap;
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .lmh-avail__dot {
+    display: grid;
+    place-items: center;
+    inline-size: 18px;
+    block-size: 18px;
+    border-radius: 50%;
+    color: #fff;
+  }
+
+  .lmh-avail__stock--in {
+    color: #2f7d4a;
+  }
+
+  .lmh-avail__stock--in .lmh-avail__dot {
+    background: #2f7d4a;
+  }
+
+  /* Low stock and made-to-order: a soft pulse draws the eye without shouting */
+  .lmh-avail__stock--low,
+  .lmh-avail__stock--order {
+    color: #b8691d;
+  }
+
+  .lmh-avail__stock--low .lmh-avail__dot,
+  .lmh-avail__stock--order .lmh-avail__dot {
+    background: #b8691d;
+    animation: lmh-pulse 1.8s ease-out infinite;
+  }
+
+  .lmh-avail__stock--out {
+    color: color-mix(in srgb, var(--lmh-accent) 60%, transparent);
+  }
+
+  .lmh-avail__stock--out .lmh-avail__dot {
+    background: color-mix(in srgb, var(--lmh-accent) 45%, transparent);
+  }
+
+  @keyframes lmh-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgb(184 105 29 / 0.45);
+    }
+    100% {
+      box-shadow: 0 0 0 8px rgb(184 105 29 / 0);
+    }
+  }
+
+  .lmh-avail__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border: 1px solid var(--lmh-accent);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--lmh-accent);
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .lmh-avail__toggle:hover,
+  .lmh-avail__toggle[aria-expanded='true'] {
+    background: var(--lmh-accent);
+    color: var(--color-background);
+  }
+
+  .lmh-avail__toggle:focus-visible {
+    outline: 1px solid var(--lmh-accent);
+    outline-offset: 3px;
+  }
+
+  /* The panel's outer box animates its height, so it has no padding of its own */
+  .lmh-avail__panel {
+    overflow: hidden;
+  }
+
+  .lmh-avail__panel-inner {
+    display: grid;
+    gap: 12px;
+    margin-block-start: 16px;
+    padding: 20px;
+    border: 1px solid color-mix(in srgb, var(--lmh-accent) 30%, transparent);
+    border-radius: 12px;
+  }
+
+  .lmh-avail__intro {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lmh-avail__dot {
+      animation: none !important;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Stock and personalise",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "product-custom-property"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Stock"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stock",
+      "label": "Show stock badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "in_stock_text",
+      "label": "In stock text",
+      "default": "In stock"
+    },
+    {
+      "type": "range",
+      "id": "low_stock_threshold",
+      "label": "Low stock from",
+      "info": "Shows the low stock text when this many or fewer are left. Needs Shopify to track inventory.",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "low_stock_text",
+      "label": "Low stock text",
+      "default": "Only [count] left",
+      "info": "[count] is replaced by the number left."
+    },
+    {
+      "type": "text",
+      "id": "backorder_text",
+      "label": "Made to order text",
+      "default": "Made to order",
+      "info": "For products that keep selling when out of stock."
+    },
+    {
+      "type": "text",
+      "id": "sold_out_text",
+      "label": "Sold out text",
+      "default": "Sold out"
+    },
+    {
+      "type": "header",
+      "content": "Personalise"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_personalise",
+      "label": "Show personalise button",
+      "default": true,
+      "info": "Add \"Custom property\" blocks inside this block for the fields, e.g. your dog's name. The answers are saved on the order."
+    },
+    {
+      "type": "text",
+      "id": "personalise_label",
+      "label": "Button label",
+      "default": "Personalise me",
+      "visible_if": "{{ block.settings.show_personalise }}"
+    },
+    {
+      "type": "text",
+      "id": "personalise_intro",
+      "label": "Intro text",
+      "default": "Make it theirs. We'll add these details to your order.",
+      "visible_if": "{{ block.settings.show_personalise }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_personalise",
+      "label": "Open the fields by default",
+      "default": false,
+      "visible_if": "{{ block.settings.show_personalise }}"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent colour",
+      "default": "{{ settings.color_palette.foreground }}",
+      "info": "Icons, lines and buttons. Defaults to the brand red."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stock and personalise",
+      "category": "t:categories.product",
+      "blocks": {
+        "dog_name": {
+          "type": "product-custom-property",
+          "settings": {
+            "property_heading": "What's your dog's name?",
+            "property_key": "Dog's name",
+            "input_type": "text",
+            "max_length": 30,
+            "placeholder": "e.g. Biscuit"
+          }
+        },
+        "allergies": {
+          "type": "product-custom-property",
+          "settings": {
+            "property_heading": "Does your dog have any allergies?",
+            "property_key": "Allergies",
+            "input_type": "text",
+            "max_length": 100,
+            "placeholder": "e.g. chicken, wheat"
+          }
+        }
+      },
+      "block_order": ["dog_name", "allergies"]
+    }
+  ]
+}
+{% endschema %}

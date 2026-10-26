@@ -278,6 +278,63 @@
     },
     {
       "type": "header",
+      "content": "Sale badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sale_badge",
+      "label": "Show a badge when on sale",
+      "default": true,
+      "info": "Shows when the price is lower than the compare-at price."
+    },
+    {
+      "type": "text",
+      "id": "sale_badge_text",
+      "label": "Badge text",
+      "default": "Sale",
+      "visible_if": "{{ block.settings.show_sale_badge }}"
+    },
+    {
+      "type": "header",
+      "content": "Watch video button"
+    },
+    {
+      "type": "select",
+      "id": "watch_video",
+      "label": "Watch video button",
+      "options": [
+        {
+          "value": "none",
+          "label": "Hidden"
+        },
+        {
+          "value": "product",
+          "label": "Play the product's video"
+        },
+        {
+          "value": "link",
+          "label": "Play a video link"
+        }
+      ],
+      "default": "product",
+      "info": "A button on the main image that plays the video in a pop-up. \"Product's video\" uses the first video in the product's media."
+    },
+    {
+      "type": "url",
+      "id": "watch_video_url",
+      "label": "Video link (MP4)",
+      "info": "E.g. a video from Content > Files. Connect a product metafield to use a different video per product.",
+      "visible_if": "{{ block.settings.watch_video == 'link' }}"
+    },
+    {
+      "type": "text",
+      "id": "watch_video_label",
+      "label": "Button label",
+      "default": "Watch video",
+      "visible_if": "{{ block.settings.watch_video != 'none' }}"
+    },
+    {
+      "type": "header",
       "content": "t:content.padding"
     },
     {

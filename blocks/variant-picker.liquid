@@ -43,6 +43,13 @@
       "default": true
     },
     {
+      "type": "textarea",
+      "id": "fallback_swatches",
+      "label": "Swatch colours",
+      "info": "One colour per line, like Pumpkin Velvet: #D9682B. Used for any colour that has no swatch set in Shopify.",
+      "visible_if": "{{ block.settings.show_swatches }}"
+    },
+    {
       "type": "header",
       "content": "t:content.appearance"
     },

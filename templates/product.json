@@ -35,28 +35,33 @@
           "type": "_product-media-gallery",
           "static": true,
           "settings": {
-            "media_presentation": "grid",
+            "media_presentation": "carousel",
             "media_columns": "two",
-            "image_gap": 1,
+            "image_gap": 8,
             "large_first_image": true,
-            "icons_style": "arrow",
-            "slideshow_controls_style": "counter",
-            "slideshow_mobile_controls_style": "hint",
+            "icons_style": "chevron",
+            "slideshow_controls_style": "thumbnails",
+            "slideshow_mobile_controls_style": "thumbnails",
             "thumbnail_position": "bottom",
-            "thumbnail_width": 44,
-            "thumbnail_radius": 0,
+            "thumbnail_width": 72,
+            "thumbnail_radius": 12,
             "aspect_ratio": "1",
-            "constrain_to_viewport": false,
+            "constrain_to_viewport": true,
             "media_fit": "cover",
-            "media_radius": 0,
-            "extend_media": true,
-            "zoom": false,
+            "media_radius": 16,
+            "extend_media": false,
+            "zoom": true,
             "video_loop": false,
             "hide_variants": false,
-            "padding-block-start": 0,
+            "padding-block-start": 12,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "show_sale_badge": true,
+            "sale_badge_text": "Sale",
+            "watch_video": "none",
+            "watch_video_label": "Watch video",
+            "watch_video_url": "https://www.lovemyhuman.co.uk/cdn/shop/videos/c/vp/a5f74f01a9ca4222a1e685ea0e4ed642/a5f74f01a9ca4222a1e685ea0e4ed642.HD-1080p-7.2Mbps-49327868.mp4"
           },
           "blocks": {}
         },
@@ -70,7 +75,7 @@
             "custom_width_mobile": 100,
             "height": "fit",
             "details_position": "flex-start",
-            "gap": 12,
+            "gap": 20,
             "sticky_details_desktop": true,
             "background_media": "none",
             "background_color": "",
@@ -87,32 +92,6 @@
             "padding-inline-end": 12
           },
           "blocks": {
-            "text_Uck8Ya": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>{{ closest.product.vendor }}</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "text_tefwj7": {
               "type": "text",
               "name": "t:names.title",
@@ -121,7 +100,7 @@
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "h3",
+                "type_preset": "h2",
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
@@ -151,28 +130,6 @@
               },
               "blocks": {}
             },
-            "price_a7krng": {
-              "type": "price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": true,
-                "show_tax_info": true,
-                "type_preset": "h4",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "text_color": "{{ settings.color_palette.foreground }}",
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
               "settings": {
@@ -191,7 +148,8 @@
                 "padding-block-start": 12,
                 "padding-block-end": 24,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "fallback_swatches": "Pumpkin Velvet: #D9682B\nBlush Pink: #E8B4B8\nTeal: #2B7A8C\nOlive: #8A8A3C\nMustard: #E3A82B\nDove Grey: #B9B4AE"
               },
               "blocks": {}
             },
@@ -256,41 +214,166 @@
               },
               "block_order": []
             },
-            "text_gXMUag": {
-              "type": "text",
-              "name": "t:names.product_description",
+            "lmh_meta": {
+              "type": "lmh-product-meta",
               "settings": {
-                "text": "{{ closest.product.description }}",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "{{ settings.color_palette.foreground }}",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "show_vendor": true,
+                "text": "",
+                "show_share": true,
+                "share_facebook": true,
+                "share_x": true,
+                "share_pinterest": true,
+                "share_copy": true
+              }
+            },
+            "lmh_benefits": {
+              "type": "lmh-benefits",
+              "settings": {
+                "columns": 2
               },
-              "blocks": {}
+              "blocks": {
+                "b1": {
+                  "type": "_lmh-benefit",
+                  "settings": {
+                    "icon": "paw",
+                    "text": "Tested by our dogs"
+                  }
+                },
+                "b2": {
+                  "type": "_lmh-benefit",
+                  "settings": {
+                    "icon": "home",
+                    "text": "Chosen in Chelsea"
+                  }
+                },
+                "b3": {
+                  "type": "_lmh-benefit",
+                  "settings": {
+                    "icon": "truck",
+                    "text": "Fast UK delivery"
+                  }
+                },
+                "b4": {
+                  "type": "_lmh-benefit",
+                  "settings": {
+                    "icon": "returns",
+                    "text": "14-day returns"
+                  }
+                }
+              },
+              "block_order": [
+                "b1",
+                "b2",
+                "b3",
+                "b4"
+              ]
+            },
+            "lmh_delivery": {
+              "type": "lmh-delivery-countdown",
+              "settings": {
+                "message": "Want it by [day]? Order within [time] & select Next Day Delivery",
+                "cutoff_hour": 14,
+                "delivery_days": 1,
+                "saturday_delivery": false,
+                "fallback": "Order today for fast UK delivery"
+              }
+            },
+            "lmh_price_row": {
+              "type": "group",
+              "name": "Price and stock",
+              "settings": {
+                "content_direction": "row",
+                "vertical_on_mobile": false,
+                "horizontal_alignment": "space-between",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "gap": 12,
+                "width": "fill",
+                "width_mobile": "fill",
+                "height": "fit"
+              },
+              "blocks": {
+                "price_a7krng": {
+                  "type": "price",
+                  "settings": {
+                    "show_sale_price_first": true,
+                    "show_installments": true,
+                    "show_tax_info": true,
+                    "type_preset": "h4",
+                    "width": "fit-content",
+                    "alignment": "left",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "text_color": "{{ settings.color_palette.foreground }}",
+                    "padding-block-start": 4,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "lmh_availability": {
+                  "type": "lmh-availability",
+                  "settings": {
+                    "show_stock": true,
+                    "in_stock_text": "In stock",
+                    "low_stock_threshold": 5,
+                    "low_stock_text": "Only [count] left",
+                    "backorder_text": "Made to order",
+                    "sold_out_text": "Sold out",
+                    "show_personalise": false,
+                    "personalise_label": "Personalise me",
+                    "personalise_intro": "Make it theirs. We'll add these details to your order.",
+                    "open_personalise": false
+                  },
+                  "blocks": {
+                    "dog_name": {
+                      "type": "product-custom-property",
+                      "settings": {
+                        "property_heading": "What's your dog's name?",
+                        "property_key": "Dog's name",
+                        "input_type": "text",
+                        "max_length": 30,
+                        "required": false,
+                        "placeholder": "e.g. Biscuit"
+                      }
+                    },
+                    "allergies": {
+                      "type": "product-custom-property",
+                      "settings": {
+                        "property_heading": "Does your dog have any allergies?",
+                        "property_key": "Allergies",
+                        "input_type": "text",
+                        "max_length": 100,
+                        "required": false,
+                        "placeholder": "e.g. chicken, wheat"
+                      }
+                    }
+                  },
+                  "block_order": [
+                    "dog_name",
+                    "allergies"
+                  ]
+                }
+              },
+              "block_order": [
+                "price_a7krng",
+                "lmh_availability"
+              ]
             }
           },
           "block_order": [
-            "text_Uck8Ya",
+            "lmh_meta",
             "text_tefwj7",
             "reviews",
-            "price_a7krng",
+            "lmh_price_row",
             "variant_picker_R3rGDr",
+            "lmh_benefits",
             "buy_buttons_eYQEYi",
-            "text_gXMUag"
+            "lmh_delivery"
           ]
         }
       },

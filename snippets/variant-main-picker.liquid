@@ -56,6 +56,18 @@
       {%- for product_option in product_resource.options_with_values -%}
         {%- liquid
           assign swatch_count = product_option.values | map: 'swatch' | compact | size
+
+          # LMH: when Shopify has no swatches for this option, use the block's "Swatch colours" list
+          if swatch_count == 0 and block_settings.show_swatches and block_settings.fallback_swatches != blank
+            for fallback_value in product_option.values
+              capture fallback_hex
+                render 'lmh-swatch-hex', name: fallback_value.name, list: block_settings.fallback_swatches
+              endcapture
+              if fallback_hex != blank
+                assign swatch_count = swatch_count | plus: 1
+              endif
+            endfor
+          endif
           assign variant_style = block_settings.variant_style
 
           if swatch_count > 0 and block_settings.show_swatches
@@ -94,7 +106,8 @@
             {{ option_id_attribute }}
           >
             <legend>
-              {{ product_option.name | escape -}}
+              {%- comment -%} LMH: Shopify's swatch option is always "Color"; show the UK spelling {%- endcomment -%}
+              {{ product_option.name | replace: 'Color', 'Colour' | escape -}}
               {%- if variant_style == 'swatch' -%}
                 <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
               {%- endif %}
@@ -143,10 +156,19 @@
                     endif
                   %}
 
+                  {%- liquid
+                    assign fallback_hex = ''
+                    if product_option_value.swatch == blank and block_settings.fallback_swatches != blank
+                      capture fallback_hex
+                        render 'lmh-swatch-hex', name: product_option_value.name, list: block_settings.fallback_swatches
+                      endcapture
+                    endif
+                  -%}
                   {% render 'swatch',
                     swatch: product_option_value.swatch,
                     variant_image: featured_media,
-                    mode: 'unscaled'
+                    mode: 'unscaled',
+                    fallback_color: fallback_hex
                   %}
                 {% else %}
                   {% if product_option_value.available == true %}

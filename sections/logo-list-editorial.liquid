@@ -287,7 +287,7 @@
     color: var(--ll-heading);
     font-family: var(--font-heading--family);
     /* Big headings scale down on phones so they stay on one or two lines */
-    font-size: min(calc(var(--ll-heading-size) * 0.85), 10vw);
+    font-size: min(calc(var(--ll-heading-size) * 0.85), 30px);
     font-weight: 400;
     letter-spacing: 0.04em;
     line-height: 1.1;
@@ -558,7 +558,8 @@
     }
 
     .ll__heading {
-      font-size: var(--ll-heading-size);
+      /* Tablets get a capped size; full size from 990px */
+      font-size: min(var(--ll-heading-size), 40px);
     }
 
     .ll__list {
@@ -579,6 +580,12 @@
   @media screen and (max-width: 749px) {
     .ll {
       padding-block: min(var(--ll-padding-top), 48px) min(var(--ll-padding-bottom), 48px);
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .ll__heading {
+      font-size: var(--ll-heading-size);
     }
   }
 {% endstylesheet %}
