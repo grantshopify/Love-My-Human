@@ -1,0 +1,888 @@
+{%- comment -%}
+  Image grid (e.g. "TV appearances"): a centred heading over a grid of images.
+  Each image can link somewhere and have a caption. On mobile it becomes a swipe row or a grid.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+
+  # Colours: two presets from the theme palette, or the custom pickers
+  assign palette = settings.color_palette
+  case s.color_style
+    when 'neutral'
+      assign ig_background = palette.background
+      assign ig_heading = palette.color1
+      assign ig_text = palette.color1
+    when 'custom'
+      assign ig_background = s.background_color
+      assign ig_heading = s.heading_color
+      assign ig_text = s.text_color
+    else
+      assign ig_background = palette.background
+      assign ig_heading = palette.foreground
+      assign ig_text = palette.color1
+  endcase
+
+  case s.aspect_ratio
+    when 'landscape'
+      assign ratio = '16 / 9'
+    when 'classic'
+      assign ratio = '4 / 3'
+    when 'square'
+      assign ratio = '1 / 1'
+    when 'portrait'
+      assign ratio = '3 / 4'
+    else
+      assign ratio = '5 / 3'
+  endcase
+
+  # Scroll animation: the heading and images fade up one after another
+  if s.animate
+    assign reveal = 'data-reveal'
+  endif
+
+  # "TV screens" style: each image sits in a TV set that switches on when hovered (or scrolled to on phones)
+  assign onair = false
+  if s.style == 'onair'
+    assign onair = true
+  endif
+
+  assign columns = s.columns_desktop
+  assign sizes = '(min-width: 750px) calc(min(100vw - 48px, ' | append: s.max_width | append: 'px) / ' | append: columns | append: '), 80vw'
+-%}
+
+{%- if s.animate -%}{% render 'editorial-reveal' %}{%- endif -%}
+
+<div
+  class="ig ig--mobile-{{ s.mobile_layout }} ig--caption-{{ s.caption_style }}{% if onair %} ig--style-onair{% endif %}"
+  style="
+    --ig-background: {{ ig_background }};
+    --ig-heading: {{ ig_heading }};
+    --ig-text: {{ ig_text }};
+    --ig-ratio: {{ ratio }};
+    --ig-columns: {{ columns }};
+    --ig-gap: {{ s.gap }}px;
+    --ig-width: {{ s.max_width }}px;
+    --ig-heading-size: {{ s.heading_size }}px;
+    --ig-padding-top: {{ s.padding_top }}px;
+    --ig-padding-bottom: {{ s.padding_bottom }}px;
+  "
+>
+  <div class="ig__inner">
+    <div class="ig__intro" {{ reveal }}>
+      {%- if s.eyebrow != blank -%}
+        <p class="ig__eyebrow">{{ s.eyebrow }}</p>
+      {%- endif -%}
+      {%- if s.heading != blank -%}
+        <h2 class="ig__heading">{{ s.heading }}</h2>
+      {%- endif -%}
+      {%- if s.text != blank -%}
+        <div class="ig__text">{{ s.text }}</div>
+      {%- endif -%}
+    </div>
+
+    <ul class="ig__list list-unstyled" role="list">
+      {%- for block in section.blocks -%}
+        {%- assign b = block.settings -%}
+        <li class="ig__item" {{ reveal }} {{ block.shopify_attributes }}>
+          {%- if b.link != blank -%}
+            <a
+              class="ig__link"
+              href="{{ b.link }}"
+              {% if b.new_tab %}
+                target="_blank" rel="noopener"
+              {% endif %}
+            >
+          {%- else -%}
+            <div class="ig__link">
+          {%- endif -%}
+            {%- if onair -%}<div class="ig__tv">{%- endif -%}
+            <div class="ig__media">
+              {%- if b.image != blank -%}
+                {{
+                  b.image
+                  | image_url: width: 1200
+                  | image_tag:
+                    class: 'ig__image',
+                    loading: 'lazy',
+                    alt: b.title,
+                    widths: '300, 450, 600, 800, 1000, 1200',
+                    sizes: sizes
+                }}
+              {%- elsif b.theme_image != blank -%}
+                <img
+                  class="ig__image"
+                  src="{{ b.theme_image | asset_url }}"
+                  width="592"
+                  height="360"
+                  alt="{{ b.title | escape }}"
+                  loading="lazy"
+                >
+              {%- else -%}
+                {%- comment -%} No image yet: show the title so the client can picture the grid {%- endcomment -%}
+                <span class="ig__placeholder">{{ b.title | default: 'Add an image' }}</span>
+              {%- endif -%}
+              {%- if onair == false and s.caption_style == 'overlay' and b.title != blank -%}
+                <span class="ig__overlay" aria-hidden="true">
+                  <span class="ig__overlay-title">{{ b.title }}</span>
+                  {%- if b.link != blank and s.link_label != blank -%}
+                    <span class="ig__overlay-cta">
+                      {{- s.link_label -}}
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m-5-5 5 5-5 5"/></svg>
+                    </span>
+                  {%- endif -%}
+                </span>
+              {%- endif -%}
+            </div>
+            {%- if onair -%}
+                <div class="ig__tv-bar">
+                  <span class="ig__tv-title">{{ b.title }}</span>
+                  {%- if s.onair_label != blank -%}
+                    <span class="ig__onair" aria-hidden="true">{{ s.onair_label }}</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- elsif s.caption_style == 'below' and b.title != blank -%}
+              <span class="ig__caption">{{ b.title }}</span>
+            {%- endif -%}
+          {%- if b.link != blank -%}
+            </a>
+          {%- else -%}
+            </div>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{%- if onair -%}
+  <script>
+    // Phones have no hover, so each TV switches on while it is in view instead
+    (() => {
+      const section = document.getElementById('shopify-section-{{ section.id }}');
+      if (!section || !window.matchMedia('(hover: none)').matches || !('IntersectionObserver' in window)) return;
+      const observer = new IntersectionObserver(
+        (entries) => entries.forEach((entry) => entry.target.classList.toggle('is-on', entry.isIntersecting)),
+        { threshold: 0.6 }
+      );
+      section.querySelectorAll('.ig__tv').forEach((tv) => observer.observe(tv));
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .ig {
+    padding: var(--ig-padding-top) 0 var(--ig-padding-bottom);
+    background: var(--ig-background);
+    color: var(--ig-text);
+    font-family: var(--font-body--family);
+  }
+
+  .ig__inner {
+    max-inline-size: calc(var(--ig-width) + 48px);
+    margin: 0 auto;
+  }
+
+  /* The gap below the heading lives on its wrapper: the theme zeroes the margin of a heading that is the last child */
+  .ig__intro {
+    margin-block-end: 32px;
+    text-align: center;
+  }
+
+  .ig__eyebrow {
+    margin: 0 15px 8px;
+    color: var(--ig-heading);
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* Short rules either side of the label, like the video section */
+  .ig__eyebrow::before,
+  .ig__eyebrow::after {
+    content: '';
+    display: inline-block;
+    inline-size: 24px;
+    block-size: 1px;
+    margin-inline: 12px;
+    background: currentColor;
+    vertical-align: middle;
+    opacity: 0.6;
+  }
+
+  .ig__heading {
+    margin: 0 15px;
+    color: var(--ig-heading);
+    font-family: var(--font-heading--family);
+    font-size: calc(var(--ig-heading-size) * 0.85);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .ig__text {
+    max-inline-size: 628px;
+    margin: 12px auto 0;
+    padding-inline: 15px;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  .ig__text p {
+    margin: 0;
+  }
+
+  .ig__list {
+    display: grid;
+    gap: var(--ig-gap);
+    margin: 0;
+    padding: 0 15px;
+  }
+
+  /* Mobile: swipe row with the next image peeking in (like Hermès "Keep exploring") */
+  .ig--mobile-carousel .ig__list {
+    grid-auto-columns: 80%;
+    grid-auto-flow: column;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: 15px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .ig--mobile-carousel .ig__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ig--mobile-carousel .ig__item {
+    scroll-snap-align: start;
+  }
+
+  .ig--mobile-grid_2 .ig__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ig--mobile-grid_1 .ig__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ig__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ig__media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: var(--ig-ratio);
+    background: color-mix(in srgb, var(--ig-text) 8%, transparent);
+  }
+
+  .ig__image {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .ig__link:hover .ig__image {
+    transform: scale(1.06);
+  }
+
+  /* Hover: a red wash rises from the bottom with the show's name */
+  .ig__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 16px;
+    background: linear-gradient(to top, color-mix(in srgb, var(--ig-heading) 92%, transparent), color-mix(in srgb, var(--ig-heading) 0%, transparent) 70%);
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .ig__overlay-title,
+  .ig__overlay-cta {
+    transform: translateY(14px);
+    transition: transform 0.6s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .ig__overlay-title {
+    font-family: var(--font-heading--family);
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+    text-transform: uppercase;
+  }
+
+  .ig__overlay-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition-delay: 0.05s;
+  }
+
+  .ig__link:hover .ig__overlay,
+  .ig__link:focus-visible .ig__overlay {
+    opacity: 1;
+  }
+
+  .ig__link:hover :is(.ig__overlay-title, .ig__overlay-cta),
+  .ig__link:focus-visible :is(.ig__overlay-title, .ig__overlay-cta) {
+    transform: none;
+  }
+
+  /* Phones have no hover, and the TV artwork already shows the name */
+  @media (hover: none) {
+    .ig__overlay {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ig__image,
+    .ig__overlay,
+    .ig__overlay-title,
+    .ig__overlay-cta {
+      transition: none;
+    }
+  }
+
+  a.ig__link:focus-visible {
+    outline: 1px solid var(--ig-heading);
+    outline-offset: 3px;
+  }
+
+  .ig__placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 12px;
+    color: var(--ig-heading);
+    font-family: var(--font-heading--family);
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .ig__caption {
+    display: block;
+    padding: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ig__intro {
+      margin-block-end: 40px;
+    }
+
+    .ig__heading {
+      margin: 0 24px;
+      font-size: var(--ig-heading-size);
+    }
+
+    .ig__text {
+      padding-inline: 24px;
+    }
+
+    .ig__list,
+    .ig--mobile-carousel .ig__list,
+    .ig--mobile-grid_2 .ig__list,
+    .ig--mobile-grid_1 .ig__list {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(var(--ig-columns), minmax(0, 1fr));
+      overflow: visible;
+      padding-inline: 24px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ig {
+      padding-block: min(var(--ig-padding-top), 48px) min(var(--ig-padding-bottom), 48px);
+    }
+  }
+  /* ---------- "TV screens" style ---------- */
+  .ig--style-onair .ig__list {
+    gap: 20px;
+  }
+
+  .ig__tv {
+    position: relative;
+    padding: 12px 12px 38px;
+    border-radius: 20px;
+    background: var(--ig-heading);
+    transition: transform 0.5s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .ig__link:hover .ig__tv {
+    transform: translateY(-4px);
+  }
+
+  .ig--style-onair .ig__media {
+    border-radius: 12px / 16px;
+    background: #000;
+  }
+
+  /* Scan lines across the screen */
+  .ig--style-onair .ig__media::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.12) 0 1px, transparent 1px 3px);
+    pointer-events: none;
+  }
+
+  /* Static: a burst of grain when the set switches on */
+  .ig--style-onair .ig__media::after {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");
+    mix-blend-mode: screen;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Off: soft and dim. On: sharp */
+  .ig--style-onair .ig__image {
+    filter: blur(1.5px) brightness(0.8);
+    transition:
+      filter 0.5s cubic-bezier(0.2, 0, 0, 1) 0.15s,
+      transform 0.8s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .ig--style-onair .ig__link:hover .ig__image,
+  .ig--style-onair .ig__tv.is-on .ig__image {
+    filter: none;
+    transform: none;
+  }
+
+  .ig--style-onair .ig__link:hover .ig__media::after,
+  .ig--style-onair .ig__tv.is-on .ig__media::after {
+    animation: ig-static 0.45s steps(4) 1;
+  }
+
+  @keyframes ig-static {
+    0% {
+      opacity: 0.85;
+      transform: translate(0, 0);
+    }
+    33% {
+      transform: translate(-8%, 5%);
+    }
+    66% {
+      transform: translate(6%, -7%);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(0, 0);
+    }
+  }
+
+  .ig__tv-bar {
+    position: absolute;
+    inset: auto 16px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--ig-background);
+    font-family: var(--font-heading--family);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .ig__tv-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ig__onair {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    border: 1px solid color-mix(in srgb, var(--ig-background) 60%, transparent);
+    border-radius: 4px;
+    font-size: 10px;
+  }
+
+  .ig__onair::before {
+    content: '';
+    inline-size: 7px;
+    block-size: 7px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--ig-background) 45%, transparent);
+  }
+
+  .ig__link:hover .ig__onair::before,
+  .ig__tv.is-on .ig__onair::before {
+    background: #fff;
+    box-shadow: 0 0 8px 2px rgb(255 255 255 / 0.8);
+    animation: ig-blink 1.2s steps(2) infinite;
+  }
+
+  @keyframes ig-blink {
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .ig--style-onair .ig__list {
+      gap: max(var(--ig-gap), 28px);
+    }
+
+    .ig__tv {
+      padding: 14px 14px 40px;
+      border-radius: 22px;
+    }
+
+    .ig__tv-bar {
+      inset-inline: 18px;
+      bottom: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ig__tv,
+    .ig--style-onair .ig__image {
+      transition: none;
+    }
+
+    .ig--style-onair .ig__media::after,
+    .ig__onair::before {
+      animation: none !important;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Image grid",
+  "tag": "section",
+  "class": "image-grid-section",
+  "max_blocks": 24,
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "theme_image",
+          "label": "Built-in image",
+          "info": "A file already in the theme, used until you pick an image above. You can leave this as it is."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "TV show",
+          "info": "Used as the image description for screen readers, and as the caption if captions are on."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional, e.g. the episode or article"
+        },
+        {
+          "type": "checkbox",
+          "id": "new_tab",
+          "label": "Open link in a new tab",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small label above the heading",
+      "default": "As seen on"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "TV appearances"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "info": "Optional"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "caption_style",
+      "label": "Titles",
+      "options": [
+        {
+          "value": "overlay",
+          "label": "On the image when hovered"
+        },
+        {
+          "value": "below",
+          "label": "Under the image"
+        },
+        {
+          "value": "none",
+          "label": "Hidden"
+        }
+      ],
+      "default": "overlay",
+      "visible_if": "{{ section.settings.style == 'grid' }}"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Hover link label",
+      "default": "Watch the clip",
+      "info": "Shown on hover for images that have a link.",
+      "visible_if": "{{ section.settings.style == 'grid' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "animate",
+      "label": "Animate on scroll",
+      "info": "The heading and images fade up one after another.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Image grid"
+        },
+        {
+          "value": "onair",
+          "label": "TV screens"
+        }
+      ],
+      "default": "grid",
+      "info": "TV screens: each image sits in a TV set that crackles on with static and a glowing light when hovered. On phones it switches on as it scrolls into view."
+    },
+    {
+      "type": "text",
+      "id": "onair_label",
+      "label": "Badge label",
+      "default": "Featured",
+      "info": "The small badge with the light, e.g. Featured or As seen on TV. Leave empty to hide it.",
+      "visible_if": "{{ section.settings.style == 'onair' }}"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        {
+          "value": "carousel",
+          "label": "Swipe row"
+        },
+        {
+          "value": "grid_2",
+          "label": "Grid, 2 columns"
+        },
+        {
+          "value": "grid_1",
+          "label": "One per row"
+        }
+      ],
+      "default": "grid_2"
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Image shape",
+      "options": [
+        {
+          "value": "tv",
+          "label": "TV (5:3)"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape (16:9)"
+        },
+        {
+          "value": "classic",
+          "label": "Classic (4:3)"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait (3:4)"
+        }
+      ],
+      "default": "tv"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Space between images",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 600,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1080
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "color_style",
+      "label": "Colour style",
+      "options": [
+        {
+          "value": "brand",
+          "label": "Website red (Love My Human)"
+        },
+        {
+          "value": "neutral",
+          "label": "Neutral: black on cream (Hermès)"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "brand",
+      "info": "The two presets use your theme colour palette, so they follow the website."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "{{ settings.color_palette.background }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "{{ settings.color_palette.foreground }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "{{ settings.color_palette.color1 }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image grid (TV appearances)",
+      "category": "t:categories.storytelling",
+      "blocks": {
+        "i1": { "type": "image", "settings": { "theme_image": "lmh-tv-the-apprentice.jpg", "title": "The Apprentice" } },
+        "i2": { "type": "image", "settings": { "theme_image": "lmh-tv-love-your-weekend.jpg", "title": "Love Your Weekend with Alan Titchmarsh" } },
+        "i3": { "type": "image", "settings": { "theme_image": "lmh-tv-goodwoof.jpg", "title": "Goodwoof" } },
+        "i4": { "type": "image", "settings": { "theme_image": "lmh-tv-rob-and-romesh-vs.jpg", "title": "Rob & Romesh vs" } },
+        "i5": { "type": "image", "settings": { "theme_image": "lmh-tv-celebs-go-dating.jpg", "title": "Celebs Go Dating" } },
+        "i6": { "type": "image", "settings": { "theme_image": "lmh-tv-the-pet-show.jpg", "title": "The Pet Show" } }
+      },
+      "block_order": ["i1", "i2", "i3", "i4", "i5", "i6"]
+    }
+  ]
+}
+{% endschema %}

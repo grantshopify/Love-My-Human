@@ -370,7 +370,9 @@
         "h3"
       ],
       "settings": {
-        "details": "<p>Every piece in our edit is chosen by our founder Jenny and tried and tested by the dogs of our London townhouse, so it works as hard for your dog as it looks in your home.</p><p>Designed for pets. Loved by humans.</p><p>Not sure about the size or fit? Our team is happy to help you choose the right one for your dog.</p>"
+        "details": "<p>Every piece in our edit is chosen by our founder Jenny and tried and tested by the dogs of our London townhouse, so it works as hard for your dog as it looks in your home.</p><p>Designed for pets. Loved by humans.</p><p>Not sure about the size or fit? Our team is happy to help you choose the right one for your dog.</p>",
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     },
     "editorial_video": {
@@ -382,13 +384,174 @@
         "video_file": "https://www.lovemyhuman.co.uk/cdn/shop/videos/c/vp/a5f74f01a9ca4222a1e685ea0e4ed642/a5f74f01a9ca4222a1e685ea0e4ed642.HD-1080p-7.2Mbps-49327868.mp4",
         "eyebrow": "Our story",
         "button_label": "Discover our story",
-        "button_link": "shopify://pages/about-us-love-my-human-townhouse"
+        "button_link": "shopify://pages/about-us-love-my-human-townhouse",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "image_grid_tv": {
+      "type": "image-grid-editorial",
+      "blocks": {
+        "i1": {
+          "type": "image",
+          "settings": {
+            "title": "The Apprentice",
+            "theme_image": "lmh-tv-the-apprentice.jpg"
+          }
+        },
+        "i2": {
+          "type": "image",
+          "settings": {
+            "title": "Love Your Weekend with Alan Titchmarsh",
+            "theme_image": "lmh-tv-love-your-weekend.jpg"
+          }
+        },
+        "i3": {
+          "type": "image",
+          "settings": {
+            "title": "Goodwoof",
+            "theme_image": "lmh-tv-goodwoof.jpg"
+          }
+        },
+        "i4": {
+          "type": "image",
+          "settings": {
+            "title": "Rob & Romesh vs",
+            "theme_image": "lmh-tv-rob-and-romesh-vs.jpg"
+          }
+        },
+        "i5": {
+          "type": "image",
+          "settings": {
+            "title": "Celebs Go Dating",
+            "theme_image": "lmh-tv-celebs-go-dating.jpg"
+          }
+        },
+        "i6": {
+          "type": "image",
+          "settings": {
+            "title": "The Pet Show",
+            "theme_image": "lmh-tv-the-pet-show.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "settings": {
+        "heading": "TV appearances",
+        "style": "onair",
+        "mobile_layout": "grid_1",
+        "onair_label": "Featured",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "press_logos": {
+      "type": "logo-list-editorial",
+      "blocks": {
+        "l1": {
+          "type": "logo",
+          "settings": {
+            "name": "The Chelsea Awards",
+            "theme_image": "lmh-press-chelsea-awards.png"
+          }
+        },
+        "l2": {
+          "type": "logo",
+          "settings": {
+            "name": "Evening Standard",
+            "theme_image": "lmh-press-evening-standard.png"
+          }
+        },
+        "l3": {
+          "type": "logo",
+          "settings": {
+            "name": "Mandarin Oriental",
+            "theme_image": "lmh-press-mandarin-oriental.png"
+          }
+        },
+        "l4": {
+          "type": "logo",
+          "settings": {
+            "name": "The Times",
+            "theme_image": "lmh-press-the-times.png"
+          }
+        },
+        "l5": {
+          "type": "logo",
+          "settings": {
+            "name": "The Guardian",
+            "theme_image": "lmh-press-the-guardian.png"
+          }
+        },
+        "l6": {
+          "type": "logo",
+          "settings": {
+            "name": "Livingetc",
+            "theme_image": "lmh-press-livingetc.png"
+          }
+        },
+        "l7": {
+          "type": "logo",
+          "settings": {
+            "name": "Channel 4",
+            "theme_image": "lmh-press-channel-4.png"
+          }
+        },
+        "l8": {
+          "type": "logo",
+          "settings": {
+            "name": "Financial Times",
+            "theme_image": "lmh-press-financial-times.png"
+          }
+        },
+        "l9": {
+          "type": "logo",
+          "settings": {
+            "name": "The World of Interiors",
+            "theme_image": "lmh-press-world-of-interiors.png"
+          }
+        },
+        "l10": {
+          "type": "logo",
+          "settings": {
+            "name": "Sloane Square",
+            "theme_image": "lmh-press-sloane-square.png"
+          }
+        }
+      },
+      "block_order": [
+        "l1",
+        "l2",
+        "l3",
+        "l4",
+        "l5",
+        "l6",
+        "l7",
+        "l8",
+        "l9",
+        "l10"
+      ],
+      "settings": {
+        "heading": "They're talking about",
+        "columns_mobile": 2,
+        "padding_top": 64,
+        "padding_bottom": 64,
+        "eyebrow": "In the press"
       }
     }
   },
   "order": [
     "main",
     "product_details_editorial",
-    "editorial_video"
+    "editorial_video",
+    "image_grid_tv",
+    "press_logos"
   ]
 }

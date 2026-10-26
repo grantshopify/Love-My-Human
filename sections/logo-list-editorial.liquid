@@ -1,0 +1,588 @@
+{%- comment -%}
+  Press logos (e.g. "They're talking about"): a centred heading over a grid of logos.
+  Logos are fitted to the same height so a row looks even, whatever their shape.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+
+  # Colours: two presets from the theme palette, or the custom pickers
+  assign palette = settings.color_palette
+  case s.color_style
+    when 'neutral'
+      assign ll_background = palette.background
+      assign ll_heading = palette.color1
+      assign ll_text = palette.color1
+    when 'custom'
+      assign ll_background = s.background_color
+      assign ll_heading = s.heading_color
+      assign ll_text = s.text_color
+    else
+      assign ll_background = palette.background
+      assign ll_heading = palette.foreground
+      assign ll_text = palette.color1
+  endcase
+
+  # Scroll animation: the logos fade up one after another
+  if s.animate
+    assign reveal = 'data-reveal'
+  endif
+-%}
+
+{%- if s.animate -%}{% render 'editorial-reveal' %}{%- endif -%}
+
+<div
+  class="ll{% if s.grayscale %} ll--grayscale{% endif %}{% if s.mobile_marquee %} ll--marquee{% endif %}"
+  style="
+    --ll-background: {{ ll_background }};
+    --ll-heading: {{ ll_heading }};
+    --ll-text: {{ ll_text }};
+    --ll-columns: {{ s.columns_desktop }};
+    --ll-columns-mobile: {{ s.columns_mobile }};
+    --ll-logo-height: {{ s.logo_height }}px;
+    --ll-logo-height-mobile: {{ s.logo_height_mobile }}px;
+    --ll-logo-width: {{ s.logo_width }}px;
+    --ll-width: {{ s.max_width }}px;
+    --ll-heading-size: {{ s.heading_size }}px;
+    --ll-padding-top: {{ s.padding_top }}px;
+    --ll-padding-bottom: {{ s.padding_bottom }}px;
+    --ll-speed: {{ s.marquee_speed }}s;
+  "
+>
+  <div class="ll__inner">
+    {%- if s.heading != blank or s.eyebrow != blank -%}
+      <div class="ll__intro" {{ reveal }}>
+        {%- if s.eyebrow != blank -%}
+          <p class="ll__eyebrow">{{ s.eyebrow }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="ll__heading">{{ s.heading }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Each logo is built once, then used in the list and, for the mobile ticker, in its copy {%- endcomment -%}
+    {%- capture logos -%}
+      {%- for block in section.blocks -%}
+        {%- assign b = block.settings -%}
+        <li class="ll__item" {{ reveal }} {{ block.shopify_attributes }}>
+        {%- if b.link != blank -%}
+          <a
+            class="ll__logo"
+            href="{{ b.link }}"
+            {% if b.new_tab %}
+              target="_blank" rel="noopener"
+            {% endif %}
+          >
+        {%- else -%}
+          <span class="ll__logo">
+        {%- endif -%}
+          {%- if b.image != blank -%}
+            {{
+              b.image
+              | image_url: width: 480
+              | image_tag: class: 'll__image', loading: 'lazy', alt: b.name, widths: '160, 240, 320, 480', sizes: '200px'
+            }}
+          {%- elsif b.theme_image != blank -%}
+            <img
+              class="ll__image"
+              src="{{ b.theme_image | asset_url }}"
+              width="300"
+              height="120"
+              alt="{{ b.name | escape }}"
+              loading="lazy"
+            >
+          {%- else -%}
+            {%- comment -%} No logo yet: show the name so the client can picture the row {%- endcomment -%}
+            <span class="ll__placeholder">{{ b.name | default: 'Logo' }}</span>
+          {%- endif -%}
+        {%- if b.link != blank -%}
+          </a>
+        {%- else -%}
+          </span>
+        {%- endif -%}
+        </li>
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    <div class="ll__viewport">
+      <div class="ll__track">
+        <ul class="ll__list list-unstyled" role="list">
+          {{- logos -}}
+        </ul>
+        {%- if s.mobile_marquee -%}
+          <ul class="ll__list ll__list--copy list-unstyled" role="list" aria-hidden="true" inert>
+            {{- logos | remove: 'data-reveal' -}}
+          </ul>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .ll {
+    padding: var(--ll-padding-top) 15px var(--ll-padding-bottom);
+    background: var(--ll-background);
+    color: var(--ll-text);
+    font-family: var(--font-body--family);
+  }
+
+  .ll__inner {
+    max-inline-size: var(--ll-width);
+    margin: 0 auto;
+  }
+
+  /* Same heading block as the TV and video sections: label, heading, then 32px (40px on desktop) */
+  .ll__intro {
+    margin-block-end: 32px;
+    text-align: center;
+  }
+
+  .ll__eyebrow {
+    margin: 0 0 8px;
+    color: var(--ll-heading);
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .ll__eyebrow::before,
+  .ll__eyebrow::after {
+    content: '';
+    display: inline-block;
+    inline-size: 24px;
+    block-size: 1px;
+    margin-inline: 12px;
+    background: currentColor;
+    vertical-align: middle;
+    opacity: 0.6;
+  }
+
+  .ll__heading {
+    margin: 0;
+    color: var(--ll-heading);
+    font-family: var(--font-heading--family);
+    font-size: calc(var(--ll-heading-size) * 0.85);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .ll__list {
+    display: grid;
+    grid-template-columns: repeat(var(--ll-columns-mobile), minmax(0, 1fr));
+    gap: 32px 16px;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ll__item {
+    display: flex;
+    justify-content: center;
+  }
+
+  .ll__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--ll-logo-height-mobile);
+    max-inline-size: min(100%, var(--ll-logo-width) * 0.75);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      opacity 0.4s ease,
+      transform 0.5s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* Hover: the other logos step back so the one under the pointer stands out */
+  @media (hover: hover) {
+    .ll__list:hover .ll__logo {
+      opacity: 0.35;
+    }
+
+    .ll__list .ll__item:hover .ll__logo {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+
+    .ll--grayscale .ll__item:hover .ll__image {
+      filter: none;
+    }
+  }
+
+  .ll__list--copy {
+    display: none;
+  }
+
+  a.ll__logo:focus-visible {
+    outline: 1px solid var(--ll-heading);
+    outline-offset: 6px;
+  }
+
+  .ll__image {
+    display: block;
+    inline-size: auto;
+    max-inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
+  }
+
+  .ll--grayscale .ll__image {
+    filter: grayscale(1);
+    transition: filter 0.4s ease;
+  }
+
+  /* Mobile ticker: the logos glide past in one line, with soft faded edges. Touch to pause */
+  @media screen and (max-width: 989px) and (prefers-reduced-motion: no-preference) {
+    .ll--marquee .ll__viewport {
+      overflow: hidden;
+      margin-inline: -15px;
+      mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+    }
+
+    @media screen and (min-width: 750px) {
+      .ll--marquee .ll__viewport {
+        margin-inline: -24px;
+      }
+    }
+
+    .ll--marquee .ll__track {
+      display: flex;
+      inline-size: max-content;
+      animation: ll-marquee var(--ll-speed, 70s) linear infinite;
+    }
+
+    .ll--marquee .ll__viewport:active .ll__track {
+      animation-play-state: paused;
+    }
+
+    .ll--marquee .ll__list {
+      display: flex;
+      flex: none;
+      gap: 0;
+    }
+
+    .ll--marquee .ll__item {
+      flex: none;
+      padding-inline: 22px;
+    }
+
+    .ll--marquee .ll__logo {
+      max-inline-size: calc(var(--ll-logo-width) * 0.9);
+    }
+
+    /* Logos slide in sideways, so they skip the fade-up (it would only fire as each one enters) */
+    .ll--marquee .ll__item.reveal-ready:not(.is-revealed) {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes ll-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .ll__placeholder {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.1;
+    text-align: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ll {
+      padding-inline: 24px;
+    }
+
+    .ll__intro {
+      margin-block-end: 40px;
+    }
+
+    .ll__heading {
+      font-size: var(--ll-heading-size);
+    }
+
+    .ll__list {
+      grid-template-columns: repeat(var(--ll-columns), minmax(0, 1fr));
+      gap: 48px 32px;
+    }
+
+    .ll__logo {
+      block-size: var(--ll-logo-height);
+      max-inline-size: min(100%, var(--ll-logo-width));
+    }
+
+    .ll__placeholder {
+      font-size: 16px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ll {
+      padding-block: min(var(--ll-padding-top), 48px) min(var(--ll-padding-bottom), 48px);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Press logos",
+  "tag": "section",
+  "class": "logo-list-section",
+  "max_blocks": 30,
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo",
+          "info": "A PNG with a transparent background or an SVG works best."
+        },
+        {
+          "type": "text",
+          "id": "theme_image",
+          "label": "Built-in logo",
+          "info": "A file already in the theme, used until you pick a logo above. You can leave this as it is."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Publication",
+          "info": "Used as the logo description for screen readers."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional, e.g. the article"
+        },
+        {
+          "type": "checkbox",
+          "id": "new_tab",
+          "label": "Open link in a new tab",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small label above the heading",
+      "default": "In the press"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "They're talking about"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Logos"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Logos per row on desktop",
+      "min": 3,
+      "max": 8,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Logos per row on mobile",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo height on desktop",
+      "min": 20,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "logo_height_mobile",
+      "label": "Logo height on mobile",
+      "min": 16,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Max logo width",
+      "info": "Stops long logos (like The Times) looking bigger than the rest.",
+      "min": 60,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "default": 130
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_marquee",
+      "label": "Scrolling ticker on mobile and tablet",
+      "info": "On phones and tablets the logos glide past in one line instead of stacking in rows.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "label": "Ticker speed",
+      "info": "Seconds for one full loop. Lower is faster.",
+      "min": 10,
+      "max": 120,
+      "step": 2,
+      "unit": "s",
+      "default": 70
+    },
+    {
+      "type": "checkbox",
+      "id": "animate",
+      "label": "Animate on scroll",
+      "info": "The logos fade up one after another.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "grayscale",
+      "label": "Show logos in black and white",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 600,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1080
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "color_style",
+      "label": "Colour style",
+      "options": [
+        {
+          "value": "brand",
+          "label": "Website red (Love My Human)"
+        },
+        {
+          "value": "neutral",
+          "label": "Neutral: black on cream (Hermès)"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "brand",
+      "info": "The two presets use your theme colour palette, so they follow the website."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "{{ settings.color_palette.background }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "{{ settings.color_palette.foreground }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Placeholder text",
+      "default": "{{ settings.color_palette.color1 }}",
+      "visible_if": "{{ section.settings.color_style == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Press logos",
+      "category": "t:categories.storytelling",
+      "blocks": {
+        "l1": { "type": "logo", "settings": { "theme_image": "lmh-press-chelsea-awards.png", "name": "The Chelsea Awards" } },
+        "l2": { "type": "logo", "settings": { "theme_image": "lmh-press-evening-standard.png", "name": "Evening Standard" } },
+        "l3": { "type": "logo", "settings": { "theme_image": "lmh-press-mandarin-oriental.png", "name": "Mandarin Oriental" } },
+        "l4": { "type": "logo", "settings": { "theme_image": "lmh-press-the-times.png", "name": "The Times" } },
+        "l5": { "type": "logo", "settings": { "theme_image": "lmh-press-the-guardian.png", "name": "The Guardian" } },
+        "l6": { "type": "logo", "settings": { "theme_image": "lmh-press-livingetc.png", "name": "Livingetc" } },
+        "l7": { "type": "logo", "settings": { "theme_image": "lmh-press-channel-4.png", "name": "Channel 4" } },
+        "l8": { "type": "logo", "settings": { "theme_image": "lmh-press-financial-times.png", "name": "Financial Times" } },
+        "l9": { "type": "logo", "settings": { "theme_image": "lmh-press-world-of-interiors.png", "name": "The World of Interiors" } },
+        "l10": { "type": "logo", "settings": { "theme_image": "lmh-press-sloane-square.png", "name": "Sloane Square" } }
+      },
+      "block_order": ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8", "l9", "l10"]
+    }
+  ]
+}
+{% endschema %}
