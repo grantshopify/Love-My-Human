@@ -585,67 +585,6 @@
         "padding_bottom": 64
       }
     },
-    "editorial_video": {
-      "type": "editorial-video",
-      "settings": {
-        "eyebrow": "Our story",
-        "heading": "Made for pets. Loved by humans.",
-        "text": "<p>Designed by our founder Jenny at our London townhouse, for dogs and the humans who love them.</p>",
-        "button_label": "Discover our story",
-        "button_link": "shopify://pages/about-us-love-my-human-townhouse",
-        "heading_uppercase": true,
-        "heading_size": 34,
-        "video_file": "https://www.lovemyhuman.co.uk/cdn/shop/videos/c/vp/a5f74f01a9ca4222a1e685ea0e4ed642/a5f74f01a9ca4222a1e685ea0e4ed642.HD-1080p-7.2Mbps-49327868.mp4",
-        "video_url": "",
-        "autoplay": true,
-        "loop": true,
-        "animate": true,
-        "show_controls": true,
-        "caption": "",
-        "aspect_ratio": "landscape",
-        "aspect_ratio_mobile": "portrait",
-        "full_width_mobile": true,
-        "max_width": 1200,
-        "color_style": "brand",
-        "background_color": "{{ settings.color_palette.background }}",
-        "heading_color": "{{ settings.color_palette.foreground }}",
-        "text_color": "{{ settings.color_palette.color1 }}",
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
-    "customer_reviews": {
-      "type": "reviews-editorial",
-      "blocks": {
-        "judgeme_reviews": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "review_data": "sample_data",
-            "max_width": 1200,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judgeme_reviews"
-      ],
-      "disabled": true,
-      "settings": {
-        "eyebrow": "Reviews",
-        "heading": "What humans say",
-        "heading_size": 48,
-        "heading_rule": true,
-        "anchor": "reviews",
-        "animate": true,
-        "max_width": 1080,
-        "background_color": "{{ settings.color_palette.background }}",
-        "accent_color": "{{ settings.color_palette.foreground }}",
-        "text_color": "{{ settings.color_palette.color1 }}",
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
     "image_grid_tv": {
       "type": "image-grid-editorial",
       "blocks": {
@@ -731,6 +670,67 @@
         "color_style": "brand",
         "background_color": "{{ settings.color_palette.background }}",
         "heading_color": "{{ settings.color_palette.foreground }}",
+        "text_color": "{{ settings.color_palette.color1 }}",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "editorial_video": {
+      "type": "editorial-video",
+      "settings": {
+        "eyebrow": "Our story",
+        "heading": "Made for pets. Loved by humans.",
+        "text": "<p>Designed by our founder Jenny at our London townhouse, for dogs and the humans who love them.</p>",
+        "button_label": "Discover our story",
+        "button_link": "shopify://pages/about-us-love-my-human-townhouse",
+        "heading_uppercase": true,
+        "heading_size": 34,
+        "video_file": "https://www.lovemyhuman.co.uk/cdn/shop/videos/c/vp/a5f74f01a9ca4222a1e685ea0e4ed642/a5f74f01a9ca4222a1e685ea0e4ed642.HD-1080p-7.2Mbps-49327868.mp4",
+        "video_url": "",
+        "autoplay": true,
+        "loop": true,
+        "animate": true,
+        "show_controls": true,
+        "caption": "",
+        "aspect_ratio": "landscape",
+        "aspect_ratio_mobile": "portrait",
+        "full_width_mobile": true,
+        "max_width": 1200,
+        "color_style": "brand",
+        "background_color": "{{ settings.color_palette.background }}",
+        "heading_color": "{{ settings.color_palette.foreground }}",
+        "text_color": "{{ settings.color_palette.color1 }}",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "customer_reviews": {
+      "type": "reviews-editorial",
+      "blocks": {
+        "judgeme_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judgeme_reviews"
+      ],
+      "disabled": true,
+      "settings": {
+        "eyebrow": "Reviews",
+        "heading": "What humans say",
+        "heading_size": 48,
+        "heading_rule": true,
+        "anchor": "reviews",
+        "animate": true,
+        "max_width": 1080,
+        "background_color": "{{ settings.color_palette.background }}",
+        "accent_color": "{{ settings.color_palette.foreground }}",
         "text_color": "{{ settings.color_palette.color1 }}",
         "padding_top": 64,
         "padding_bottom": 64
@@ -872,9 +872,9 @@
   "order": [
     "main",
     "product_details_editorial",
-    "editorial_video",
-    "customer_reviews",
+    "press_logos",
     "image_grid_tv",
-    "press_logos"
+    "editorial_video",
+    "customer_reviews"
   ]
 }
