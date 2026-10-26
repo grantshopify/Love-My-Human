@@ -27,18 +27,31 @@
   if s.animate
     assign reveal = 'data-reveal'
   endif
+
+  # Slider: a set number of logos at a time, with arrows (and swipe) to move to the next set
+  assign slider = false
+  if s.layout == 'slider'
+    assign slider = true
+  endif
+  # The mobile ticker only applies to the grid layout
+  assign ticker = false
+  if s.mobile_marquee and slider == false
+    assign ticker = true
+  endif
 -%}
 
 {%- if s.animate -%}{% render 'editorial-reveal' %}{%- endif -%}
 
 <div
-  class="ll{% if s.grayscale %} ll--grayscale{% endif %}{% if s.mobile_marquee %} ll--marquee{% endif %}"
+  class="ll{% if s.grayscale %} ll--grayscale{% endif %}{% if ticker %} ll--marquee{% endif %}{% if slider %} ll--slider{% endif %}{% if s.heading_rule %} ll--rule{% endif %}"
   style="
     --ll-background: {{ ll_background }};
     --ll-heading: {{ ll_heading }};
     --ll-text: {{ ll_text }};
     --ll-columns: {{ s.columns_desktop }};
     --ll-columns-mobile: {{ s.columns_mobile }};
+    --ll-per-page: {{ s.per_page }};
+    --ll-per-page-mobile: {{ s.per_page_mobile }};
     --ll-logo-height: {{ s.logo_height }}px;
     --ll-logo-height-mobile: {{ s.logo_height_mobile }}px;
     --ll-logo-width: {{ s.logo_width }}px;
@@ -105,20 +118,129 @@
       {%- endfor -%}
     {%- endcapture -%}
 
-    <div class="ll__viewport">
-      <div class="ll__track">
-        <ul class="ll__list list-unstyled" role="list">
+    {%- if slider -%}
+      <logo-slider class="ll__slider">
+        <button type="button" class="ll__arrow ll__arrow--prev" data-ll-prev aria-label="Previous logos" disabled>
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 5.5-6.5 6.5 6.5 6.5"/></svg>
+        </button>
+        <ul class="ll__list ll__list--slider list-unstyled" role="list" tabindex="0" aria-label="{{ s.heading | default: 'Press logos' | escape }}" data-ll-list>
           {{- logos -}}
         </ul>
-        {%- if s.mobile_marquee -%}
-          <ul class="ll__list ll__list--copy list-unstyled" role="list" aria-hidden="true" inert>
-            {{- logos | remove: 'data-reveal' -}}
+        <button type="button" class="ll__arrow ll__arrow--next" data-ll-next aria-label="Next logos">
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></svg>
+        </button>
+        <div class="ll__dots" data-ll-dots></div>
+      </logo-slider>
+    {%- else -%}
+      <div class="ll__viewport">
+        <div class="ll__track">
+          <ul class="ll__list list-unstyled" role="list">
+            {{- logos -}}
           </ul>
-        {%- endif -%}
+          {%- if ticker -%}
+            <ul class="ll__list ll__list--copy list-unstyled" role="list" aria-hidden="true" inert>
+              {{- logos | remove: 'data-reveal' -}}
+            </ul>
+          {%- endif -%}
+        </div>
       </div>
-    </div>
+    {%- endif -%}
   </div>
 </div>
+
+{%- if slider -%}
+  <script>
+    if (!customElements.get('logo-slider')) {
+      customElements.define(
+        'logo-slider',
+        class extends HTMLElement {
+          connectedCallback() {
+            this.list = this.querySelector('[data-ll-list]');
+            this.prev = this.querySelector('[data-ll-prev]');
+            this.next = this.querySelector('[data-ll-next]');
+            this.dots = this.querySelector('[data-ll-dots]');
+            this.items = [...this.list.children];
+
+            this.prev.addEventListener('click', () => this.go(-1));
+            this.next.addEventListener('click', () => this.go(1));
+            this.list.addEventListener('scroll', () => this.update(), { passive: true });
+            this.list.addEventListener('keydown', (event) => {
+              if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                event.preventDefault();
+                this.go(event.key === 'ArrowRight' ? 1 : -1);
+              }
+            });
+            // Logos per page changes between phone and desktop, so rebuild the dots when the size changes
+            this.resizeObserver = new ResizeObserver(() => this.build());
+            this.resizeObserver.observe(this.list);
+          }
+
+          disconnectedCallback() {
+            this.resizeObserver?.disconnect();
+          }
+
+          /** Distance from one logo to the next, and how many fit in view */
+          measure() {
+            const step = this.items.length > 1 ? this.items[1].offsetLeft - this.items[0].offsetLeft : this.list.clientWidth;
+            const perPage = Math.max(1, Math.round(this.list.clientWidth / step));
+            return { step, perPage, pages: Math.ceil(this.items.length / perPage) };
+          }
+
+          build() {
+            const { pages } = this.measure();
+            this.dots.replaceChildren(
+              ...Array.from({ length: pages }, (_, index) => {
+                const dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = 'll__dot';
+                dot.setAttribute('aria-label', `Show logos ${index + 1} of ${pages}`);
+                dot.addEventListener('click', () => this.goTo(index));
+                return dot;
+              })
+            );
+            this.dots.hidden = pages < 2;
+            this.prev.hidden = this.next.hidden = pages < 2;
+            this.update();
+          }
+
+          go(direction) {
+            // Count from the page we are heading to, so quick repeated clicks still move one page each
+            const { pages } = this.measure();
+            const from = this.target ?? this.current ?? 0;
+            this.goTo(Math.min(Math.max(from + direction, 0), pages - 1));
+          }
+
+          goTo(index) {
+            const { step, perPage } = this.measure();
+            this.target = index;
+            clearTimeout(this.targetTimer);
+            this.targetTimer = setTimeout(() => (this.target = null), 700);
+            this.scroll(index * step * perPage);
+          }
+
+          scroll(left) {
+            const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            this.list.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
+          }
+
+          update() {
+            const { step, perPage, pages } = this.measure();
+            const max = this.list.scrollWidth - this.list.clientWidth;
+            const left = this.list.scrollLeft;
+            this.prev.disabled = left <= 2;
+            this.next.disabled = left >= max - 2;
+            const current = left >= max - 2 ? pages - 1 : Math.round(left / (step * perPage));
+            this.current = current;
+            [...this.dots.children].forEach((dot, index) => {
+              if (index === current) dot.setAttribute('aria-current', 'true');
+              else dot.removeAttribute('aria-current');
+            });
+          }
+        }
+      );
+    }
+  </script>
+{%- endif -%}
 
 {% stylesheet %}
   .ll {
@@ -164,12 +286,141 @@
     margin: 0;
     color: var(--ll-heading);
     font-family: var(--font-heading--family);
-    font-size: calc(var(--ll-heading-size) * 0.85);
+    /* Big headings scale down on phones so they stay on one or two lines */
+    font-size: min(calc(var(--ll-heading-size) * 0.85), 10vw);
     font-weight: 400;
     letter-spacing: 0.04em;
-    line-height: 1.2;
+    line-height: 1.1;
     text-align: center;
     text-transform: uppercase;
+  }
+
+  /* Optional short red line under the heading */
+  .ll--rule .ll__heading::after {
+    content: '';
+    display: block;
+    inline-size: 56px;
+    block-size: 3px;
+    margin: 16px auto 0;
+    background: currentColor;
+  }
+
+  /* ---------- Slider: a page of logos at a time, arrows either side ---------- */
+  .ll__slider {
+    --ll-slide-gap: 16px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ll--slider .ll__list--slider {
+    display: grid;
+    grid-auto-columns: calc((100% - (var(--ll-per-page-mobile) - 1) * var(--ll-slide-gap)) / var(--ll-per-page-mobile));
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    gap: var(--ll-slide-gap);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding-block: 12px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .ll--slider .ll__list--slider::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ll--slider .ll__list--slider:focus-visible {
+    outline: 1px solid var(--ll-heading);
+    outline-offset: 4px;
+  }
+
+  .ll--slider .ll__item {
+    scroll-snap-align: start;
+  }
+
+  .ll__arrow {
+    display: grid;
+    place-items: center;
+    inline-size: 40px;
+    block-size: 40px;
+    padding: 0;
+    border: 1px solid var(--ll-heading);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ll-heading);
+    cursor: pointer;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      opacity 0.3s ease,
+      transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .ll__arrow:hover:not(:disabled) {
+    background: var(--ll-heading);
+    color: var(--ll-background);
+  }
+
+  .ll__arrow--prev:hover:not(:disabled) {
+    transform: translateX(-2px);
+  }
+
+  .ll__arrow--next:hover:not(:disabled) {
+    transform: translateX(2px);
+  }
+
+  .ll__arrow:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+
+  .ll__arrow:focus-visible {
+    outline: 1px solid var(--ll-heading);
+    outline-offset: 3px;
+  }
+
+  .ll__dots {
+    display: flex;
+    grid-column: 2;
+    justify-content: center;
+    gap: 8px;
+    margin-block-start: 16px;
+  }
+
+  .ll__dot {
+    inline-size: 8px;
+    block-size: 8px;
+    padding: 0;
+    border: 1px solid var(--ll-heading);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    transition:
+      inline-size 0.4s cubic-bezier(0.2, 0, 0, 1),
+      background-color 0.3s ease;
+  }
+
+  .ll__dot[aria-current='true'] {
+    inline-size: 24px;
+    background: var(--ll-heading);
+  }
+
+  @media screen and (min-width: 750px) {
+    .ll__slider {
+      --ll-slide-gap: 32px;
+      gap: 24px;
+    }
+
+    .ll--slider .ll__list--slider {
+      grid-auto-columns: calc((100% - (var(--ll-per-page) - 1) * var(--ll-slide-gap)) / var(--ll-per-page));
+    }
+
+    .ll__arrow {
+      inline-size: 48px;
+      block-size: 48px;
+    }
   }
 
   .ll__list {
@@ -395,14 +646,57 @@
       "id": "heading_size",
       "label": "Heading size",
       "min": 16,
-      "max": 48,
+      "max": 72,
       "step": 1,
       "unit": "px",
       "default": 24
     },
     {
+      "type": "checkbox",
+      "id": "heading_rule",
+      "label": "Short line under the heading",
+      "default": false
+    },
+    {
       "type": "header",
       "content": "Logos"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Rows"
+        },
+        {
+          "value": "slider",
+          "label": "Slider with arrows"
+        }
+      ],
+      "default": "grid",
+      "info": "Slider: shows a few logos at a time. Customers click the arrows or swipe to see the next set."
+    },
+    {
+      "type": "range",
+      "id": "per_page",
+      "label": "Logos at a time on desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "visible_if": "{{ section.settings.layout == 'slider' }}"
+    },
+    {
+      "type": "range",
+      "id": "per_page_mobile",
+      "label": "Logos at a time on mobile",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "visible_if": "{{ section.settings.layout == 'slider' }}"
     },
     {
       "type": "range",
@@ -411,7 +705,8 @@
       "min": 3,
       "max": 8,
       "step": 1,
-      "default": 5
+      "default": 5,
+      "visible_if": "{{ section.settings.layout == 'grid' }}"
     },
     {
       "type": "range",
@@ -420,7 +715,8 @@
       "min": 2,
       "max": 4,
       "step": 1,
-      "default": 2
+      "default": 2,
+      "visible_if": "{{ section.settings.layout == 'grid' }}"
     },
     {
       "type": "range",
@@ -458,7 +754,8 @@
       "id": "mobile_marquee",
       "label": "Scrolling ticker on mobile and tablet",
       "info": "On phones and tablets the logos glide past in one line instead of stacking in rows.",
-      "default": true
+      "default": true,
+      "visible_if": "{{ section.settings.layout == 'grid' }}"
     },
     {
       "type": "range",
@@ -469,7 +766,8 @@
       "max": 120,
       "step": 2,
       "unit": "s",
-      "default": 70
+      "default": 70,
+      "visible_if": "{{ section.settings.layout == 'grid' }}"
     },
     {
       "type": "checkbox",

@@ -444,12 +444,15 @@
         "i6"
       ],
       "settings": {
-        "heading": "TV appearances",
-        "style": "onair",
+        "heading": "As seen on TV",
+        "style": "card",
         "mobile_layout": "grid_1",
         "onair_label": "Featured",
         "padding_top": 64,
-        "padding_bottom": 64
+        "padding_bottom": 64,
+        "eyebrow": "",
+        "heading_size": 56,
+        "heading_rule": true
       }
     },
     "press_logos": {
@@ -539,11 +542,17 @@
         "l10"
       ],
       "settings": {
-        "heading": "They're talking about",
+        "heading": "Featured in the press",
         "columns_mobile": 2,
         "padding_top": 64,
         "padding_bottom": 64,
-        "eyebrow": "In the press"
+        "eyebrow": "",
+        "layout": "slider",
+        "per_page": 4,
+        "per_page_mobile": 2,
+        "heading_size": 48,
+        "heading_rule": true,
+        "grayscale": true
       }
     }
   },

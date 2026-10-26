@@ -46,6 +46,11 @@
   if s.style == 'onair'
     assign onair = true
   endif
+  # "Cards" style: a red-bordered card with the show name in a bar under the image
+  assign card = false
+  if s.style == 'card'
+    assign card = true
+  endif
 
   assign columns = s.columns_desktop
   assign sizes = '(min-width: 750px) calc(min(100vw - 48px, ' | append: s.max_width | append: 'px) / ' | append: columns | append: '), 80vw'
@@ -54,7 +59,7 @@
 {%- if s.animate -%}{% render 'editorial-reveal' %}{%- endif -%}
 
 <div
-  class="ig ig--mobile-{{ s.mobile_layout }} ig--caption-{{ s.caption_style }}{% if onair %} ig--style-onair{% endif %}"
+  class="ig ig--mobile-{{ s.mobile_layout }} ig--caption-{{ s.caption_style }}{% if onair %} ig--style-onair{% endif %}{% if card %} ig--style-card{% endif %}{% if s.heading_rule %} ig--rule{% endif %}"
   style="
     --ig-background: {{ ig_background }};
     --ig-heading: {{ ig_heading }};
@@ -122,7 +127,7 @@
                 {%- comment -%} No image yet: show the title so the client can picture the grid {%- endcomment -%}
                 <span class="ig__placeholder">{{ b.title | default: 'Add an image' }}</span>
               {%- endif -%}
-              {%- if onair == false and s.caption_style == 'overlay' and b.title != blank -%}
+              {%- if onair == false and card == false and s.caption_style == 'overlay' and b.title != blank -%}
                 <span class="ig__overlay" aria-hidden="true">
                   <span class="ig__overlay-title">{{ b.title }}</span>
                   {%- if b.link != blank and s.link_label != blank -%}
@@ -142,6 +147,13 @@
                   {%- endif -%}
                 </div>
               </div>
+            {%- elsif card -%}
+              <span class="ig__card-title">
+                <span>{{ b.title }}</span>
+                {%- if b.link != blank -%}
+                  <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m-5-5 5 5-5 5"/></svg>
+                {%- endif -%}
+              </span>
             {%- elsif s.caption_style == 'below' and b.title != blank -%}
               <span class="ig__caption">{{ b.title }}</span>
             {%- endif -%}
@@ -216,12 +228,23 @@
     margin: 0 15px;
     color: var(--ig-heading);
     font-family: var(--font-heading--family);
-    font-size: calc(var(--ig-heading-size) * 0.85);
+    /* Big headings scale down on phones so they stay on one or two lines */
+    font-size: min(calc(var(--ig-heading-size) * 0.85), 10vw);
     font-weight: 400;
     letter-spacing: 0.04em;
-    line-height: 1.2;
+    line-height: 1.1;
     text-align: center;
     text-transform: uppercase;
+  }
+
+  /* Optional short red line under the heading */
+  .ig--rule .ig__heading::after {
+    content: '';
+    display: block;
+    inline-size: 56px;
+    block-size: 3px;
+    margin: 16px auto 0;
+    background: currentColor;
   }
 
   .ig__text {
@@ -417,6 +440,74 @@
       padding-block: min(var(--ig-padding-top), 48px) min(var(--ig-padding-bottom), 48px);
     }
   }
+  /* ---------- "Cards" style ---------- */
+  .ig--style-card .ig__list {
+    gap: 16px;
+  }
+
+  .ig--style-card .ig__link {
+    overflow: hidden;
+    border: 3px solid var(--ig-heading);
+    border-radius: 12px;
+    /* Red behind everything: cards land on fractions of a pixel, and any sub-pixel seam between the
+       border and the image then blends into the border instead of showing as a light hairline */
+    background: var(--ig-heading);
+  }
+
+  /* The image clips itself (inner corner = card radius minus the border), and the backing is the
+     border colour, so the zoom on hover never shows a light hairline at the edges */
+  .ig--style-card .ig__media {
+    border-radius: 9px 9px 0 0;
+    background: var(--ig-heading);
+    isolation: isolate;
+  }
+
+  .ig__card-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--ig-background);
+    color: var(--ig-text);
+    font-family: var(--font-heading--family);
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease;
+  }
+
+  .ig__card-title svg {
+    flex: none;
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* Hover: the card stays put (moving it softens the border and corners); the image zooms a touch
+     and the title bar fills with red */
+  @media (hover: hover) {
+    .ig--style-card .ig__link:hover .ig__image {
+      transform: scale(1.03);
+    }
+
+    .ig--style-card .ig__link:hover .ig__card-title {
+      background: var(--ig-heading);
+      color: var(--ig-background);
+    }
+
+    .ig--style-card .ig__link:hover .ig__card-title svg {
+      transform: translateX(4px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ig__card-title {
+      transition: none;
+    }
+  }
+
   /* ---------- "TV screens" style ---------- */
   .ig--style-onair .ig__list {
     gap: 20px;
@@ -651,10 +742,16 @@
       "id": "heading_size",
       "label": "Heading size",
       "min": 16,
-      "max": 48,
+      "max": 72,
       "step": 1,
       "unit": "px",
       "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_rule",
+      "label": "Short line under the heading",
+      "default": false
     },
     {
       "type": "select",
@@ -708,6 +805,10 @@
         {
           "value": "onair",
           "label": "TV screens"
+        },
+        {
+          "value": "card",
+          "label": "Cards with title bar"
         }
       ],
       "default": "grid",
