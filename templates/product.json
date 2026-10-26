@@ -349,7 +349,7 @@
                   "type": "_lmh-benefit",
                   "settings": {
                     "icon": "paw",
-                    "text": "Loved by our dogs"
+                    "text": "Loved by dogs"
                   },
                   "blocks": {}
                 },
@@ -585,6 +585,138 @@
         "padding_bottom": 64
       }
     },
+    "press_logos": {
+      "type": "logo-list-editorial",
+      "blocks": {
+        "l1": {
+          "type": "logo",
+          "settings": {
+            "theme_image": "lmh-press-chelsea-awards.png",
+            "name": "The Chelsea Awards",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "l2": {
+          "type": "logo",
+          "settings": {
+            "theme_image": "lmh-press-evening-standard.png",
+            "name": "Evening Standard",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "l3": {
+          "type": "logo",
+          "settings": {
+            "theme_image": "lmh-press-mandarin-oriental.png",
+            "name": "Mandarin Oriental",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "l4": {
+          "type": "logo",
+          "settings": {
+            "theme_image": "lmh-press-the-times.png",
+            "name": "The Times",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "l5": {
+          "type": "logo",
+          "settings": {
+            "theme_image": "lmh-press-the-guardian.png",
+            "name": "The Guardian",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "l6": {
+          "type": "logo",
+          "settings": {
+            "theme_image": "lmh-press-livingetc.png",
+            "name": "Livingetc",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "l7": {
+          "type": "logo",
+          "settings": {
+            "theme_image": "lmh-press-channel-4.png",
+            "name": "Channel 4",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "l8": {
+          "type": "logo",
+          "settings": {
+            "theme_image": "lmh-press-financial-times.png",
+            "name": "Financial Times",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "l9": {
+          "type": "logo",
+          "settings": {
+            "theme_image": "lmh-press-world-of-interiors.png",
+            "name": "The World of Interiors",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "l10": {
+          "type": "logo",
+          "settings": {
+            "theme_image": "lmh-press-sloane-square.png",
+            "name": "Sloane Square",
+            "link": "",
+            "new_tab": true
+          }
+        }
+      },
+      "block_order": [
+        "l1",
+        "l2",
+        "l3",
+        "l4",
+        "l5",
+        "l6",
+        "l7",
+        "l8",
+        "l9",
+        "l10"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Featured in the press",
+        "heading_size": 48,
+        "heading_rule": true,
+        "layout": "slider",
+        "per_page": 4,
+        "per_page_mobile": 2,
+        "columns_desktop": 5,
+        "columns_mobile": 2,
+        "logo_height": 56,
+        "logo_height_mobile": 36,
+        "logo_width": 130,
+        "mobile_marquee": true,
+        "marquee_speed": 70,
+        "animate": true,
+        "grayscale": true,
+        "max_width": 1080,
+        "color_style": "brand",
+        "background_color": "{{ settings.color_palette.background }}",
+        "heading_color": "{{ settings.color_palette.foreground }}",
+        "text_color": "{{ settings.color_palette.color1 }}",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
     "image_grid_tv": {
       "type": "image-grid-editorial",
       "blocks": {
@@ -731,138 +863,6 @@
         "max_width": 1080,
         "background_color": "{{ settings.color_palette.background }}",
         "accent_color": "{{ settings.color_palette.foreground }}",
-        "text_color": "{{ settings.color_palette.color1 }}",
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
-    "press_logos": {
-      "type": "logo-list-editorial",
-      "blocks": {
-        "l1": {
-          "type": "logo",
-          "settings": {
-            "theme_image": "lmh-press-chelsea-awards.png",
-            "name": "The Chelsea Awards",
-            "link": "",
-            "new_tab": true
-          }
-        },
-        "l2": {
-          "type": "logo",
-          "settings": {
-            "theme_image": "lmh-press-evening-standard.png",
-            "name": "Evening Standard",
-            "link": "",
-            "new_tab": true
-          }
-        },
-        "l3": {
-          "type": "logo",
-          "settings": {
-            "theme_image": "lmh-press-mandarin-oriental.png",
-            "name": "Mandarin Oriental",
-            "link": "",
-            "new_tab": true
-          }
-        },
-        "l4": {
-          "type": "logo",
-          "settings": {
-            "theme_image": "lmh-press-the-times.png",
-            "name": "The Times",
-            "link": "",
-            "new_tab": true
-          }
-        },
-        "l5": {
-          "type": "logo",
-          "settings": {
-            "theme_image": "lmh-press-the-guardian.png",
-            "name": "The Guardian",
-            "link": "",
-            "new_tab": true
-          }
-        },
-        "l6": {
-          "type": "logo",
-          "settings": {
-            "theme_image": "lmh-press-livingetc.png",
-            "name": "Livingetc",
-            "link": "",
-            "new_tab": true
-          }
-        },
-        "l7": {
-          "type": "logo",
-          "settings": {
-            "theme_image": "lmh-press-channel-4.png",
-            "name": "Channel 4",
-            "link": "",
-            "new_tab": true
-          }
-        },
-        "l8": {
-          "type": "logo",
-          "settings": {
-            "theme_image": "lmh-press-financial-times.png",
-            "name": "Financial Times",
-            "link": "",
-            "new_tab": true
-          }
-        },
-        "l9": {
-          "type": "logo",
-          "settings": {
-            "theme_image": "lmh-press-world-of-interiors.png",
-            "name": "The World of Interiors",
-            "link": "",
-            "new_tab": true
-          }
-        },
-        "l10": {
-          "type": "logo",
-          "settings": {
-            "theme_image": "lmh-press-sloane-square.png",
-            "name": "Sloane Square",
-            "link": "",
-            "new_tab": true
-          }
-        }
-      },
-      "block_order": [
-        "l1",
-        "l2",
-        "l3",
-        "l4",
-        "l5",
-        "l6",
-        "l7",
-        "l8",
-        "l9",
-        "l10"
-      ],
-      "settings": {
-        "eyebrow": "",
-        "heading": "Featured in the press",
-        "heading_size": 48,
-        "heading_rule": true,
-        "layout": "slider",
-        "per_page": 4,
-        "per_page_mobile": 2,
-        "columns_desktop": 5,
-        "columns_mobile": 2,
-        "logo_height": 56,
-        "logo_height_mobile": 36,
-        "logo_width": 130,
-        "mobile_marquee": true,
-        "marquee_speed": 70,
-        "animate": true,
-        "grayscale": true,
-        "max_width": 1080,
-        "color_style": "brand",
-        "background_color": "{{ settings.color_palette.background }}",
-        "heading_color": "{{ settings.color_palette.foreground }}",
         "text_color": "{{ settings.color_palette.color1 }}",
         "padding_top": 64,
         "padding_bottom": 64
