@@ -223,6 +223,21 @@
           width: min(100%, calc(var(--constrained-height) * {{ block_settings.aspect_ratio }}));
         }
       }
+
+      /* LMH: the photo fills the full column width; its height stays limited to the screen, so on wide screens
+         it is trimmed a little top and bottom instead of shrinking (the arrows then sit on the photo) */
+      @media screen and (min-width: 750px) {
+        media-gallery.media-gallery--carousel .product-media-constraint-wrapper {
+          width: 100%;
+          height: 100%;
+        }
+
+        media-gallery.media-gallery--carousel .product-media-constraint-wrapper :is(.product-media, img) {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
     {% endif %}
 
     /* Constrain all deferred-media content to parent bounds when specific aspect ratio is set */

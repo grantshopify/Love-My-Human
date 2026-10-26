@@ -46,7 +46,7 @@
             "thumbnail_width": 72,
             "thumbnail_radius": 12,
             "aspect_ratio": "1",
-            "constrain_to_viewport": false,
+            "constrain_to_viewport": true,
             "media_fit": "cover",
             "media_radius": 16,
             "extend_media": false,
@@ -401,7 +401,7 @@
       "settings": {
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
-        "equal_columns": false,
+        "equal_columns": true,
         "limit_details_width": false,
         "gap": 12,
         "enable_sticky_add_to_cart": true,
@@ -676,7 +676,8 @@
         "anchor": "reviews",
         "padding_top": 64,
         "padding_bottom": 64
-      }
+      },
+      "disabled": true
     }
   },
   "order": [
