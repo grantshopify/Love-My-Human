@@ -1,0 +1,478 @@
+{%- comment -%}
+  Collection bubbles ("Shop by collection"): every collection as a round photo in a ring with its name underneath.
+  Desktop: one centred row (wraps if there are many). Phones: a swipe row, or wrapped rows.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+
+  if s.animate
+    assign reveal = 'data-reveal'
+  endif
+
+  assign show_link = false
+  if s.link_label != blank and s.link != blank
+    assign show_link = true
+  endif
+
+  assign size_2x = s.bubble_size | times: 2
+-%}
+
+{%- if s.animate -%}{% render 'editorial-reveal' %}{%- endif -%}
+
+<div
+  class="cb cb--mobile-{{ s.mobile_layout }}"
+  style="
+    --cb-background: {{ s.background_color | default: settings.color_palette.background }};
+    --cb-accent: {{ s.accent_color | default: settings.color_palette.foreground }};
+    --cb-heading-size: {{ s.heading_size }}px;
+    --cb-size: {{ s.bubble_size }}px;
+    --cb-size-mobile: {{ s.bubble_size_mobile }}px;
+    --cb-width: {{ s.max_width }}px;
+    --cb-padding-top: {{ s.padding_top }}px;
+    --cb-padding-bottom: {{ s.padding_bottom }}px;
+  "
+>
+  <div class="cb__inner">
+    {%- if s.eyebrow != blank or s.heading != blank -%}
+      <div class="cb__intro" {{ reveal }}>
+        {%- if s.eyebrow != blank -%}
+          <p class="cb__eyebrow">{{ s.eyebrow }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="cb__heading">{{ s.heading }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <ul class="cb__list list-unstyled" role="list">
+      {%- if s.collection_list.size > 0 -%}
+        {%- for collection in s.collection_list -%}
+          {%- assign image = collection.featured_image | default: collection.image -%}
+          <li class="cb__item" {{ reveal }}>
+            <a class="cb__link" href="{{ collection.url }}">
+              <span class="cb__ring">
+                {%- if image != blank -%}
+                  {{
+                    image
+                    | image_url: width: size_2x, height: size_2x, crop: 'center'
+                    | image_tag:
+                      class: 'cb__image',
+                      loading: 'lazy',
+                      alt: '',
+                      widths: '120, 200, 300, 400',
+                      sizes: '(min-width: 750px) 220px, 160px'
+                  }}
+                {%- else -%}
+                  {{ 'collection-1' | placeholder_svg_tag: 'cb__image cb__image--placeholder' }}
+                {%- endif -%}
+              </span>
+              <span class="cb__title">{{ collection.title }}</span>
+              {%- if s.show_count -%}
+                <span class="cb__count">
+                  {{- collection.products_count }}
+                  {% if collection.products_count == 1 %}product{% else %}products{% endif -%}
+                </span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} No collections picked yet: placeholders so the layout shows in the editor {%- endcomment -%}
+        {%- for i in (1..6) -%}
+          <li class="cb__item">
+            <span class="cb__link">
+              <span class="cb__ring">{{ 'collection-1' | placeholder_svg_tag: 'cb__image cb__image--placeholder' }}</span>
+              <span class="cb__title">Collection</span>
+            </span>
+          </li>
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+
+    {%- if show_link -%}
+      <div class="cb__footer" {{ reveal }}>
+        <a class="cb__more" href="{{ s.link }}">
+          {{- s.link_label -}}
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m-5-5 5 5-5 5"/></svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .cb {
+    padding: var(--cb-padding-top) 16px var(--cb-padding-bottom);
+    background: var(--cb-background);
+    font-family: var(--font-body--family);
+  }
+
+  .cb__inner {
+    max-inline-size: var(--cb-width);
+    margin: 0 auto;
+  }
+
+  .cb__intro {
+    margin-block-end: 28px;
+    text-align: center;
+  }
+
+  .cb__eyebrow {
+    margin: 0 0 6px;
+    color: var(--cb-accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .cb__heading {
+    margin: 0;
+    color: var(--cb-accent);
+    font-family: var(--font-heading--family);
+    font-size: min(calc(var(--cb-heading-size) * 0.85), 30px);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  .cb__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px 20px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cb__item {
+    flex: none;
+    inline-size: var(--cb-size-mobile);
+  }
+
+  .cb__link {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    color: var(--cb-accent);
+    text-align: center;
+    text-decoration: none;
+  }
+
+  /* The photo sits inside a red ring with a cream gap, like a story bubble */
+  .cb__ring {
+    display: block;
+    inline-size: var(--cb-size-mobile);
+    aspect-ratio: 1;
+    padding: 4px;
+    border: 2px solid var(--cb-accent);
+    border-radius: 50%;
+    transition:
+      transform 0.5s cubic-bezier(0.2, 0, 0, 1),
+      box-shadow 0.5s ease;
+  }
+
+  .cb__image {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .cb__image--placeholder {
+    background: color-mix(in srgb, var(--cb-accent) 12%, #fff);
+    fill: var(--cb-accent);
+  }
+
+  .cb__title {
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .cb__count {
+    margin-block-start: -6px;
+    color: color-mix(in srgb, var(--cb-accent) 70%, transparent);
+    font-size: 12px;
+  }
+
+  @media (hover: hover) {
+    .cb__link:hover .cb__ring {
+      box-shadow: 0 14px 24px -14px var(--cb-accent);
+      transform: translateY(-4px) rotate(-3deg);
+    }
+  }
+
+  .cb__link:focus-visible {
+    outline: none;
+  }
+
+  .cb__link:focus-visible .cb__ring {
+    outline: 2px solid var(--cb-accent);
+    outline-offset: 3px;
+  }
+
+  .cb__footer {
+    margin-block-start: 28px;
+    text-align: center;
+  }
+
+  .cb__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding-block-end: 4px;
+    background: linear-gradient(currentColor, currentColor) left bottom / 100% 1px no-repeat;
+    color: var(--cb-accent);
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background-size 0.5s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .cb__more:hover {
+    background-position: right bottom;
+    background-size: 0 1px;
+  }
+
+  /* Phones, swipe row: bubbles scroll sideways and run to the screen edge */
+  @media screen and (max-width: 749px) {
+    .cb {
+      padding-block: min(var(--cb-padding-top), 48px) min(var(--cb-padding-bottom), 48px);
+    }
+
+    .cb--mobile-swipe .cb__list {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 16px;
+      margin-inline: -16px;
+      padding: 6px 16px 10px;
+      overflow-x: auto;
+      scroll-padding-inline: 16px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .cb--mobile-swipe .cb__list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cb--mobile-swipe .cb__item {
+      scroll-snap-align: start;
+    }
+
+    .cb__title {
+      font-size: 13px;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .cb {
+      padding-inline: 24px;
+    }
+
+    .cb__intro {
+      margin-block-end: 36px;
+    }
+
+    .cb__heading {
+      font-size: min(var(--cb-heading-size), 40px);
+    }
+
+    .cb__list {
+      gap: 28px 36px;
+    }
+
+    .cb__item,
+    .cb__ring {
+      inline-size: var(--cb-size);
+    }
+
+    .cb__title {
+      font-size: 16px;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .cb__heading {
+      font-size: var(--cb-heading-size);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cb__ring {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection bubbles",
+  "tag": "section",
+  "class": "collection-bubbles-section",
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "collection_list",
+      "label": "Collections",
+      "limit": 12,
+      "info": "Each collection shows its own image. Change it in Products > Collections."
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small label above the heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by collection"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "Show number of products",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label",
+      "default": "View all",
+      "info": "Shown under the bubbles. Needs a link."
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "animate",
+      "label": "Animate on scroll",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "bubble_size",
+      "label": "Bubble size on desktop",
+      "min": 80,
+      "max": 220,
+      "step": 4,
+      "unit": "px",
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "bubble_size_mobile",
+      "label": "Bubble size on mobile",
+      "min": 64,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 104
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "On mobile",
+      "options": [
+        {
+          "value": "swipe",
+          "label": "Swipe row"
+        },
+        {
+          "value": "wrap",
+          "label": "Rows"
+        }
+      ],
+      "default": "swipe"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 800,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1320
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "{{ settings.color_palette.background }}"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Rings and text",
+      "default": "{{ settings.color_palette.foreground }}"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection bubbles",
+      "category": "t:categories.collection_list"
+    }
+  ]
+}
+{% endschema %}
