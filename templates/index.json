@@ -132,7 +132,7 @@
           "settings": {
             "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-london-main-head-poodle-finished-groom_f3960ddd-c51e-4e56-99ac-e0c800078d43_1.webp",
             "title": "Book a dog groom",
-            "chip": "Book now",
+            "chip": "",
             "text": "",
             "link": "shopify://pages/dog-grooming-chelsea-premium-pet-grooming-services-love-my-human"
           }
@@ -142,7 +142,7 @@
           "settings": {
             "image": "shopify://shop_images/Jenny_Matthews_at_the_LMH_Townhouse.webp",
             "title": "Doggy day-care",
-            "chip": "Daily",
+            "chip": "",
             "text": "",
             "link": "shopify://pages/dog-daycare-chelsea-premium-dog-day-care-services-love-my-human-townhouse"
           }
@@ -152,7 +152,7 @@
           "settings": {
             "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-aoife-journey-main-header-grooming-academy-training_ebb4d686-9f0a-4132-9d95-5488fcef8bef.webp",
             "title": "Grooming academy",
-            "chip": "Courses",
+            "chip": "",
             "text": "",
             "link": "shopify://pages/academy"
           }
@@ -162,7 +162,7 @@
           "settings": {
             "image": "shopify://shop_images/acedemysplash_1d57ee16-615b-4faa-bcc8-cdcca1bf1112.webp",
             "title": "Wholesale",
-            "chip": "Trade",
+            "chip": "",
             "text": "",
             "link": "shopify://pages/wholesale-portal"
           }
