@@ -53,15 +53,15 @@
             "zoom": true,
             "video_loop": false,
             "hide_variants": false,
-            "padding-block-start": 12,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0,
             "show_sale_badge": true,
             "sale_badge_text": "Sale",
             "watch_video": "none",
+            "watch_video_url": "https://www.lovemyhuman.co.uk/cdn/shop/videos/c/vp/a5f74f01a9ca4222a1e685ea0e4ed642/a5f74f01a9ca4222a1e685ea0e4ed642.HD-1080p-7.2Mbps-49327868.mp4",
             "watch_video_label": "Watch video",
-            "watch_video_url": "https://www.lovemyhuman.co.uk/cdn/shop/videos/c/vp/a5f74f01a9ca4222a1e685ea0e4ed642/a5f74f01a9ca4222a1e685ea0e4ed642.HD-1080p-7.2Mbps-49327868.mp4"
+            "padding-block-start": 12,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
           },
           "blocks": {}
         },
@@ -92,6 +92,20 @@
             "padding-inline-end": 12
           },
           "blocks": {
+            "lmh_meta": {
+              "type": "lmh-product-meta",
+              "settings": {
+                "show_vendor": true,
+                "text": "",
+                "show_share": false,
+                "share_facebook": true,
+                "share_x": true,
+                "share_pinterest": true,
+                "share_copy": true,
+                "accent_color": "{{ settings.color_palette.foreground }}"
+              },
+              "blocks": {}
+            },
             "text_tefwj7": {
               "type": "text",
               "name": "t:names.title",
@@ -118,11 +132,242 @@
               },
               "blocks": {}
             },
+            "lmh_price_row": {
+              "type": "group",
+              "name": "Price and stock",
+              "settings": {
+                "content_direction": "row",
+                "vertical_on_mobile": false,
+                "horizontal_alignment": "space-between",
+                "vertical_alignment": "flex-start",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 12,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "background_media": "none",
+                "background_color": "",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "lmh_price_stack": {
+                  "type": "group",
+                  "name": "Price and reviews",
+                  "settings": {
+                    "content_direction": "column",
+                    "vertical_on_mobile": true,
+                    "horizontal_alignment": "flex-start",
+                    "vertical_alignment": "center",
+                    "align_baseline": false,
+                    "horizontal_alignment_flex_direction_column": "flex-start",
+                    "vertical_alignment_flex_direction_column": "flex-start",
+                    "gap": 6,
+                    "width": "fit-content",
+                    "custom_width": 100,
+                    "width_mobile": "fit-content",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "custom_height": 100,
+                    "background_media": "none",
+                    "background_color": "",
+                    "video_position": "cover",
+                    "background_image_position": "cover",
+                    "toggle_overlay": false,
+                    "overlay_color": "#00000026",
+                    "overlay_style": "solid",
+                    "gradient_direction": "to top",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_color": "",
+                    "border_radius": 0,
+                    "link": "",
+                    "open_in_new_tab": false,
+                    "placeholder": "",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {
+                    "price_a7krng": {
+                      "type": "price",
+                      "settings": {
+                        "show_sale_price_first": true,
+                        "show_installments": true,
+                        "show_tax_info": false,
+                        "type_preset": "h4",
+                        "width": "fit-content",
+                        "alignment": "left",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "text_color": "{{ settings.color_palette.foreground }}",
+                        "padding-block-start": 4,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "lmh_reviews": {
+                      "type": "lmh-review-summary",
+                      "settings": {
+                        "empty_text": "Be the first to review",
+                        "link": "",
+                        "accent_color": "{{ settings.color_palette.foreground }}"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "price_a7krng",
+                    "lmh_reviews"
+                  ]
+                },
+                "lmh_availability": {
+                  "type": "lmh-availability",
+                  "settings": {
+                    "show_stock": true,
+                    "in_stock_text": "In stock",
+                    "low_stock_threshold": 5,
+                    "low_stock_text": "Only [count] left",
+                    "backorder_text": "Made to order",
+                    "sold_out_text": "Sold out",
+                    "show_personalise": false,
+                    "personalise_label": "Personalise me",
+                    "personalise_intro": "Make it theirs. We'll add these details to your order.",
+                    "open_personalise": false,
+                    "accent_color": "{{ settings.color_palette.foreground }}"
+                  },
+                  "blocks": {
+                    "dog_name": {
+                      "type": "product-custom-property",
+                      "settings": {
+                        "property_heading": "What's your dog's name?",
+                        "property_description": "",
+                        "property_key": "Dog's name",
+                        "input_type": "text",
+                        "max_length": 30,
+                        "checkbox_label": "Include gift wrapping",
+                        "required": false,
+                        "placeholder": "e.g. Biscuit",
+                        "placeholder_textarea": "Enter your special instructions",
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "allergies": {
+                      "type": "product-custom-property",
+                      "settings": {
+                        "property_heading": "Does your dog have any allergies?",
+                        "property_description": "",
+                        "property_key": "Allergies",
+                        "input_type": "text",
+                        "max_length": 100,
+                        "checkbox_label": "Include gift wrapping",
+                        "required": false,
+                        "placeholder": "e.g. chicken, wheat",
+                        "placeholder_textarea": "Enter your special instructions",
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "dog_name",
+                    "allergies"
+                  ]
+                }
+              },
+              "block_order": [
+                "lmh_price_stack",
+                "lmh_availability"
+              ]
+            },
+            "lmh_benefits": {
+              "type": "lmh-benefits",
+              "settings": {
+                "columns": 2,
+                "accent_color": "{{ settings.color_palette.foreground }}"
+              },
+              "blocks": {
+                "b1": {
+                  "type": "_lmh-benefit",
+                  "settings": {
+                    "icon": "paw",
+                    "text": "Loved by dogs"
+                  },
+                  "blocks": {}
+                },
+                "b2": {
+                  "type": "_lmh-benefit",
+                  "settings": {
+                    "icon": "home",
+                    "text": "Chosen in Chelsea"
+                  },
+                  "blocks": {}
+                },
+                "b3": {
+                  "type": "_lmh-benefit",
+                  "settings": {
+                    "icon": "truck",
+                    "text": "Fast UK delivery"
+                  },
+                  "blocks": {}
+                },
+                "b4": {
+                  "type": "_lmh-benefit",
+                  "settings": {
+                    "icon": "returns",
+                    "text": "14-day returns"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "b1",
+                "b2",
+                "b3",
+                "b4"
+              ]
+            },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
               "settings": {
                 "variant_style": "buttons",
                 "show_swatches": true,
+                "fallback_swatches": "Pumpkin Velvet: #D9682B\nBlush Pink: #E8B4B8\nTeal: #2B7A8C\nOlive: #8A8A3C\nMustard: #E3A82B\nDove Grey: #B9B4AE",
                 "option_label_text_color": "",
                 "variant_style_class": "default",
                 "custom_variant_background": "{{ settings.color_palette.background }}",
@@ -136,8 +381,7 @@
                 "padding-block-start": 12,
                 "padding-block-end": 24,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0,
-                "fallback_swatches": "Pumpkin Velvet: #D9682B\nBlush Pink: #E8B4B8\nTeal: #2B7A8C\nOlive: #8A8A3C\nMustard: #E3A82B\nDove Grey: #B9B4AE"
+                "padding-inline-end": 0
               },
               "blocks": {}
             },
@@ -185,13 +429,13 @@
                   "type": "add-to-cart",
                   "static": true,
                   "settings": {
+                    "show_icon": false,
+                    "text_size": 18,
+                    "bold_text": true,
                     "style_class": "button-custom",
                     "custom_button_background": "{{ settings.color_palette.foreground }}",
                     "custom_button_text": "{{ settings.color_palette.background }}",
-                    "custom_button_border": "{{ settings.color_palette.background }}",
-                    "show_icon": false,
-                    "text_size": 18,
-                    "bold_text": true
+                    "custom_button_border": "{{ settings.color_palette.background }}"
                   },
                   "blocks": {}
                 },
@@ -205,60 +449,6 @@
               },
               "block_order": []
             },
-            "lmh_meta": {
-              "type": "lmh-product-meta",
-              "settings": {
-                "show_vendor": true,
-                "text": "",
-                "show_share": false,
-                "share_facebook": true,
-                "share_x": true,
-                "share_pinterest": true,
-                "share_copy": true
-              }
-            },
-            "lmh_benefits": {
-              "type": "lmh-benefits",
-              "settings": {
-                "columns": 2
-              },
-              "blocks": {
-                "b1": {
-                  "type": "_lmh-benefit",
-                  "settings": {
-                    "icon": "paw",
-                    "text": "Tested by our dogs"
-                  }
-                },
-                "b2": {
-                  "type": "_lmh-benefit",
-                  "settings": {
-                    "icon": "home",
-                    "text": "Chosen in Chelsea"
-                  }
-                },
-                "b3": {
-                  "type": "_lmh-benefit",
-                  "settings": {
-                    "icon": "truck",
-                    "text": "Fast UK delivery"
-                  }
-                },
-                "b4": {
-                  "type": "_lmh-benefit",
-                  "settings": {
-                    "icon": "returns",
-                    "text": "14-day returns"
-                  }
-                }
-              },
-              "block_order": [
-                "b1",
-                "b2",
-                "b3",
-                "b4"
-              ]
-            },
             "lmh_delivery": {
               "type": "lmh-delivery-countdown",
               "settings": {
@@ -266,130 +456,19 @@
                 "cutoff_hour": 14,
                 "delivery_days": 1,
                 "saturday_delivery": false,
-                "fallback": "Order today for fast UK delivery"
-              }
-            },
-            "lmh_price_row": {
-              "type": "group",
-              "name": "Price and stock",
-              "settings": {
-                "content_direction": "row",
-                "vertical_on_mobile": false,
-                "horizontal_alignment": "space-between",
-                "vertical_alignment": "flex-start",
-                "align_baseline": false,
-                "gap": 12,
-                "width": "fill",
-                "width_mobile": "fill",
-                "height": "fit"
+                "boxed": false,
+                "fallback": "Order today for fast UK delivery",
+                "accent_color": "{{ settings.color_palette.foreground }}"
               },
-              "blocks": {
-                "lmh_availability": {
-                  "type": "lmh-availability",
-                  "settings": {
-                    "show_stock": true,
-                    "in_stock_text": "In stock",
-                    "low_stock_threshold": 5,
-                    "low_stock_text": "Only [count] left",
-                    "backorder_text": "Made to order",
-                    "sold_out_text": "Sold out",
-                    "show_personalise": false,
-                    "personalise_label": "Personalise me",
-                    "personalise_intro": "Make it theirs. We'll add these details to your order.",
-                    "open_personalise": false
-                  },
-                  "blocks": {
-                    "dog_name": {
-                      "type": "product-custom-property",
-                      "settings": {
-                        "property_heading": "What's your dog's name?",
-                        "property_key": "Dog's name",
-                        "input_type": "text",
-                        "max_length": 30,
-                        "required": false,
-                        "placeholder": "e.g. Biscuit"
-                      }
-                    },
-                    "allergies": {
-                      "type": "product-custom-property",
-                      "settings": {
-                        "property_heading": "Does your dog have any allergies?",
-                        "property_key": "Allergies",
-                        "input_type": "text",
-                        "max_length": 100,
-                        "required": false,
-                        "placeholder": "e.g. chicken, wheat"
-                      }
-                    }
-                  },
-                  "block_order": [
-                    "dog_name",
-                    "allergies"
-                  ]
-                },
-                "lmh_price_stack": {
-                  "type": "group",
-                  "name": "Price and reviews",
-                  "settings": {
-                    "content_direction": "column",
-                    "vertical_on_mobile": true,
-                    "horizontal_alignment_flex_direction_column": "flex-start",
-                    "vertical_alignment_flex_direction_column": "flex-start",
-                    "gap": 6,
-                    "width": "fit-content",
-                    "width_mobile": "fit-content",
-                    "height": "fit"
-                  },
-                  "blocks": {
-                    "price_a7krng": {
-                      "type": "price",
-                      "settings": {
-                        "show_sale_price_first": true,
-                        "show_installments": true,
-                        "show_tax_info": false,
-                        "type_preset": "h4",
-                        "width": "fit-content",
-                        "alignment": "left",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "text_color": "{{ settings.color_palette.foreground }}",
-                        "padding-block-start": 4,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "lmh_reviews": {
-                      "type": "lmh-review-summary",
-                      "settings": {
-                        "empty_text": "Be the first to review",
-                        "link": "",
-                        "accent_color": "{{ settings.color_palette.foreground }}"
-                      }
-                    }
-                  },
-                  "block_order": [
-                    "price_a7krng",
-                    "lmh_reviews"
-                  ]
-                }
-              },
-              "block_order": [
-                "lmh_price_stack",
-                "lmh_availability"
-              ]
+              "blocks": {}
             }
           },
           "block_order": [
             "lmh_meta",
             "text_tefwj7",
             "lmh_price_row",
-            "variant_picker_R3rGDr",
             "lmh_benefits",
+            "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
             "lmh_delivery"
           ]
@@ -405,10 +484,10 @@
         "limit_details_width": false,
         "gap": 12,
         "enable_sticky_add_to_cart": true,
+        "sticky_show_icon": false,
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 20,
-        "padding-block-end": 0,
-        "sticky_show_icon": false
+        "padding-block-end": 0
       }
     },
     "product_details_editorial": {
@@ -417,25 +496,37 @@
         "care": {
           "type": "tab",
           "settings": {
+            "icon": "paw",
             "title": "Care",
             "content": "<p>Look after it and it will look after your dog for years to come.</p><ul><li>Follow the care label on the product</li><li>Brush off hair and dirt regularly</li><li>Spot clean marks with a damp cloth and mild soap</li><li>Wash removable covers on a gentle cycle and air dry</li><li>Keep away from direct heat and strong sunlight</li></ul>",
-            "icon": "paw"
+            "page": "",
+            "link_label": "",
+            "link": "",
+            "open": false
           }
         },
         "delivery": {
           "type": "tab",
           "settings": {
+            "icon": "truck",
             "title": "Delivery & returns",
             "content": "<p><strong>UK delivery</strong></p><ul><li>Orders under £50: Royal Mail 1st Class, £3.50, 2–3 working days</li><li>Orders over £50: courier, £6, 1–2 working days</li><li>Free delivery on orders over £75</li></ul><p><strong>Europe</strong></p><p>Tracked and signed courier from £25. For larger items such as dog beds, email <a href=\"mailto:hello@lovemyhuman.co.uk\">hello@lovemyhuman.co.uk</a> and we will arrange the best way to send them.</p><p><strong>Returns</strong></p><p>Changed your mind? We are happy to refund or exchange non-perishable items within 14 days, as long as they are new, unused and in their original packaging. Personalised and special-order items cannot be returned. This does not affect your statutory rights.</p>",
-            "icon": "truck"
+            "page": "",
+            "link_label": "",
+            "link": "",
+            "open": false
           }
         },
         "gifting": {
           "type": "tab",
           "settings": {
+            "icon": "gift",
             "title": "Gifting",
             "content": "<p>Looking for something ready to give? Our XMAS Hamper is packed with treats and toys chosen by the team.</p><p>[Add your gift message and gift wrapping options here.]</p>",
-            "icon": "gift"
+            "page": "",
+            "link_label": "",
+            "link": "",
+            "open": false
           }
         },
         "h1": {
@@ -472,89 +563,26 @@
         "h3"
       ],
       "settings": {
+        "product": "",
+        "heading": "",
+        "description_source": "product",
+        "custom_description": "",
         "details": "<p>Every piece in our edit is chosen by our founder Jenny and tried and tested by the dogs of our London townhouse, so it works as hard for your dog as it looks in your home.</p><p>Designed for pets. Loved by humans.</p><p>Not sure about the size or fit? Our team is happy to help you choose the right one for your dog.</p>",
+        "show_sku": true,
+        "sku_label": "Product reference:",
+        "contact_text": "Like to know more?",
+        "contact_link_label": "Contact Customer Service",
+        "contact_link": "",
+        "animate": true,
+        "single_open": false,
+        "title_size": 16,
+        "text_size": 14,
+        "color_style": "brand",
+        "background_color": "{{ settings.color_palette.background }}",
+        "heading_color": "{{ settings.color_palette.foreground }}",
+        "text_color": "{{ settings.color_palette.color1 }}",
         "padding_top": 64,
         "padding_bottom": 64
-      }
-    },
-    "editorial_video": {
-      "type": "editorial-video",
-      "settings": {
-        "heading": "Made for pets. Loved by humans.",
-        "text": "<p>Designed by our founder Jenny at our London townhouse, for dogs and the humans who love them.</p>",
-        "heading_uppercase": true,
-        "video_file": "https://www.lovemyhuman.co.uk/cdn/shop/videos/c/vp/a5f74f01a9ca4222a1e685ea0e4ed642/a5f74f01a9ca4222a1e685ea0e4ed642.HD-1080p-7.2Mbps-49327868.mp4",
-        "eyebrow": "Our story",
-        "button_label": "Discover our story",
-        "button_link": "shopify://pages/about-us-love-my-human-townhouse",
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
-    "image_grid_tv": {
-      "type": "image-grid-editorial",
-      "blocks": {
-        "i1": {
-          "type": "image",
-          "settings": {
-            "title": "The Apprentice",
-            "theme_image": "lmh-tv-the-apprentice.jpg"
-          }
-        },
-        "i2": {
-          "type": "image",
-          "settings": {
-            "title": "Love Your Weekend with Alan Titchmarsh",
-            "theme_image": "lmh-tv-love-your-weekend.jpg"
-          }
-        },
-        "i3": {
-          "type": "image",
-          "settings": {
-            "title": "Goodwoof",
-            "theme_image": "lmh-tv-goodwoof.jpg"
-          }
-        },
-        "i4": {
-          "type": "image",
-          "settings": {
-            "title": "Rob & Romesh vs",
-            "theme_image": "lmh-tv-rob-and-romesh-vs.jpg"
-          }
-        },
-        "i5": {
-          "type": "image",
-          "settings": {
-            "title": "Celebs Go Dating",
-            "theme_image": "lmh-tv-celebs-go-dating.jpg"
-          }
-        },
-        "i6": {
-          "type": "image",
-          "settings": {
-            "title": "The Pet Show",
-            "theme_image": "lmh-tv-the-pet-show.jpg"
-          }
-        }
-      },
-      "block_order": [
-        "i1",
-        "i2",
-        "i3",
-        "i4",
-        "i5",
-        "i6"
-      ],
-      "settings": {
-        "heading": "As seen on TV",
-        "style": "card",
-        "mobile_layout": "grid_1",
-        "onair_label": "Featured",
-        "padding_top": 64,
-        "padding_bottom": 64,
-        "eyebrow": "",
-        "heading_size": 56,
-        "heading_rule": true
       }
     },
     "press_logos": {
@@ -563,71 +591,91 @@
         "l1": {
           "type": "logo",
           "settings": {
+            "theme_image": "lmh-press-chelsea-awards.png",
             "name": "The Chelsea Awards",
-            "theme_image": "lmh-press-chelsea-awards.png"
+            "link": "",
+            "new_tab": true
           }
         },
         "l2": {
           "type": "logo",
           "settings": {
+            "theme_image": "lmh-press-evening-standard.png",
             "name": "Evening Standard",
-            "theme_image": "lmh-press-evening-standard.png"
+            "link": "",
+            "new_tab": true
           }
         },
         "l3": {
           "type": "logo",
           "settings": {
+            "theme_image": "lmh-press-mandarin-oriental.png",
             "name": "Mandarin Oriental",
-            "theme_image": "lmh-press-mandarin-oriental.png"
+            "link": "",
+            "new_tab": true
           }
         },
         "l4": {
           "type": "logo",
           "settings": {
+            "theme_image": "lmh-press-the-times.png",
             "name": "The Times",
-            "theme_image": "lmh-press-the-times.png"
+            "link": "",
+            "new_tab": true
           }
         },
         "l5": {
           "type": "logo",
           "settings": {
+            "theme_image": "lmh-press-the-guardian.png",
             "name": "The Guardian",
-            "theme_image": "lmh-press-the-guardian.png"
+            "link": "",
+            "new_tab": true
           }
         },
         "l6": {
           "type": "logo",
           "settings": {
+            "theme_image": "lmh-press-livingetc.png",
             "name": "Livingetc",
-            "theme_image": "lmh-press-livingetc.png"
+            "link": "",
+            "new_tab": true
           }
         },
         "l7": {
           "type": "logo",
           "settings": {
+            "theme_image": "lmh-press-channel-4.png",
             "name": "Channel 4",
-            "theme_image": "lmh-press-channel-4.png"
+            "link": "",
+            "new_tab": true
           }
         },
         "l8": {
           "type": "logo",
           "settings": {
+            "theme_image": "lmh-press-financial-times.png",
             "name": "Financial Times",
-            "theme_image": "lmh-press-financial-times.png"
+            "link": "",
+            "new_tab": true
           }
         },
         "l9": {
           "type": "logo",
           "settings": {
+            "theme_image": "lmh-press-world-of-interiors.png",
             "name": "The World of Interiors",
-            "theme_image": "lmh-press-world-of-interiors.png"
+            "link": "",
+            "new_tab": true
           }
         },
         "l10": {
           "type": "logo",
           "settings": {
+            "theme_image": "lmh-press-sloane-square.png",
             "name": "Sloane Square",
-            "theme_image": "lmh-press-sloane-square.png"
+            "link": "",
+            "new_tab": true
           }
         }
       },
@@ -644,17 +692,148 @@
         "l10"
       ],
       "settings": {
-        "heading": "Featured in the press",
-        "columns_mobile": 2,
-        "padding_top": 64,
-        "padding_bottom": 64,
         "eyebrow": "",
+        "heading": "Featured in the press",
+        "heading_size": 48,
+        "heading_rule": true,
         "layout": "slider",
         "per_page": 4,
         "per_page_mobile": 2,
-        "heading_size": 48,
+        "columns_desktop": 5,
+        "columns_mobile": 2,
+        "logo_height": 56,
+        "logo_height_mobile": 36,
+        "logo_width": 130,
+        "mobile_marquee": true,
+        "marquee_speed": 70,
+        "animate": true,
+        "grayscale": true,
+        "max_width": 1080,
+        "color_style": "brand",
+        "background_color": "{{ settings.color_palette.background }}",
+        "heading_color": "{{ settings.color_palette.foreground }}",
+        "text_color": "{{ settings.color_palette.color1 }}",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "image_grid_tv": {
+      "type": "image-grid-editorial",
+      "blocks": {
+        "i1": {
+          "type": "image",
+          "settings": {
+            "theme_image": "lmh-tv-the-apprentice.jpg",
+            "title": "The Apprentice",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "i2": {
+          "type": "image",
+          "settings": {
+            "theme_image": "lmh-tv-love-your-weekend.jpg",
+            "title": "Love Your Weekend with Alan Titchmarsh",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "i3": {
+          "type": "image",
+          "settings": {
+            "theme_image": "lmh-tv-goodwoof.jpg",
+            "title": "Goodwoof",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "i4": {
+          "type": "image",
+          "settings": {
+            "theme_image": "lmh-tv-rob-and-romesh-vs.jpg",
+            "title": "Rob & Romesh vs",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "i5": {
+          "type": "image",
+          "settings": {
+            "theme_image": "lmh-tv-celebs-go-dating.jpg",
+            "title": "Celebs Go Dating",
+            "link": "",
+            "new_tab": true
+          }
+        },
+        "i6": {
+          "type": "image",
+          "settings": {
+            "theme_image": "lmh-tv-the-pet-show.jpg",
+            "title": "The Pet Show",
+            "link": "",
+            "new_tab": true
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4",
+        "i5",
+        "i6"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "As seen on TV",
+        "text": "",
+        "heading_size": 56,
         "heading_rule": true,
-        "grayscale": true
+        "caption_style": "overlay",
+        "link_label": "Watch the clip",
+        "animate": true,
+        "style": "card",
+        "onair_label": "Featured",
+        "columns_desktop": 3,
+        "mobile_layout": "grid_1",
+        "aspect_ratio": "tv",
+        "gap": 10,
+        "max_width": 1080,
+        "color_style": "brand",
+        "background_color": "{{ settings.color_palette.background }}",
+        "heading_color": "{{ settings.color_palette.foreground }}",
+        "text_color": "{{ settings.color_palette.color1 }}",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "editorial_video": {
+      "type": "editorial-video",
+      "settings": {
+        "eyebrow": "Our story",
+        "heading": "Made for pets. Loved by humans.",
+        "text": "<p>Designed by our founder Jenny at our London townhouse, for dogs and the humans who love them.</p>",
+        "button_label": "Discover our story",
+        "button_link": "shopify://pages/about-us-love-my-human-townhouse",
+        "heading_uppercase": true,
+        "heading_size": 34,
+        "video_file": "https://www.lovemyhuman.co.uk/cdn/shop/videos/c/vp/a5f74f01a9ca4222a1e685ea0e4ed642/a5f74f01a9ca4222a1e685ea0e4ed642.HD-1080p-7.2Mbps-49327868.mp4",
+        "video_url": "",
+        "autoplay": true,
+        "loop": true,
+        "animate": true,
+        "show_controls": true,
+        "caption": "",
+        "aspect_ratio": "landscape",
+        "aspect_ratio_mobile": "portrait",
+        "full_width_mobile": true,
+        "max_width": 1200,
+        "color_style": "brand",
+        "background_color": "{{ settings.color_palette.background }}",
+        "heading_color": "{{ settings.color_palette.foreground }}",
+        "text_color": "{{ settings.color_palette.color1 }}",
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     },
     "customer_reviews": {
@@ -662,30 +841,40 @@
       "blocks": {
         "judgeme_reviews": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
         }
       },
       "block_order": [
         "judgeme_reviews"
       ],
+      "disabled": true,
       "settings": {
         "eyebrow": "Reviews",
         "heading": "What humans say",
         "heading_size": 48,
         "heading_rule": true,
         "anchor": "reviews",
+        "animate": true,
+        "max_width": 1080,
+        "background_color": "{{ settings.color_palette.background }}",
+        "accent_color": "{{ settings.color_palette.foreground }}",
+        "text_color": "{{ settings.color_palette.color1 }}",
         "padding_top": 64,
         "padding_bottom": 64
-      },
-      "disabled": true
+      }
     }
   },
   "order": [
     "main",
     "product_details_editorial",
-    "editorial_video",
-    "customer_reviews",
+    "press_logos",
     "image_grid_tv",
-    "press_logos"
+    "editorial_video",
+    "customer_reviews"
   ]
 }
