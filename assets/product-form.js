@@ -452,6 +452,12 @@ class ProductFormComponent extends Component {
       })
     );
 
+    // LMH: the buttons show a loader until the add is confirmed (the cart drawer opens at the same moment)
+    const addToCartButtons = Array.from(allAddToCartContainers, (container) => container.refs.addToCartButton);
+    this.#setButtonsBusy(addToCartButtons, true);
+    const clearBusy = () => this.#setButtonsBusy(addToCartButtons, false);
+    deferredEventPromise.promise.then(clearBusy, clearBusy);
+
     const fetchCfg = fetchConfig('javascript', { body: formData });
 
     fetch(Theme.routes.cart_add_url, {
@@ -750,6 +756,22 @@ class ProductFormComponent extends Component {
   #clearLiveRegionText() {
     const liveRegion = this.refs.liveRegion;
     liveRegion.textContent = '';
+  }
+
+  /**
+   * Shows or hides the loader on the add to cart buttons while an add is in progress.
+   * @param {(HTMLButtonElement | undefined)[]} buttons
+   * @param {boolean} busy
+   */
+  #setButtonsBusy(buttons, busy) {
+    for (const button of buttons) {
+      if (!button) continue;
+      if (busy) {
+        button.setAttribute('aria-busy', 'true');
+      } else {
+        button.removeAttribute('aria-busy');
+      }
+    }
   }
 
   /**

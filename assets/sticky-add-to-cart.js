@@ -292,10 +292,15 @@ class StickyAddToCartComponent extends Component {
   #handleCartAddComplete = (event) => {
     // Reset the puppet flag only after the cart operation's promise settles,
     // not when the event is first dispatched (before the HTTP request completes).
+    // LMH: when the add came from the sticky bar, its button shows the loader until the add settles
+    const fromStickyBar = this.#targetAddToCartButton?.dataset.puppet === 'true';
+    if (fromStickyBar) this.refs.addToCartButton.setAttribute('aria-busy', 'true');
+
     const resetPuppet = () => {
       if (this.#targetAddToCartButton) {
         this.#targetAddToCartButton.dataset.puppet = 'false';
       }
+      this.refs.addToCartButton.removeAttribute('aria-busy');
     };
 
     // CartLinesUpdateEvent has a promise; CartErrorEvent does not (error already happened).
