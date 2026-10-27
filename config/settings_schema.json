@@ -1554,6 +1554,14 @@
         "visible_if": "{{ settings.cart_type == 'drawer' }}"
       },
       {
+        "type": "checkbox",
+        "id": "cart_drawer_animation",
+        "label": "Cart drawer slide-in animation",
+        "info": "Off: the cart opens instantly.",
+        "default": true,
+        "visible_if": "{{ settings.cart_type == 'drawer' }}"
+      },
+      {
         "type": "header",
         "content": "t:content.cart_features"
       },

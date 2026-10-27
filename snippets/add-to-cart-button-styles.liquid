@@ -115,6 +115,19 @@
     }
   }
 
+  /* LMH: with the add to cart animation off there is no tick, so the button keeps its text */
+  .add-to-cart-button[data-no-tick][data-added='true'] {
+    color: var(--button-color);
+  }
+
+  .add-to-cart-button[data-no-tick][data-added='true'] .add-to-cart-text {
+    clip-path: none;
+    filter: none;
+    opacity: 1;
+    translate: none;
+    animation: none;
+  }
+
   .add-to-cart-button[data-added='true'] .checkmark-burst {
     opacity: 1;
   }

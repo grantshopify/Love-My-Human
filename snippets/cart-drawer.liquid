@@ -46,6 +46,9 @@
     {% unless settings.cart_drawer_style == 'push' %}
       overlay
     {% endunless %}
+    {% if settings.cart_drawer_animation == false %}
+      no-animate
+    {% endif %}
   >
     <dialog
       ref="panel"

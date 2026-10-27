@@ -177,6 +177,8 @@ class StickyAddToCartComponent extends Component {
     if (!this.#targetAddToCartButton) return;
     this.#targetAddToCartButton.dataset.puppet = 'true';
     this.#targetAddToCartButton.click();
+    // LMH: with the add to cart animation off, just add (the cart opens without a tick or flying image)
+    if (this.dataset.addToCartAnimation === 'false') return;
     const cartIcon = document.querySelector('.header-actions__cart-icon');
 
     if (this.refs.addToCartButton.dataset.added !== 'true') {

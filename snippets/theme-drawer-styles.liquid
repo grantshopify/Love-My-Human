@@ -101,6 +101,14 @@
     animation: overlay-backdrop-out var(--overlay-drawer-out-duration, 300ms) ease forwards;
   }
 
+  /* LMH: drawer opens and closes instantly when its animation is switched off */
+  theme-drawer[no-animate] .theme-drawer__dialog--opening,
+  theme-drawer[no-animate] .theme-drawer__dialog--closing,
+  theme-drawer[no-animate] .theme-drawer__dialog--opening::backdrop,
+  theme-drawer[no-animate] .theme-drawer__dialog--closing::backdrop {
+    animation: none;
+  }
+
   @keyframes overlay-drawer-in {
     from {
       transform: translateX(100%);
