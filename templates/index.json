@@ -130,8 +130,8 @@
         "wholesale": {
           "type": "service",
           "settings": {
-            "image": "shopify://shop_images/blogImage_78f861b2-5271-4f77-99f5-5b894ef4e58f.webp",
-            "title": "Wholesale",
+            "image": "shopify://shop_images/wholesale.jpg",
+            "title": "Shop Online",
             "chip": "",
             "text": "",
             "link": "shopify://pages/wholesale-portal"
