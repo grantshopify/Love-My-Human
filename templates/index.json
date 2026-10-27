@@ -130,7 +130,7 @@
         "wholesale": {
           "type": "service",
           "settings": {
-            "image": "shopify://shop_images/LMH_Logo.jpg",
+            "image": "shopify://shop_images/wholesale.jpg",
             "title": "Shop Online",
             "chip": "",
             "text": "",
