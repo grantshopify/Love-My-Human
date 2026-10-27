@@ -9,96 +9,22 @@
  */
 {
   "sections": {
-    "section": {
-      "type": "section",
-      "blocks": {
-        "text_tqQTNE": {
-          "type": "text",
-          "name": "t:names.title",
-          "settings": {
-            "text": "<h1>{{ closest.collection.title }}</h1>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "{{ settings.color_palette.background }}",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 100,
-            "padding-block-end": 0,
-            "padding-inline-start": 40,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "text_XrfHMz": {
-          "type": "text",
-          "name": "t:names.text",
-          "settings": {
-            "text": "{{ closest.collection.description }}",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "{{ settings.color_palette.background }}",
-            "background": true,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "text_tqQTNE",
-        "text_XrfHMz"
-      ],
-      "disabled": true,
-      "name": "t:names.heading",
+    "seo_intro": {
+      "type": "collection-seo-intro",
+      "name": "Collection intro (SEO)",
       "settings": {
-        "content_direction": "row",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "flex-start",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "full-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "background_media": "image",
-        "background_color": "{{ settings.color_palette.foreground }}",
-        "video_position": "cover",
-        "background_image": "{{ collection.image }}",
-        "background_image_position": "cover",
-        "toggle_overlay": true,
-        "overlay_color": "#00000061",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "padding-block-start": 100,
-        "padding-block-end": 32
+        "fallback_to_description": true,
+        "heading": "",
+        "heading_size": 48,
+        "show_breadcrumb": true,
+        "home_label": "Home",
+        "alignment": "left",
+        "text_width": 900,
+        "background_color": "",
+        "accent_color": "",
+        "text_color": "",
+        "padding_top": 100,
+        "padding_bottom": 32
       }
     },
     "main": {
@@ -392,10 +318,26 @@
         "padding-block-start": 0,
         "padding-block-end": 1
       }
+    },
+    "seo_extended": {
+      "type": "collection-seo-extended",
+      "name": "Collection extended SEO",
+      "settings": {
+        "alignment": "center",
+        "heading_size": 30,
+        "text_width": 960,
+        "top_rule": true,
+        "background_color": "",
+        "accent_color": "",
+        "text_color": "",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
-    "section",
-    "main"
+    "seo_intro",
+    "main",
+    "seo_extended"
   ]
 }

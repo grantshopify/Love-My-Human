@@ -1,0 +1,267 @@
+{%- comment -%}
+  Collection extended SEO: the longer copy under the products, e.g. "Stylish dog beds for every breed" with a few
+  paragraphs and links to other collections. It comes from the collection's rich text metafield custom.extended_seo
+  (Products > Collections > a collection > Metafields), so every collection has its own.
+  Collections without it show nothing here.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign copy = collection.metafields.custom.extended_seo | metafield_tag
+-%}
+
+{%- if copy != blank or request.design_mode -%}
+  <div
+    class="cse cse--{{ s.alignment }}{% if s.top_rule %} cse--rule{% endif %}"
+    style="
+      --cse-background: {{ s.background_color | default: settings.color_palette.background }};
+      --cse-accent: {{ s.accent_color | default: settings.color_palette.foreground }};
+      --cse-text: {{ s.text_color | default: settings.color_palette.color1 }};
+      --cse-heading-size: {{ s.heading_size }}px;
+      --cse-text-width: {{ s.text_width }}px;
+      --cse-padding-top: {{ s.padding_top }}px;
+      --cse-padding-bottom: {{ s.padding_bottom }}px;
+    "
+  >
+    <div class="cse__inner">
+      {%- if copy != blank -%}
+        <div class="cse__copy">{{ copy }}</div>
+      {%- else -%}
+        <p class="cse__hint">
+          Add this collection's longer SEO text in Products &gt; Collections &gt; {{ collection.title }} &gt; Metafields
+          &gt; Extended SEO. This box only shows in the editor.
+        </p>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .cse {
+    padding: var(--cse-padding-top) var(--page-margin, 16px) var(--cse-padding-bottom);
+    background: var(--cse-background);
+    color: var(--cse-text);
+    font-family: var(--font-body--family);
+  }
+
+  .cse__inner {
+    max-inline-size: var(--cse-text-width);
+    margin: 0 auto;
+  }
+
+  .cse--center .cse__inner {
+    text-align: center;
+  }
+
+  .cse--left .cse__inner {
+    margin-inline-start: 0;
+  }
+
+  /* Optional short red line above the text, to separate it from the products */
+  .cse--rule .cse__inner::before {
+    content: '';
+    display: block;
+    inline-size: 56px;
+    block-size: 3px;
+    margin-block-end: 28px;
+    background: var(--cse-accent);
+  }
+
+  .cse--center.cse--rule .cse__inner::before {
+    margin-inline: auto;
+  }
+
+  /* The copy is rich text from the metafield: headings, paragraphs, lists and links */
+  .cse__copy {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .cse__copy > * {
+    margin: 0 0 14px;
+  }
+
+  .cse__copy > :last-child {
+    margin-block-end: 0;
+  }
+
+  .cse__copy :is(h1, h2) {
+    margin-block-end: 14px;
+    color: var(--cse-accent);
+    font-family: var(--font-heading--family);
+    font-size: min(calc(var(--cse-heading-size) * 0.8), 26px);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    text-transform: uppercase;
+  }
+
+  .cse__copy :is(h3, h4, h5, h6) {
+    margin-block: 24px 8px;
+    color: var(--cse-accent);
+    font-family: var(--font-heading--family);
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .cse__copy a {
+    color: var(--cse-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .cse__copy a:hover {
+    text-decoration-color: transparent;
+  }
+
+  .cse__copy ul,
+  .cse__copy ol {
+    padding-inline-start: 20px;
+    text-align: start;
+  }
+
+  .cse--center .cse__copy :is(ul, ol) {
+    display: inline-block;
+  }
+
+  .cse__hint {
+    margin: 0;
+    padding: 12px 16px;
+    border: 1px dashed color-mix(in srgb, var(--cse-accent) 50%, transparent);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .cse {
+      padding-block: min(var(--cse-padding-top), 48px) min(var(--cse-padding-bottom), 48px);
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .cse__copy {
+      font-size: 16px;
+    }
+
+    .cse__copy :is(h1, h2) {
+      font-size: var(--cse-heading-size);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection extended SEO",
+  "tag": "section",
+  "class": "collection-seo-extended-section",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "The text is set per collection: Products > Collections > a collection > Metafields > \"Extended SEO\". Collections without it show nothing here."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "info": "For the main heading in the text (Heading 1 or 2).",
+      "min": 18,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "text_width",
+      "label": "Text width",
+      "min": 480,
+      "max": 1400,
+      "step": 20,
+      "unit": "px",
+      "default": 960
+    },
+    {
+      "type": "checkbox",
+      "id": "top_rule",
+      "label": "Short line above the text",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "{{ settings.color_palette.background }}"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Headings and links",
+      "default": "{{ settings.color_palette.foreground }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "{{ settings.color_palette.color1 }}"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection extended SEO",
+      "category": "t:categories.collection"
+    }
+  ]
+}
+{% endschema %}
