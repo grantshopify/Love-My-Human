@@ -27,6 +27,34 @@
         "padding_bottom": 32
       }
     },
+    "collection_chips": {
+      "type": "collection-chips",
+      "name": "Collection chips",
+      "settings": {
+        "collection_list": [
+          "dog-harnesses",
+          "dog-leads",
+          "dog-collars",
+          "dog-beds",
+          "dog-toys",
+          "dog-treats",
+          "puppy-essentials",
+          "cat-toys",
+          "cat-treats"
+        ],
+        "show_all": true,
+        "all_label": "Shop all",
+        "all_link": "",
+        "label": "Collections",
+        "chip_size": 78,
+        "chip_size_mobile": 64,
+        "alignment": "left",
+        "background_color": "",
+        "accent_color": "",
+        "padding_top": 0,
+        "padding_bottom": 4
+      }
+    },
     "main": {
       "type": "main-collection",
       "blocks": {
@@ -48,8 +76,10 @@
             "padding-block-end": 8,
             "padding-inline-start": 40,
             "padding-inline-end": 40,
-            "facets_margin_bottom": 0,
-            "facets_margin_right": 0
+            "facets_margin_bottom": 12,
+            "facets_margin_right": 0,
+            "drawer_on_desktop": true,
+            "drawer_button_label": "Filter & sort"
           },
           "blocks": {}
         },
@@ -74,12 +104,12 @@
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
-                "image_ratio": "square",
+                "image_ratio": "portrait",
                 "border": "solid",
                 "border_width": 0,
                 "border_opacity": 0,
                 "border_color": "",
-                "border_radius": 0,
+                "border_radius": 14,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -98,7 +128,7 @@
                 "align_baseline": false,
                 "horizontal_alignment_flex_direction_column": "flex-start",
                 "vertical_alignment_flex_direction_column": "space-between",
-                "gap": 4,
+                "gap": 8,
                 "width": "fill",
                 "custom_width": 100,
                 "width_mobile": "fill",
@@ -120,10 +150,10 @@
                 "border_radius": 0,
                 "link": "",
                 "open_in_new_tab": false,
-                "padding-block-start": 12,
-                "padding-block-end": 12,
-                "padding-inline-start": 12,
-                "padding-inline-end": 12
+                "padding-block-start": 14,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
               },
               "blocks": {
                 "group_i9KeQ7": {
@@ -173,11 +203,11 @@
                         "max_width": "normal",
                         "alignment": "left",
                         "type_preset": "h6",
-                        "font": "var(--font-body--family)",
+                        "font": "var(--font-heading--family)",
                         "font_size": "1rem",
                         "line_height": "normal",
                         "letter_spacing": "normal",
-                        "case": "none",
+                        "case": "uppercase",
                         "wrap": "pretty",
                         "text_color": "{{ settings.color_palette.foreground }}",
                         "background": false,
@@ -204,13 +234,13 @@
                     "show_tax_info": false,
                     "type_preset": "paragraph",
                     "width": "fit-content",
-                    "alignment": "right",
+                    "alignment": "left",
                     "font": "var(--font-body--family)",
                     "font_size": "1rem",
                     "line_height": "normal",
                     "letter_spacing": "normal",
                     "case": "none",
-                    "text_color": "{{ settings.color_palette.foreground }}",
+                    "text_color": "{{ settings.color_palette.color1 }}",
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
@@ -287,12 +317,29 @@
                   "block_order": [
                     "text_yYkK7E"
                   ]
+                },
+                "swatches_lmh": {
+                  "type": "swatches",
+                  "settings": {}
+                },
+                "card_add_lmh": {
+                  "type": "lmh-card-add",
+                  "settings": {
+                    "style": "outline",
+                    "add_label": "Add to cart",
+                    "choose_label": "Choose options",
+                    "sold_out_label": "Sold out",
+                    "accent_color": "",
+                    "accent_text_color": ""
+                  }
                 }
               },
               "block_order": [
                 "group_i9KeQ7",
                 "price_m8gnxH",
-                "group_HnURV7"
+                "swatches_lmh",
+                "group_HnURV7",
+                "card_add_lmh"
               ]
             }
           },
@@ -304,19 +351,19 @@
       },
       "settings": {
         "layout_type": "grid",
-        "product_card_size": "large",
+        "product_card_size": "medium",
         "mobile_product_card_size": "small",
         "enable_infinite_scroll": true,
         "products_per_page": 24,
-        "product_grid_width": "full-width",
-        "full_width_on_mobile": true,
-        "columns_gap_horizontal": 1,
-        "columns_gap_vertical": 1,
+        "product_grid_width": "centered",
+        "full_width_on_mobile": false,
+        "columns_gap_horizontal": 16,
+        "columns_gap_vertical": 32,
         "padding-inline-start": 0,
         "padding-inline-end": 0,
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 0,
-        "padding-block-end": 1
+        "padding-block-end": 48
       }
     },
     "seo_extended": {
@@ -337,6 +384,7 @@
   },
   "order": [
     "seo_intro",
+    "collection_chips",
     "main",
     "seo_extended"
   ]

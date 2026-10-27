@@ -1,0 +1,352 @@
+{%- comment -%}
+  Collection chips: round photo links to other collections, shown above the products on collection pages.
+  The collection being viewed gets a red ring. The row scrolls sideways when there are more chips than fit.
+  A collection can show its own chips through the list-of-collections metafield custom.sub_collections;
+  otherwise the collections picked in this section are used.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+
+  assign chips = s.collection_list
+  assign own_chips = collection.metafields.custom.sub_collections.value
+  if own_chips != blank
+    assign chips = own_chips
+  endif
+
+  assign size_2x = s.chip_size | times: 2
+  assign all_url = s.all_link | default: routes.all_products_collection_url
+  assign all_active = false
+  if collection.handle == 'all' or request.path == all_url
+    assign all_active = true
+  endif
+-%}
+
+{%- if chips.size > 0 or s.show_all -%}
+  <nav
+    class="cch cch--{{ s.alignment }}"
+    aria-label="{{ s.label | default: 'Collections' | escape }}"
+    style="
+      --cch-background: {{ s.background_color | default: settings.color_palette.background }};
+      --cch-accent: {{ s.accent_color | default: settings.color_palette.foreground }};
+      --cch-size: {{ s.chip_size }}px;
+      --cch-size-mobile: {{ s.chip_size_mobile }}px;
+      --cch-padding-top: {{ s.padding_top }}px;
+      --cch-padding-bottom: {{ s.padding_bottom }}px;
+    "
+  >
+    <ul class="cch__list list-unstyled" role="list">
+      {%- if s.show_all -%}
+        <li class="cch__item">
+          <a class="cch__link" href="{{ all_url }}"{% if all_active %} aria-current="page"{% endif %}>
+            <span class="cch__ring">
+              {%- if s.all_image != blank -%}
+                {{
+                  s.all_image
+                  | image_url: width: size_2x, height: size_2x, crop: 'center'
+                  | image_tag: class: 'cch__image', loading: 'lazy', alt: '', widths: '96, 160, 240, 320', sizes: '120px'
+                }}
+              {%- else -%}
+                <span class="cch__all-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>
+                </span>
+              {%- endif -%}
+            </span>
+            <span class="cch__title">{{ s.all_label }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+
+      {%- for chip in chips -%}
+        {%- assign image = chip.featured_image | default: chip.image -%}
+        <li class="cch__item">
+          <a class="cch__link" href="{{ chip.url }}"{% if chip.handle == collection.handle %} aria-current="page"{% endif %}>
+            <span class="cch__ring">
+              {%- if image != blank -%}
+                {{
+                  image
+                  | image_url: width: size_2x, height: size_2x, crop: 'center'
+                  | image_tag: class: 'cch__image', loading: 'lazy', alt: '', widths: '96, 160, 240, 320', sizes: '120px'
+                }}
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'cch__image cch__image--placeholder' }}
+              {%- endif -%}
+            </span>
+            <span class="cch__title">{{ chip.title }}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </nav>
+{%- endif -%}
+
+{% stylesheet %}
+  .cch {
+    padding: var(--cch-padding-top) 0 var(--cch-padding-bottom);
+    background: var(--cch-background);
+  }
+
+  /* One row that scrolls sideways; it runs to the screen edge and starts in line with the page margin */
+  .cch__list {
+    display: flex;
+    gap: 16px;
+    margin: 0;
+    padding: 4px var(--page-margin, 16px) 8px calc(var(--page-margin, 16px) - 8px);
+    overflow-x: auto;
+    scroll-padding-inline: calc(var(--page-margin, 16px) - 8px);
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .cch__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cch--center .cch__list {
+    justify-content: safe center;
+  }
+
+  .cch__item {
+    flex: none;
+    inline-size: calc(var(--cch-size-mobile) + 16px);
+    scroll-snap-align: start;
+  }
+
+  .cch__link {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    color: var(--cch-accent);
+    text-align: center;
+    text-decoration: none;
+  }
+
+  /* The photo sits in a ring that turns red for the collection being viewed */
+  .cch__ring {
+    display: grid;
+    place-items: center;
+    inline-size: var(--cch-size-mobile);
+    aspect-ratio: 1;
+    padding: 3px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    transition:
+      border-color 0.3s ease,
+      transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .cch__image {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .cch__image--placeholder {
+    background: color-mix(in srgb, var(--cch-accent) 12%, #fff);
+    fill: var(--cch-accent);
+  }
+
+  .cch__all-icon {
+    display: grid;
+    place-items: center;
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--cch-accent) 10%, transparent);
+  }
+
+  .cch__link[aria-current='page'] .cch__ring {
+    border-color: var(--cch-accent);
+  }
+
+  @media (hover: hover) {
+    .cch__link:hover .cch__ring {
+      transform: translateY(-3px);
+    }
+
+    .cch__link:hover:not([aria-current='page']) .cch__ring {
+      border-color: color-mix(in srgb, var(--cch-accent) 35%, transparent);
+    }
+  }
+
+  .cch__link:focus-visible {
+    outline: none;
+  }
+
+  .cch__link:focus-visible .cch__ring {
+    outline: 2px solid var(--cch-accent);
+    outline-offset: 2px;
+  }
+
+  .cch__title {
+    font-family: var(--font-heading--family);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  @media screen and (min-width: 750px) {
+    .cch__list {
+      gap: 20px;
+    }
+
+    .cch__item {
+      inline-size: calc(var(--cch-size) + 16px);
+    }
+
+    .cch__ring {
+      inline-size: var(--cch-size);
+    }
+
+    .cch__title {
+      font-size: 13px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cch__ring {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection chips",
+  "tag": "section",
+  "class": "collection-chips-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Round links to other collections. A collection can show its own set through the \"Sub-collections\" metafield (custom.sub_collections); otherwise these are used."
+    },
+    {
+      "type": "collection_list",
+      "id": "collection_list",
+      "label": "Collections",
+      "limit": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "show_all",
+      "label": "Show a \"Shop all\" chip first",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "all_label",
+      "label": "\"Shop all\" label",
+      "default": "Shop all",
+      "visible_if": "{{ section.settings.show_all }}"
+    },
+    {
+      "type": "url",
+      "id": "all_link",
+      "label": "\"Shop all\" link",
+      "info": "Defaults to all products.",
+      "visible_if": "{{ section.settings.show_all }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "all_image",
+      "label": "\"Shop all\" image",
+      "visible_if": "{{ section.settings.show_all }}"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Name for screen readers",
+      "default": "Collections"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "chip_size",
+      "label": "Chip size on desktop",
+      "min": 56,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 78
+    },
+    {
+      "type": "range",
+      "id": "chip_size_mobile",
+      "label": "Chip size on mobile",
+      "min": 48,
+      "max": 110,
+      "step": 2,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "{{ settings.color_palette.background }}"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Rings and text",
+      "default": "{{ settings.color_palette.foreground }}"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection chips",
+      "category": "t:categories.collection"
+    }
+  ]
+}
+{% endschema %}

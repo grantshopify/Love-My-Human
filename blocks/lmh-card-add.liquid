@@ -1,0 +1,179 @@
+{%- comment -%}
+  Product card "Add to cart": a full-width button under the product, built on the theme's quick add.
+  One-variant products are added straight to the cart; products with options open the quick-add chooser.
+  While this block is in a card, the small quick-add button on the image is hidden.
+{%- endcomment -%}
+
+{%- liquid
+  assign b = block.settings
+  assign p = closest.product
+-%}
+
+<div
+  class="lmh-card-add lmh-card-add--{{ b.style }}"
+  style="--lmh-accent: {{ b.accent_color | default: settings.color_palette.foreground }}; --lmh-accent-text: {{ b.accent_text_color | default: settings.color_palette.background }};"
+  {{ block.shopify_attributes }}
+>
+  {%- if p == blank -%}
+    <button type="button" class="lmh-card-add__static" disabled>{{ b.add_label }}</button>
+  {%- elsif p.available -%}
+    {% render 'quick-add', product: p, section_id: section.id, block: block, add_text: b.add_label, choose_text: b.choose_label %}
+  {%- else -%}
+    <button type="button" class="lmh-card-add__static" disabled>{{ b.sold_out_label }}</button>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .lmh-card-add {
+    /* The add-to-cart spinner uses the button colour */
+    --button-color: var(--lmh-accent);
+
+    inline-size: 100%;
+    margin-block-start: auto;
+  }
+
+  /* Buttons line up across a row: the text under the photo fills the card and the button sits at the bottom,
+     however many lines the product name takes */
+  .product-card__content > .group-block:has(.lmh-card-add) {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .product-card__content > .group-block:has(.lmh-card-add) > .group-block-content {
+    flex-grow: 1;
+  }
+
+  /* The theme's quick add floats over the image; here it sits in the card as a normal button */
+  .lmh-card-add .quick-add {
+    position: static;
+    inset: auto;
+    pointer-events: auto;
+  }
+
+  .lmh-card-add button.quick-add__button,
+  .lmh-card-add .lmh-card-add__static {
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    max-inline-size: none;
+    block-size: auto;
+    min-block-size: 44px;
+    padding: 12px 16px;
+    border: 1px solid var(--lmh-accent);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--lmh-accent);
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+    opacity: 1;
+    backdrop-filter: none;
+    scale: none;
+    cursor: pointer;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .lmh-card-add--solid button.quick-add__button {
+    background: var(--lmh-accent);
+    color: var(--lmh-accent-text);
+    --button-color: var(--lmh-accent-text);
+  }
+
+  .lmh-card-add button.quick-add__button:is(:hover, :focus-visible) {
+    background: var(--lmh-accent);
+    color: var(--lmh-accent-text);
+    --button-color: var(--lmh-accent-text);
+  }
+
+  .lmh-card-add .quick-add__button > .add-to-cart-icon {
+    display: none;
+  }
+
+  /* Keep the theme's rule: only one of "Add" / "Choose" shows at a time */
+  .lmh-card-add [data-quick-add-button='add'] button.quick-add__button--choose,
+  .lmh-card-add [data-quick-add-button='choose'] add-to-cart-component {
+    display: none;
+  }
+
+  .lmh-card-add .lmh-card-add__static:disabled {
+    cursor: default;
+    opacity: 0.45;
+  }
+
+  /* The card's own quick-add button on the image is not needed alongside this one */
+  product-card:has(.lmh-card-add) .card-gallery .quick-add {
+    display: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Add to cart button",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Adds one-variant products straight to the cart. Products with options open a quick chooser."
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        }
+      ],
+      "default": "outline"
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Add label",
+      "default": "Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "choose_label",
+      "label": "Label for products with options",
+      "default": "Choose options"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Sold out label",
+      "default": "Sold out"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Button colour",
+      "default": "{{ settings.color_palette.foreground }}"
+    },
+    {
+      "type": "color",
+      "id": "accent_text_color",
+      "label": "Text on hover",
+      "default": "{{ settings.color_palette.background }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Add to cart button",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

@@ -156,6 +156,7 @@
       facets-block-wrapper--{{ block_settings.filter_style }}
       {%- if has_custom_color %} color-custom-{{ block.id }}{% endif %}
       {%- if block_settings.filter_width == 'full-width' %} facets-block-wrapper--full-width{% endif %}
+      {%- if block_settings.drawer_on_desktop %} facets-block-wrapper--drawer-desktop{% endif %}
     "
     style="
       --grid-column--desktop:
@@ -318,6 +319,7 @@
       facets-toggle
       {%- if block_settings.enable_filtering == false %} facets-toggle--no-filters{% endif %}
       {%- if has_custom_color %} color-custom-{{ block.id }}{% endif %}
+      {%- if block_settings.drawer_on_desktop %} facets-toggle--desktop{% endif %}
     "
     style="
       --facets-inner-padding-block: {{ block_settings.padding-block-start }}px {{ block_settings.padding-block-end }}px; --facets-inner-padding-inline: var(--padding-lg);
@@ -336,7 +338,11 @@
             {{ 'icon-filter.svg' | inline_asset_content }}
           </span>
 
-          {{ 'actions.show_filters' | t }}
+          {% if block_settings.drawer_on_desktop and block_settings.drawer_button_label != blank %}
+            {{ block_settings.drawer_button_label }}
+          {% else %}
+            {{ 'actions.show_filters' | t }}
+          {% endif %}
 
           {% if total_active_values > 0 %}
             <div
@@ -370,6 +376,15 @@
     %}
 
     <div class="facets-mobile-wrapper facets-controls-wrapper{% if child_count > 1 %} facets-mobile-wrapper--multiple-controls{% endif %}">
+      {% if block_settings.drawer_on_desktop %}
+        <span class="facets-toggle__count" role="status" data-testid="products-count">
+          {%- if products_count > 25000 -%}
+            {{- 'content.item_count_cutoff' | t: count: 25000 -}}
+          {%- else -%}
+            {{- 'content.item_count' | t: count: products_count -}}
+          {%- endif -%}
+        </span>
+      {% endif %}
       {% if block_settings.enable_filtering == false and block_settings.enable_sorting %}
         <facets-form-component
           section-id="{{ section.id }}"
@@ -401,6 +416,18 @@
       {% endif %}
     </div>
   </div>
+
+  {%- comment -%} LMH: the filters in use, as removable pills under the "Filter & sort" bar {%- endcomment -%}
+  {%- if block_settings.drawer_on_desktop and block_settings.enable_filtering and total_active_values > 0 -%}
+    <div class="facets-active{% if has_custom_color %} color-custom-{{ block.id }}{% endif %}">
+      {% render 'filter-remove-buttons',
+        filters: filters,
+        results_url: results_url,
+        show_filter_label: false,
+        should_show_clear_all: true
+      %}
+    </div>
+  {%- endif -%}
 {% else %}
   <div></div>
 {% endif %}
@@ -410,7 +437,10 @@
     id="filters-drawer"
     data-skip-node-update
     no-persist
-    class="facets-block-wrapper facets-block-wrapper--vertical color-custom-drawer"
+    class="facets-block-wrapper facets-block-wrapper--vertical color-custom-drawer{% if block_settings.drawer_on_desktop %} facets-drawer--desktop{% endif %}"
+    {% if block_settings.drawer_on_desktop %}
+      overlay
+    {% endif %}
   >
     <dialog
       ref="panel"
@@ -450,6 +480,9 @@
             {% endif %}
           {% endcapture %}
           {% assign filters_drawer_title = 'blocks.filter' | t %}
+          {% if block_settings.drawer_on_desktop and block_settings.drawer_button_label != blank %}
+            {% assign filters_drawer_title = block_settings.drawer_button_label %}
+          {% endif %}
           {% render 'theme-drawer-header',
             title: filters_drawer_title,
             drawer_id: 'filters-drawer',
@@ -1299,6 +1332,384 @@
     height: var(--font-paragraph--size);
     position: absolute;
   }
+  /* LMH: "Filters in a drawer on desktop too": the desktop bar is replaced by the phone bar, styled as a pill */
+  @media screen and (min-width: 750px) {
+    .facets-block-wrapper--drawer-desktop {
+      display: none;
+    }
+
+    /* Its own row across the page, in line with the products */
+    .facets-toggle--desktop {
+      display: flex;
+      grid-column: var(--centered);
+    }
+
+    .facets-toggle--desktop .facets-toggle__button {
+      display: inline-flex;
+    }
+  }
+
+  /* In line with the page title and products: the page margin on phones, the grid column on desktop */
+  .facets-toggle--desktop {
+    height: auto;
+    padding-inline: var(--page-margin, 16px);
+
+    @media screen and (min-width: 750px) {
+      padding-inline: 0;
+    }
+  }
+
+  .facets-toggle--desktop .facets-toggle__wrapper {
+    margin-inline-start: 0;
+  }
+
+  .facets-toggle--desktop .facets-toggle__button {
+    gap: 10px;
+    white-space: nowrap;
+    padding: 11px 20px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .facets-toggle--desktop .facets-toggle__button:hover {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  /* The drawer is the only place to sort when it's used on desktop */
+  @media screen and (min-width: 750px) {
+    .facets-drawer--desktop .facets--drawer .sorting-filter {
+      display: block;
+    }
+  }
+
+  .facets-toggle__count {
+    font-size: 13px;
+    opacity: 0.7;
+  }
+  /* ---------- LMH: active filters under the "Filter & sort" bar ---------- */
+  .facets-active {
+    padding-inline: var(--page-margin, 16px);
+    margin-block: -4px 16px;
+
+    @media screen and (min-width: 750px) {
+      grid-column: var(--centered);
+      padding-inline: 0;
+    }
+  }
+
+  .facets-active .facets-remove {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .facets-active .facets-remove__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px 7px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    font-size: 13px;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .facets-active .facets-remove__pill:hover {
+    opacity: 0.85;
+  }
+
+  .facets-active .facets__clear-all-link {
+    display: inline-block;
+    margin-inline-start: 4px;
+    color: var(--color-foreground);
+    font-size: 13px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ---------- LMH: the filter drawer in the brand style ---------- */
+  .facets-drawer--desktop .theme-drawer__dialog {
+    --lmh-line: color-mix(in srgb, var(--color-foreground) 18%, transparent);
+    --lmh-soft: color-mix(in srgb, var(--color-foreground) 7%, transparent);
+    --drawer-padding: 28px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .facets-drawer--desktop .theme-drawer__dialog {
+      --drawer-padding: 20px;
+    }
+  }
+
+  /* Header: big Fjalla title, the filter count as a red bubble, a round close button */
+  .facets-drawer--desktop .theme-drawer__header {
+    padding: 24px var(--drawer-padding) 20px;
+    border-block-end: 1px solid var(--lmh-line);
+  }
+
+  .facets-drawer--desktop .theme-drawer__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .facets-drawer--desktop .theme-drawer__badge:not([hidden]) {
+    display: inline-grid;
+    place-items: center;
+    min-inline-size: 22px;
+    block-size: 22px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    font-family: var(--font-body--family);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .facets-drawer--desktop .theme-drawer__close-button {
+    display: grid;
+    place-items: center;
+    inline-size: 40px;
+    block-size: 40px;
+    border: 1px solid var(--lmh-line);
+    border-radius: 50%;
+    color: var(--color-foreground);
+    transition:
+      transform 0.4s cubic-bezier(0.2, 0, 0, 1),
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .facets-drawer--desktop .theme-drawer__close-button:hover {
+    background: var(--color-foreground);
+    color: var(--color-background);
+    transform: rotate(90deg);
+  }
+
+  /* Sections: Fjalla labels with a line between them */
+  .facets-drawer--desktop .facets-drawer__filters {
+    padding-inline: var(--drawer-padding);
+  }
+
+  .facets-drawer--desktop .facets__item,
+  .facets-drawer--desktop .sorting-filter {
+    border-block-end: 1px solid var(--lmh-line);
+  }
+
+  .facets-drawer--desktop .facets__panel {
+    border: 0;
+  }
+
+  .facets-drawer--desktop .facets__summary {
+    padding-block: 20px;
+    padding-inline: 0;
+    color: var(--color-foreground);
+  }
+
+  .facets-drawer--desktop .facets__summary .facets__label,
+  .facets-drawer--desktop .sorting-filter__container .facets__label {
+    font-family: var(--font-heading--family);
+    font-size: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .facets-drawer--desktop .facets__summary .icon-caret {
+    transition: transform 0.3s ease;
+  }
+
+  .facets-drawer--desktop .facets__panel-content,
+  .facets-drawer--desktop .sorting-filter__options {
+    padding-block-end: 20px;
+  }
+
+  /* Checkboxes: rounded red boxes, the row turns red on hover */
+  .facets-drawer--desktop .facets__inputs-list:not(.facets__inputs-list--swatches) {
+    display: grid;
+    gap: 4px;
+  }
+
+  .facets-drawer--desktop .checkbox {
+    --checkbox-size: 20px;
+    --checkbox-border: 1.5px solid color-mix(in srgb, var(--color-foreground) 45%, transparent);
+    --checkbox-border-radius: 6px;
+
+    padding-block: 6px;
+  }
+
+  .facets-drawer--desktop .checkbox__label {
+    align-items: center;
+    color: rgb(var(--color-foreground-rgb) / 0.85);
+    font-size: 15px;
+    transition: color 0.2s ease;
+  }
+
+  .facets-drawer--desktop .checkbox:hover .checkbox__label {
+    color: var(--color-foreground);
+  }
+
+  .facets-drawer--desktop .checkbox .icon-checkmark {
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .facets-drawer--desktop .checkbox__label-text {
+    padding-inline-start: 12px;
+  }
+
+  /* Colour swatches (once the Colour filter is on): round, with a ring when picked */
+  .facets-drawer--desktop .facets__inputs-list--swatches {
+    gap: 12px;
+  }
+
+  .facets-drawer--desktop .facets__inputs-list--swatches .variant-option__button-label {
+    --variant-picker-swatch-width: 32px;
+    --variant-picker-swatch-height: 32px;
+
+    border-radius: 50%;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .facets-drawer--desktop .facets__inputs-list--swatches .variant-option__button-label:has(input:checked) {
+    box-shadow:
+      0 0 0 2px var(--color-background),
+      0 0 0 4px var(--color-foreground);
+  }
+
+  /* Price: two rounded fields with a "to" between them */
+  .facets-drawer--desktop .price-facet__inputs-wrapper {
+    gap: 12px;
+  }
+
+  .facets-drawer--desktop .price-facet__input {
+    border: 1px solid var(--lmh-line);
+    border-radius: 999px;
+    background: #fff;
+    transition: border-color 0.2s ease;
+  }
+
+  .facets-drawer--desktop .price-facet__input:focus {
+    border-color: var(--color-foreground);
+    outline: none;
+  }
+
+  .facets-drawer--desktop .price-facet__highest-price {
+    margin-block-start: 10px;
+    font-size: 13px;
+    opacity: 0.75;
+  }
+
+  /* Sort on phones: the label like the other sections, the choice as a red dropdown */
+  .facets-drawer--desktop .sorting-filter__container {
+    padding-block: 20px;
+    color: var(--color-foreground);
+  }
+
+  .facets-drawer--desktop .sorting-filter__select {
+    font-size: 15px;
+  }
+
+  /* Sort: a simple list, the chosen option in bold with its tick */
+  .facets-drawer--desktop .sorting-filter__option {
+    padding-block: 8px;
+    font-size: 15px;
+    transition: color 0.2s ease;
+  }
+
+  .facets-drawer--desktop .sorting-filter__options label:hover .sorting-filter__option {
+    color: var(--color-foreground);
+  }
+
+  .facets-drawer--desktop .sorting-filter__options input:checked + .sorting-filter__option {
+    font-weight: 600;
+  }
+
+  /* Pills chosen inside the drawer */
+  .facets-drawer--desktop .facets-remove {
+    padding-block-start: 16px;
+  }
+
+  .facets-drawer--desktop .facets-remove__pill {
+    border-radius: 999px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  /* Footer: sticky, "Clear all" as an outline pill and "See results" as a solid red pill */
+  .facets-drawer--desktop .facets__drawer-actions {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 12px;
+    padding: 16px var(--drawer-padding) 20px;
+    border-block-start: 1px solid var(--lmh-line);
+    background: var(--color-background);
+    box-shadow: 0 -12px 24px -20px rgb(0 0 0 / 0.25);
+  }
+
+  .facets-drawer--desktop :is(.facets__clear-all, .facets__see-results) {
+    min-block-size: 48px;
+    border-radius: 999px;
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .facets-drawer--desktop .facets__clear-all {
+    border: 1px solid var(--color-foreground);
+    background: transparent;
+    color: var(--color-foreground);
+    box-shadow: none;
+  }
+
+  .facets-drawer--desktop .facets__drawer-actions facet-remove-component,
+  .facets-drawer--desktop .facets__clear-all {
+    inline-size: 100%;
+  }
+
+  /* Shown on desktop too: it closes the drawer to the results */
+  .facets-drawer--desktop .facets__see-results {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    border: 0;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    transition: opacity 0.2s ease;
+  }
+
+  .facets-drawer--desktop .facets__see-results:hover {
+    opacity: 0.9;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .facets-drawer--desktop .theme-drawer__close-button {
+      transition: none;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -1312,6 +1723,21 @@
       "label": "t:settings.enable_filtering",
       "info": "t:info.enable_filtering_info",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "drawer_on_desktop",
+      "label": "Filters in a drawer on desktop too",
+      "info": "Shows one \"Filter & sort\" button that opens the filters, like on phones.",
+      "default": false,
+      "visible_if": "{{ block.settings.enable_filtering }}"
+    },
+    {
+      "type": "text",
+      "id": "drawer_button_label",
+      "label": "Button label",
+      "default": "Filter & sort",
+      "visible_if": "{{ block.settings.enable_filtering and block.settings.drawer_on_desktop }}"
     },
     {
       "type": "select",

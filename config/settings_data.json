@@ -31,7 +31,7 @@
     "page_background_color": "{{ settings.color_palette.background }}",
     "page_width": "normal",
     "transition_to_main_product": true,
-    "card_hover_effect": "subtle-zoom",
+    "card_hover_effect": "none",
     "badge_sale_background_color": "{{ settings.color_palette.color1 }}",
     "badge_sale_text_color": "{{ settings.color_palette.background }}",
     "badge_sold_out_background_color": "{{ settings.color_palette.background }}",
@@ -88,7 +88,10 @@
         "disabled": false,
         "settings": {}
       }
-    }
+    },
+    "product_card_carousel": false,
+    "show_second_image_on_hover": true,
+    "currency_code_enabled_product_cards": false
   },
   "presets": {
     "Savor": {

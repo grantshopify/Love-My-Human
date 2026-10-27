@@ -8,6 +8,11 @@
 {%- liquid
   assign s = section.settings
   assign copy = collection.metafields.custom.extended_seo | metafield_tag
+
+  # Links to the store's own pages become on-site links (the admin link box needs a full https:// address)
+  assign own_domain = 'href="https://' | append: shop.permanent_domain
+  assign live_domain = 'href="' | append: shop.url
+  assign copy = copy | replace: own_domain, 'href="' | replace: live_domain, 'href="'
 -%}
 
 {%- if copy != blank or request.design_mode -%}

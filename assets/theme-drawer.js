@@ -51,7 +51,7 @@ export class ThemeDrawer extends Component {
    * with the `overlay` attribute (e.g. the cart drawer, Dawn style), otherwise below the breakpoint.
    */
   get #isModal() {
-    return this.hasAttribute('overlay') || this.#isModal;
+    return this.hasAttribute('overlay') || this.#modalQuery.matches;
   }
 
   /**
