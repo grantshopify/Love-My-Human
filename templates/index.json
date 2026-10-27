@@ -127,6 +127,16 @@
     "services_bento": {
       "type": "services-bento",
       "blocks": {
+        "wholesale": {
+          "type": "service",
+          "settings": {
+            "image": "shopify://shop_images/blogImage_78f861b2-5271-4f77-99f5-5b894ef4e58f.webp",
+            "title": "Wholesale",
+            "chip": "",
+            "text": "",
+            "link": "shopify://pages/wholesale-portal"
+          }
+        },
         "groom": {
           "type": "service",
           "settings": {
@@ -151,28 +161,18 @@
           "type": "service",
           "settings": {
             "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-aoife-journey-main-header-grooming-academy-training_ebb4d686-9f0a-4132-9d95-5488fcef8bef.webp",
-            "title": "Grooming academy",
+            "title": "Join Our Grooming academy",
             "chip": "",
             "text": "",
             "link": "shopify://pages/academy"
           }
-        },
-        "wholesale": {
-          "type": "service",
-          "settings": {
-            "image": "shopify://shop_images/blogImage_78f861b2-5271-4f77-99f5-5b894ef4e58f.webp",
-            "title": "Wholesale",
-            "chip": "",
-            "text": "",
-            "link": "shopify://pages/wholesale-portal"
-          }
         }
       },
       "block_order": [
+        "wholesale",
         "groom",
         "daycare",
-        "academy",
-        "wholesale"
+        "academy"
       ],
       "name": "What we do",
       "settings": {
