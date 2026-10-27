@@ -137,16 +137,6 @@
             "link": "shopify://pages/book-a-grooming-appointment"
           }
         },
-        "wholesale": {
-          "type": "service",
-          "settings": {
-            "image": "shopify://shop_images/wholesale.jpg",
-            "title": "Shop Online",
-            "chip": "",
-            "text": "",
-            "link": "shopify://pages/wholesale-portal"
-          }
-        },
         "daycare": {
           "type": "service",
           "settings": {
@@ -155,6 +145,16 @@
             "chip": "",
             "text": "",
             "link": "shopify://pages/dog-daycare-chelsea-premium-dog-day-care-services-love-my-human-townhouse"
+          }
+        },
+        "wholesale": {
+          "type": "service",
+          "settings": {
+            "image": "shopify://shop_images/wholesale.jpg",
+            "title": "Shop Online",
+            "chip": "",
+            "text": "",
+            "link": "shopify://pages/wholesale-portal"
           }
         },
         "academy": {
@@ -170,8 +170,8 @@
       },
       "block_order": [
         "groom",
-        "wholesale",
         "daycare",
+        "wholesale",
         "academy"
       ],
       "name": "What we do",
