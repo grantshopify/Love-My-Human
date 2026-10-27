@@ -209,10 +209,10 @@
           "puppy-essentials"
         ],
         "eyebrow": "",
-        "heading": "Shop by collection",
+        "heading": "",
         "heading_size": 38,
         "show_count": false,
-        "link_label": "View all",
+        "link_label": "",
         "link": "shopify://collections/all",
         "animate": true,
         "bubble_size": 140,
