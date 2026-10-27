@@ -216,4 +216,44 @@
       translate: 0px var(--atc-destination, 0px);
     }
   }
+
+  /* LMH: while the item is being added the label hides behind a spinner, and the button can't be clicked
+     again; the cart drawer opens once the add is confirmed */
+  /* The text fill hides a bare label too, whatever colour rule the button's style applies;
+     the stroke colour covers the outline used by the "bold text" option */
+  .add-to-cart-button[aria-busy='true'] {
+    position: relative;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke-color: transparent;
+    pointer-events: none;
+  }
+
+  .add-to-cart-button[aria-busy='true'] > * {
+    visibility: hidden;
+  }
+
+  .add-to-cart-button[aria-busy='true']::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    inline-size: 20px;
+    block-size: 20px;
+    margin: auto;
+    border: 2px solid var(--button-color, currentColor);
+    border-inline-end-color: transparent;
+    border-radius: 50%;
+    animation: atc-spin 0.7s linear infinite;
+  }
+
+  @keyframes atc-spin {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .add-to-cart-button[aria-busy='true']::after {
+      animation-duration: 2s;
+    }
+  }
 {% endstylesheet %}
