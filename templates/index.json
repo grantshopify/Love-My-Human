@@ -150,7 +150,7 @@
         "wholesale": {
           "type": "service",
           "settings": {
-            "image": "shopify://shop_images/wholesale.jpg",
+            "image": "shopify://shop_images/day_care_1.jpg",
             "title": "Shop Online",
             "chip": "",
             "text": "",
