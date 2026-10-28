@@ -1,0 +1,187 @@
+{%- doc -%}
+  Street-level hero for the wholesale log in / apply screens: the homepage's King's Road video full width,
+  a big headline over it and a cream card with the buttons. Falls back to the image, then to plain coral.
+
+  @param {string} title - Headline over the video
+  @param {string} card_title - Heading on the cream card
+  @param {string} [card_text] - Short line under the card heading
+  @param {string} primary_label - Main button text
+  @param {string} primary_url - Main button link
+  @param {string} [secondary_label] - Second button text
+  @param {string} [secondary_url] - Second button link
+  @param {object} [video] - Video setting from the section
+  @param {object} [image] - Image setting from the section, used when there is no video
+  @param {boolean} [short] - Shorter hero, for above the sign-up form
+{%- enddoc -%}
+
+<div class="wh{% if short %} wh--short{% endif %}">
+  <div class="wh__media" aria-hidden="true">
+    {%- if video != blank -%}
+      {{
+        video
+        | video_tag: image_size: '1600x', autoplay: true, loop: true, controls: false, muted: true, playsinline: true
+      }}
+    {%- elsif image != blank -%}
+      {{ image | image_url: width: 2000 | image_tag: sizes: '100vw', loading: 'eager', alt: '' }}
+    {%- endif -%}
+  </div>
+
+  <div class="wh__inner page-width">
+    <div class="wh__text">
+      <p class="wh__eyebrow">Wholesale</p>
+      <h1 class="wh__title">{{ title }}</h1>
+    </div>
+
+    <div class="wh__card">
+      <h2 class="wh__card-title">{{ card_title }}</h2>
+      {%- if card_text != blank -%}
+        <p class="wh__card-text">{{ card_text }}</p>
+      {%- endif -%}
+      <a class="wh__button" href="{{ primary_url }}">{{ primary_label }}</a>
+      {%- if secondary_label != blank -%}
+        <a class="wh__button wh__button--outline" href="{{ secondary_url }}">{{ secondary_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .wh {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-block-size: 560px;
+    overflow: hidden;
+    background: var(--color-foreground);
+  }
+
+  .wh--short {
+    min-block-size: 440px;
+  }
+
+  .wh__media,
+  .wh__media :is(video, img) {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* Darker towards the bottom so the cream headline reads over any frame */
+  .wh::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(0 0 0 / 0.15), rgb(0 0 0 / 0.6));
+    pointer-events: none;
+  }
+
+  .wh__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 24px;
+    inline-size: 100%;
+    padding-block: 120px 32px;
+    padding-inline: var(--page-margin, 16px);
+  }
+
+  .wh .wh__eyebrow {
+    margin: 0 0 10px;
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-background);
+  }
+
+  .wh .wh__title {
+    margin: 0;
+    max-inline-size: 12ch;
+    font-family: var(--font-heading--family);
+    font-size: clamp(48px, 8vw, 104px);
+    line-height: 0.92;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--color-background);
+  }
+
+  .wh__card {
+    display: grid;
+    gap: 10px;
+    padding: 24px;
+    border-radius: 20px;
+    background: var(--color-background);
+  }
+
+  .wh .wh__card-title {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 22px;
+    line-height: 1.15;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .wh .wh__card-text {
+    margin: 0 0 6px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .wh .wh__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 48px;
+    padding: 12px 20px;
+    border: 1px solid var(--color-foreground);
+    border-radius: 999px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  .wh .wh__button:hover {
+    background: transparent;
+    color: var(--color-foreground);
+  }
+
+  .wh .wh__button--outline {
+    background: transparent;
+    color: var(--color-foreground);
+  }
+
+  .wh .wh__button--outline:hover {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .wh .wh__button:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 3px;
+  }
+
+  @media screen and (min-width: 990px) {
+    .wh__inner {
+      grid-template-columns: 1fr minmax(320px, 400px);
+      align-items: end;
+      gap: 48px;
+      padding-block: 160px 48px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wh .wh__button {
+      transition: none;
+    }
+  }
+{% endstylesheet %}

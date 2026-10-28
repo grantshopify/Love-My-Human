@@ -1,7 +1,9 @@
 {%- comment -%}
-  Wholesale portal: logged out shows log in, logged in shows trade links if the customer has the wholesale tag.
-  Wholesale customers also see the products in the wholesale collection (the one picked here, or the collection with the handle "wholesale"),
-  each added to the cart in a fixed quantity (100 by default).
+  Wholesale portal.
+  - Logged out, or logged in without the wholesale tag: the street-level hero (homepage video) with log in / apply,
+    then how a trade account works.
+  - Logged in with the wholesale tag (BSS adds it on approval): the wholesale collection as collection-page cards,
+    each added to the cart in a fixed quantity (100 by default).
   Log in uses Shopify customer accounts, which sign in on Shopify's own page, so it's a link.
 {%- endcomment -%}
 
@@ -10,92 +12,333 @@
   assign customer_tags = customer.tags | join: ',' | downcase | split: ','
   assign wholesale_collection = section.settings.collection | default: collections.wholesale
   assign order_quantity = section.settings.quantity | default: 100
+  assign apply_url = '/pages/wholesale-account-registration'
+
+  # Log in and come back here, not to the shop's account page (routes.account_login_url drops the return address)
+  assign portal_path = request.path | default: '/pages/wholesale-portal'
+  assign login_url = '/account/login?return_url=' | append: portal_path
+
+  # Matches the BSS custom pricing rule for the wholesale tag
+  assign trade_discount = '20%'
+
+  assign is_wholesale = false
+  if customer and customer_tags contains wholesale_tag
+    assign is_wholesale = true
+  endif
 -%}
 
-<div class="wp page-width">
-  <h1>Wholesale portal</h1>
-
-  {%- if customer == blank -%}
-    <p><a class="button" href="{{ routes.account_login_url }}">Log in</a></p>
-    <p><a href="/pages/wholesale-account-registration">Apply for a trade account</a></p>
-  {%- elsif customer_tags contains wholesale_tag -%}
-    <p>Welcome, {{ customer.first_name }}</p>
-    <ul>
-      <li><a href="{{ routes.account_url }}">My orders</a></li>
-      <li><a href="/pages/contact">Contact us</a></li>
-      <li><a href="{{ routes.account_logout_url }}">Log out</a></li>
-    </ul>
+{%- if is_wholesale -%}
+  <div class="wp-dash page-width">
+    <header class="wp-dash__head">
+      <h1 class="wp-dash__title">Wholesale</h1>
+      <p class="wp-dash__welcome">Welcome, {{ customer.first_name }}</p>
+      <ul class="wp-dash__links">
+        <li><a href="{{ routes.account_url }}">My orders</a></li>
+        <li><a href="/pages/contact">Contact us</a></li>
+        <li><a href="{{ routes.account_logout_url }}">Log out</a></li>
+      </ul>
+    </header>
 
     {%- if wholesale_collection.products_count > 0 -%}
-      <h2>Wholesale products</h2>
-      <ul class="wp__products">
+      <p class="wp-dash__count">{{ wholesale_collection.products_count }} items</p>
+      <ul class="wp-grid">
         {%- for product in wholesale_collection.products limit: 48 -%}
-          <li>
-            <a href="{{ product.url }}">
+          {%- comment -%} product-card__content is the class BSS looks for to show trade prices on Horizon cards {%- endcomment -%}
+          <li class="wp-card product-card__content">
+            <a class="wp-card__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
               {%- if product.featured_image -%}
-                {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 25vw, 50vw' }}
+                {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 25vw, 50vw', alt: product.title }}
               {%- else -%}
                 {{ 'product-1' | placeholder_svg_tag }}
               {%- endif -%}
-              <span>{{ product.title }}</span>
             </a>
-            <span>{{ product.price | money }}</span>
-            <span>Quantity: {{ order_quantity }}</span>
-            {%- form 'product', product -%}
+            <a class="wp-card__title" href="{{ product.url }}">{{ product.title }}</a>
+            <product-price class="wp-card__price text-block paragraph" data-product-id="{{ product.id }}">
+              {% render 'price', product_resource: product %}
+            </product-price>
+            <p class="wp-card__qty">Quantity: {{ order_quantity }}</p>
+            {%- form 'product', product, class: 'wp-card__form' -%}
               <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
               <input type="hidden" name="quantity" value="{{ order_quantity }}">
               {%- if product.available -%}
-                <button type="submit" class="button">Add to cart</button>
+                <button type="submit" class="wp-card__add">Add {{ order_quantity }} to cart</button>
               {%- else -%}
-                <button type="button" class="button" disabled>Sold out</button>
+                <button type="button" class="wp-card__add" disabled>Sold out</button>
               {%- endif -%}
             {%- endform -%}
           </li>
         {%- endfor -%}
       </ul>
       {%- if wholesale_collection.products_count > 48 -%}
-        <p><a href="{{ wholesale_collection.url }}">View all</a></p>
+        <p class="wp-dash__more"><a href="{{ wholesale_collection.url }}">View all</a></p>
       {%- endif -%}
+    {%- else -%}
+      <p class="wp-dash__empty">No trade products yet. Check back soon, or <a href="/pages/contact">contact us</a> about what you'd like to stock.</p>
     {%- endif -%}
+  </div>
+{%- else -%}
+  {%- if customer == blank -%}
+    {%- capture card_text -%}
+      Trade accounts get {{ trade_discount }} off our shop range, ordering {{ order_quantity }} of each product.
+    {%- endcapture -%}
+    {% render 'wholesale-hero',
+      title: 'Trade with the King&rsquo;s Road',
+      card_title: 'Stock what our dogs love',
+      card_text: card_text,
+      primary_label: 'Log in',
+      primary_url: login_url,
+      secondary_label: 'Apply for a trade account',
+      secondary_url: apply_url,
+      video: section.settings.hero_video,
+      image: section.settings.hero_image
+    %}
   {%- else -%}
-    <p>Your trade account is being reviewed.</p>
-    <p><a href="{{ routes.account_logout_url }}">Log out</a></p>
+    {%- capture not_trade_text -%}
+      {{ customer.email }} isn&rsquo;t a trade account yet. If you&rsquo;ve applied, our team is reviewing it.
+      Used a different email for trade? Log out and log in with that one.
+    {%- endcapture -%}
+    {% render 'wholesale-hero',
+      title: 'Trade with the King&rsquo;s Road',
+      card_title: 'Not a trade account yet',
+      card_text: not_trade_text,
+      primary_label: 'Apply for a trade account',
+      primary_url: apply_url,
+      secondary_label: 'Log out',
+      secondary_url: routes.account_logout_url,
+      video: section.settings.hero_video,
+      image: section.settings.hero_image
+    %}
   {%- endif -%}
-</div>
+
+  <div class="wp-how page-width">
+    <ol class="wp-steps">
+      <li>
+        <h2>Apply</h2>
+        <p>Send us your business details on the trade form.</p>
+      </li>
+      <li>
+        <h2>We review it</h2>
+        <p>Our team approves every trade account by hand.</p>
+      </li>
+      <li>
+        <h2>Order at trade prices</h2>
+        <p>Log in here to order {{ order_quantity }} of each product at {{ trade_discount }} off.</p>
+      </li>
+    </ol>
+  </div>
+{%- endif -%}
 
 {% stylesheet %}
-  .wp {
-    padding: 40px var(--page-margin, 16px) 80px;
+  /* Trade dashboard: same grid and cards as the collection page */
+  .wp-dash {
+    padding: 40px var(--page-margin, 16px) 48px;
   }
 
-  .wp__products {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px 16px;
+  .wp-dash__head {
+    margin-block-end: 32px;
+  }
+
+  .wp-dash .wp-dash__title {
+    margin: 0 0 8px;
+    font-family: var(--font-heading--family);
+    font-size: 48px;
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .wp-dash__welcome {
+    margin: 0 0 12px;
+    font-size: 16px;
+  }
+
+  .wp-dash__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .wp__products a,
-  .wp__products span {
+  .wp-dash__count {
+    margin: 0 0 16px;
+    font-size: 13px;
+    text-align: end;
+    color: var(--color-foreground-muted, rgb(234 83 85 / 0.6));
+  }
+
+  .wp-dash__links a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 36px;
+    padding: 6px 16px;
+    border: 1px solid var(--color-foreground);
+    border-radius: 999px;
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .wp-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .wp-card {
+    display: flex;
+    flex-direction: column;
+    cursor: auto;
+  }
+
+  .wp-card__media {
     display: block;
+    aspect-ratio: 4 / 5;
+    overflow: clip;
+    border-radius: 14px;
+    background: rgb(var(--color-foreground-rgb, 234 83 85) / 0.06);
   }
 
-  .wp__products form {
-    margin-top: 8px;
-  }
-
-  .wp__products :is(img, svg) {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1;
+  .wp-card__media :is(img, svg) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
     object-fit: cover;
   }
 
+  .wp-card .wp-card__title {
+    margin-block-start: 14px;
+    font-family: var(--font-heading--family);
+    font-size: 16px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-foreground);
+  }
+
+  /* Black price, as on the collection page (the theme's price reads --color) */
+  .wp-card .wp-card__price {
+    --color: #000;
+    --color-rgb: 0 0 0;
+
+    margin-block-start: 8px;
+    font-size: 14px;
+    color: #000;
+  }
+
+  .wp-card .wp-card__qty {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: var(--color-foreground-muted, rgb(234 83 85 / 0.6));
+  }
+
+  /* Full-width button at the bottom so a row of cards lines up, however long the names are */
+  .wp-card__form {
+    margin-block-start: auto;
+    padding-block-start: 16px;
+  }
+
+  .wp-card .wp-card__add {
+    inline-size: 100%;
+    min-block-size: 44px;
+    padding: 12px 20px;
+    border: 1px solid var(--color-foreground);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-foreground);
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .wp-card .wp-card__add:is(:hover, :focus-visible):not(:disabled) {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .wp-card .wp-card__add:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .wp-dash__more,
+  .wp-dash__empty {
+    margin-block-start: 32px;
+  }
+
   @media screen and (min-width: 750px) {
-    .wp__products {
+    .wp-grid {
       grid-template-columns: repeat(4, 1fr);
+      gap: 32px 16px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .wp-dash .wp-dash__title {
+      font-size: 34px;
+    }
+  }
+
+  /* Log in / apply: the street-level hero (snippets/wholesale-hero.liquid), then how trade works */
+  .wp-how {
+    padding: 48px var(--page-margin, 16px) 80px;
+  }
+
+  .wp-steps {
+    display: grid;
+    gap: 24px;
+    margin: 0;
+    padding: 32px 0 0;
+    border-block-start: 1px solid var(--color-foreground);
+    list-style: none;
+    counter-reset: wp-step;
+  }
+
+  .wp-steps li {
+    counter-increment: wp-step;
+  }
+
+  .wp-steps li::before {
+    content: counter(wp-step);
+    display: block;
+    margin-block-end: 8px;
+    font-family: var(--font-heading--family);
+    font-size: 40px;
+    line-height: 1;
+    color: var(--color-foreground);
+  }
+
+  .wp-steps h2 {
+    margin: 0 0 6px;
+    font-family: var(--font-heading--family);
+    font-size: 20px;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .wp-steps p {
+    margin: 0;
+    max-inline-size: 32ch;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  @media screen and (min-width: 990px) {
+    .wp-steps {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
     }
   }
 {% endstylesheet %}
@@ -124,6 +367,22 @@
       "id": "collection",
       "label": "Wholesale collection",
       "info": "Leave empty to use the collection with the handle \"wholesale\"."
+    },
+    {
+      "type": "header",
+      "content": "Log in / apply screen"
+    },
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Hero video",
+      "info": "Plays behind the headline, like the homepage."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image",
+      "info": "Shown when there is no video."
     }
   ]
 }

@@ -1,45 +1,86 @@
 {%- comment -%}
-  Wholesale account: log in on the left, the BSS B2B app's sign-up form on the right (stacked on phones).
+  Wholesale account: the street-level hero (homepage video) with a log in card, then the BSS B2B app's sign-up form.
   The form comes from the page content; the app only shows it on its own page, /pages/wholesale-account-registration.
-  Log in uses Shopify customer accounts, which sign in on Shopify's own page, so the left side is a link to it.
+  Log in uses Shopify customer accounts, which sign in on Shopify's own page, so the card's button is a link to it
+  that brings the customer back to the wholesale portal afterwards.
 {%- endcomment -%}
 
+{% render 'wholesale-hero',
+  title: 'Apply for a trade account',
+  card_title: 'Already trading with us?',
+  card_text: 'Log in to see trade prices and place your order.',
+  primary_label: 'Log in',
+  primary_url: '/account/login?return_url=/pages/wholesale-portal',
+  video: section.settings.hero_video,
+  image: section.settings.hero_image,
+  short: true
+%}
+
 <div class="wa page-width">
-  <div class="wa__col">
-    <h2>Log in</h2>
-    <p>Already have a trade account?</p>
-    <a class="button" href="{{ routes.account_login_url }}">Log in</a>
+  <div class="wa__intro">
+    <h2 class="wa__heading">Tell us about your business</h2>
+    <p class="wa__lede">Our team reviews every application by hand, then you can log in to order at trade prices.</p>
   </div>
 
-  <div class="wa__col">
-    <h2>Apply for a trade account</h2>
+  <div class="wa__form">
     {{ page.content }}
   </div>
 </div>
 
+{%- comment -%}
+  The app's button text ("Submit") can't be changed in its settings, so it's set here once the form has loaded.
+{%- endcomment -%}
+<script>
+  (() => {
+    const label = 'Send application';
+    const form = document.querySelector('.wa__form');
+    if (!form) return;
+
+    const setLabel = () => {
+      const button = form.querySelector('#bss-b2b-register-form input[type="submit"]');
+      if (button && button.value !== label) button.value = label;
+    };
+
+    setLabel();
+    new MutationObserver(setLabel).observe(form, { childList: true, subtree: true });
+  })();
+</script>
+
 {% stylesheet %}
   .wa {
     display: grid;
-    gap: 48px;
-    padding: 40px var(--page-margin, 16px) 80px;
+    gap: 32px;
+    padding: 48px var(--page-margin, 16px) 80px;
   }
 
-  .wa h2 {
+  .wa .wa__heading {
     margin: 0 0 12px;
+    font-family: var(--font-heading--family);
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--color-foreground);
   }
 
-  .wa__col p {
-    margin: 0 0 16px;
+  .wa .wa__lede {
+    margin: 0;
+    max-inline-size: 40ch;
+    font-size: 17px;
+    line-height: 1.55;
   }
+
 
   @media screen and (min-width: 990px) {
     .wa {
-      grid-template-columns: 1fr 1.5fr;
+      grid-template-columns: 1fr 1.6fr;
+      align-items: start;
       gap: 80px;
+      padding-block-start: 64px;
     }
   }
 
-  /* Keep the app's form plain: no box, no big title, full width (it forces a fixed 600px with !important) */
+  /* The BSS form, restyled to the wholesale design: white rounded inputs on the cream page, small coral labels,
+     two columns on desktop and a coral pill button. The app forces some sizes with !important, so a few rules do too. */
   .wa :is(#bss-b2b-registration-form, #bss-b2b-register-form) {
     /* stylelint-disable-next-line declaration-no-important */
     width: 100% !important;
@@ -47,6 +88,12 @@
     margin: 0;
     padding: 0;
     box-shadow: none;
+    background: transparent;
+  }
+
+  /* The app's box hides overflow, which clipped the edge of the first letter of each heading and the inputs' focus ring */
+  .wa #bss-b2b-registration-form {
+    overflow: visible;
   }
 
   .wa #bss-b2b-registration-form .bss-b2b-registration-form-title h1 {
@@ -58,20 +105,158 @@
     margin: 0;
   }
 
-  .wa #bss-b2b-registration-form .field-header {
+  .wa #bss-b2b-register-form {
+    gap: 18px 16px;
+    font-family: var(--font-body--family);
+  }
+
+  /* Section headings ("Primary details", "Business details") */
+  .wa #bss-b2b-register-form .field-header {
     display: block;
+    padding-block-end: 8px;
+    border-block-end: 1px solid rgb(234 83 85 / 0.25);
     text-align: start;
   }
 
-  .wa #bss-b2b-registration-form .field-header h4 {
-    margin: 16px 0 0;
+  .wa #bss-b2b-register-form .field-header:not(:first-child) {
+    margin-block-start: 20px;
+  }
+
+  .wa #bss-b2b-register-form .field-header h4 {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .wa #bss-b2b-register-form .label-field {
+    display: block;
+    margin: 0 0 6px;
+    font-family: var(--font-body--family);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+
+  .wa #bss-b2b-register-form .label-field .required {
+    color: var(--color-foreground);
+  }
+
+  .wa #bss-b2b-register-form :is(input[type='text'], input[type='email'], input[type='password'], input[type='tel'], select, textarea) {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: 48px;
+    padding: 10px 14px;
+    border: 1px solid rgb(234 83 85 / 0.35);
+    border-radius: 10px;
+    background-color: #fff;
+    color: #2b1f1f;
+    font-family: var(--font-body--family);
     font-size: 16px;
+    box-shadow: none;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .wa #bss-b2b-register-form :is(input, select, textarea):focus {
+    border-color: var(--color-foreground);
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(234 83 85 / 0.18);
+  }
+
+  /* Phone fields: the flag picker gets the same white rounded box as the inputs, level with the number box */
+  .wa #bss-b2b-register-form .phone-country-select-wrapper {
+    padding: 0;
+  }
+
+  .wa #bss-b2b-register-form .phone-country-select {
+    box-sizing: border-box;
+    block-size: 48px;
+    padding-inline: 10px;
+    border: 1px solid rgb(234 83 85 / 0.35);
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  .wa #bss-b2b-register-form .bss-message {
+    font-size: 13px;
+    color: #c9393c;
+  }
+
+  .wa #bss-b2b-register-form .bss-b2b-rf-submit-button {
+    margin-block-start: 8px;
+    text-align: start;
+  }
+
+  .wa #bss-b2b-register-form input[type='submit'] {
+    /* stylelint-disable-next-line declaration-no-important */
+    inline-size: auto !important;
+    min-block-size: 52px;
+    padding: 14px 32px;
+    border: 1px solid var(--color-foreground);
+    border-radius: 999px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    font-family: var(--font-heading--family);
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  .wa #bss-b2b-register-form input[type='submit']:hover {
+    background: transparent;
+    color: var(--color-foreground);
+  }
+
+  .wa #bss-b2b-register-form input[type='submit']:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 3px;
+  }
+
+  /* Two columns on desktop, like the concept: pairs side by side; headings, address and the button full width.
+     Both phone fields take one column, so they line up with the fields above them. */
+  @media screen and (min-width: 750px) {
+    .wa #bss-b2b-register-form > .bss-b2b-rf-field {
+      grid-column: span 6;
+    }
+
+    .wa #bss-b2b-register-form > :is(.field-header, .bss-b2b-rf-submit-button, .bss-b2b-rf-field:has(#address-field)) {
+      grid-column: span 12;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wa #bss-b2b-register-form :is(input, select, textarea) {
+      transition: none;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "Wholesale account",
-  "tag": "section"
+  "tag": "section",
+  "settings": [
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Hero video",
+      "info": "Plays behind the headline, like the homepage."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image",
+      "info": "Shown when there is no video."
+    }
+  ]
 }
 {% endschema %}

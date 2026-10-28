@@ -2,8 +2,13 @@
   "sections": {
     "main": {
       "type": "wholesale-account",
-      "settings": {}
+      "settings": {
+        "hero_video": "shopify://files/videos/LMH About us vid (1).mp4",
+        "hero_image": "shopify://shop_images/homesplash.jpg"
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
