@@ -80,105 +80,16 @@
           "type": "question",
           "settings": {
             "question": "What delivery services do you offer?",
-            "answer": "<p>We offer Royal Mail Tracked 24 and Royal Mail Tracked for UK deliveries. All our orders are sent using tracked delivery services, so you can follow your parcel's journey from dispatch to delivery.</p><p>For international orders, available tracked delivery options and prices are displayed at checkout.</p>",
+            "answer": "<p><a href=\"https://drive.google.com/file/d/1PB6eT25OLu67b8AJl_vpbjt-1a3L34kC/view\" target=\"_blank\" title=\"https://drive.google.com/file/d/1PB6eT25OLu67b8AJl_vpbjt-1a3L34kC/view\">Download Our Modern Slavery and Human Trafficking Statement</a></p>",
             "bullets": "",
             "answer_after": ""
-          }
-        },
-        "question_j74iTg": {
-          "type": "question",
-          "settings": {
-            "question": "Do you offer international shipping?",
-            "answer": "<p>Yes! We ship internationally.</p><p>Available destinations, tracked delivery options and shipping costs are calculated at checkout once you enter your delivery address.&nbsp;</p><p>Any applicable shipping charges will be displayed before you complete your purchase.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "question_VDPwan": {
-          "type": "question",
-          "settings": {
-            "question": "How much does delivery cost?",
-            "answer": "<p>Royal Mail Tracked 24 is £5, while Royal Mail Tracked 48 is £3.50 for UK orders.</p><p>All our orders are sent using tracked delivery services, so you can follow your parcel's journey from dispatch to delivery.</p><p>International shipping costs vary depending on your destination and the available service. All applicable charges will be displayed at checkout before you complete your purchase.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "question_a3PqWC": {
-          "type": "question",
-          "settings": {
-            "question": "How long does delivery take?",
-            "answer": "<p>Once dispatched, Royal Mail Tracked 24 aims to delivery within one working day, while Royal Mail Tracked 48 aims to deliver within two to three working days. Delivery times are estimates and are not guaranteed.&nbsp;</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "group_ghn89h": {
-          "type": "group",
-          "settings": {
-            "title": "The Townhouse",
-            "icon": "home",
-            "open": false
-          }
-        },
-        "topic_aFYJCD": {
-          "type": "topic",
-          "disabled": true,
-          "settings": {
-            "title": "Grooming and daycare"
-          }
-        },
-        "question_hMEnH3": {
-          "type": "question",
-          "disabled": true,
-          "settings": {
-            "question": "How do I book a grooming appointment?",
-            "answer": "<p>You can book online or by phone. We recommend booking [2 weeks] ahead, especially at weekends.</p>",
-            "bullets": "",
-            "answer_after": "<p><a href=\"/pages/contact\" title=\"Book a groom\">Book a groom</a></p>"
-          }
-        },
-        "question_wbjhBR": {
-          "type": "question",
-          "disabled": true,
-          "settings": {
-            "question": "What does a full groom include?",
-            "answer": "<p>Every full groom is tailored to your dog's coat and includes:</p>",
-            "bullets": "Bath with dog-friendly shampoo and conditioner\nBlow-dry and brush-out\nBreed or style cut\nNail trim and ear clean",
-            "answer_after": ""
-          }
-        },
-        "question_KUrBeB": {
-          "type": "question",
-          "settings": {
-            "question": "What is your cut-off time for same-day dispatch?",
-            "answer": "<p>Our order cut-off time is 4.00pm, Monday to Friday. Orders placed before 4.00pm on a working day will be dispatched the same day. Orders placed after 4.00pm wll be dispatched the next working day.</p><p>We dispatch Monday to Friday only, so orders placed over the weekend will be dispatched on Monday, provided it is a working day.</p>",
-            "bullets": "",
-            "answer_after": ""
-          }
-        },
-        "question_ENEV8N": {
-          "type": "question",
-          "settings": {
-            "question": "Does my dog need a trial day?",
-            "answer": "<p>Yes. New dogs join us for a short trial first, so we can make sure they're happy and settled before their first full day.</p>",
-            "bullets": "",
-            "answer_after": "<p>Please bring your dog's up-to-date vaccination record.</p>"
           }
         }
       },
       "block_order": [
         "group_hAqfhp",
         "topic_QT7nW6",
-        "question_b33awc",
-        "question_j74iTg",
-        "question_VDPwan",
-        "question_a3PqWC",
-        "group_ghn89h",
-        "topic_aFYJCD",
-        "question_hMEnH3",
-        "question_wbjhBR",
-        "question_KUrBeB",
-        "question_ENEV8N"
+        "question_b33awc"
       ],
       "settings": {
         "layout": "simple",
