@@ -66,7 +66,7 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<h2>doggy day care</h2>",
+            "text": "<h2>doggy day care MATE</h2>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
