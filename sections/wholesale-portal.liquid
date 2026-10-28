@@ -1,0 +1,103 @@
+{%- comment -%}
+  Wholesale portal: logged out shows log in, logged in shows trade links if the customer has the wholesale tag.
+  Wholesale customers also see the products in the wholesale collection (the one picked here, or the collection with the handle "wholesale").
+  Log in uses Shopify customer accounts, which sign in on Shopify's own page, so it's a link.
+{%- endcomment -%}
+
+{%- liquid
+  assign wholesale_tag = section.settings.tag | strip | downcase
+  assign customer_tags = customer.tags | join: ',' | downcase | split: ','
+  assign wholesale_collection = section.settings.collection | default: collections.wholesale
+-%}
+
+<div class="wp page-width">
+  <h1>Wholesale portal</h1>
+
+  {%- if customer == blank -%}
+    <p><a class="button" href="{{ routes.account_login_url }}">Log in</a></p>
+    <p><a href="/pages/wholesale-account-registration">Apply for a trade account</a></p>
+  {%- elsif customer_tags contains wholesale_tag -%}
+    <p>Welcome, {{ customer.first_name }}</p>
+    <ul>
+      <li><a href="{{ routes.account_url }}">My orders</a></li>
+      <li><a href="/pages/contact">Contact us</a></li>
+      <li><a href="{{ routes.account_logout_url }}">Log out</a></li>
+    </ul>
+
+    {%- if wholesale_collection.products_count > 0 -%}
+      <h2>Wholesale products</h2>
+      <ul class="wp__products">
+        {%- for product in wholesale_collection.products limit: 48 -%}
+          <li>
+            <a href="{{ product.url }}">
+              {%- if product.featured_image -%}
+                {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 25vw, 50vw' }}
+              {%- endif -%}
+              <span>{{ product.title }}</span>
+            </a>
+            <span>{{ product.price | money }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+      {%- if wholesale_collection.products_count > 48 -%}
+        <p><a href="{{ wholesale_collection.url }}">View all</a></p>
+      {%- endif -%}
+    {%- endif -%}
+  {%- else -%}
+    <p>Your trade account is being reviewed.</p>
+    <p><a href="{{ routes.account_logout_url }}">Log out</a></p>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .wp {
+    padding: 40px var(--page-margin, 16px) 80px;
+  }
+
+  .wp__products {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .wp__products a,
+  .wp__products span {
+    display: block;
+  }
+
+  .wp__products img {
+    width: 100%;
+    height: auto;
+  }
+
+  @media screen and (min-width: 750px) {
+    .wp__products {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Wholesale portal",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Wholesale customer tag",
+      "info": "Customers with this tag see the trade links and products.",
+      "default": "wholesale"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Wholesale collection",
+      "info": "Leave empty to use the collection with the handle \"wholesale\"."
+    }
+  ]
+}
+{% endschema %}
