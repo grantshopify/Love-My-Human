@@ -31,6 +31,7 @@
     "page_background_color": "{{ settings.color_palette.background }}",
     "page_width": "normal",
     "transition_to_main_product": true,
+    "add_to_cart_animation": false,
     "card_hover_effect": "none",
     "badge_sale_background_color": "{{ settings.color_palette.color1 }}",
     "badge_sale_text_color": "{{ settings.color_palette.background }}",
@@ -48,9 +49,8 @@
     "secondary_button_border_width": 0,
     "button_border_radius_secondary": 0,
     "cart_type": "drawer",
-    "cart_drawer_animation": true,
-    "add_to_cart_animation": false,
     "auto_open_cart_drawer": true,
+    "cart_drawer_animation": true,
     "cart_progress_goal_1_amount": 100,
     "drawer_background_color": "{{ settings.color_palette.background }}",
     "drawer_text_color": "{{ settings.color_palette.foreground }}",
@@ -62,9 +62,12 @@
     "popover_text_color": "{{ settings.color_palette.foreground }}",
     "popover_border_radius": 0,
     "popover_border_color": "{{ settings.color_palette.color3 }}",
+    "currency_code_enabled_product_cards": false,
     "mobile_quick_add": true,
     "quick_add_background": "{{ settings.color_palette.background }}",
     "quick_add_text": "{{ settings.color_palette.foreground }}",
+    "show_second_image_on_hover": true,
+    "product_card_carousel": false,
     "variant_swatch_radius": 100,
     "palette_variant_background": "{{ settings.color_palette.background }}",
     "palette_variant_text": "{{ settings.color_palette.foreground }}",
@@ -75,23 +78,25 @@
     "variant_button_radius": 0,
     "variant_button_width": "equal-width-buttons",
     "content_for_index": [],
+    "blocks": {
+      "judgeme_core": {
+        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {}
+      },
+      "13969055170449783870": {
+        "type": "shopify://apps/bss-b2b-solution/blocks/config-header/451233f2-9631-4c49-8b6f-057e4ebcde7f",
+        "disabled": false,
+        "settings": {}
+      }
+    },
     "color_palette": {
       "background": "#F6F7F1",
       "foreground": "#EA5355",
       "color1": "#000000",
       "color2": "#e8d5c7",
       "color3": "#e6e6e6"
-    },
-    "blocks": {
-      "judgeme_core": {
-        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-        "disabled": false,
-        "settings": {}
-      }
-    },
-    "product_card_carousel": false,
-    "show_second_image_on_hover": true,
-    "currency_code_enabled_product_cards": false
+    }
   },
   "presets": {
     "Savor": {
