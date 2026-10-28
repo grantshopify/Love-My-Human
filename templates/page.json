@@ -79,8 +79,8 @@
         "question_b33awc": {
           "type": "question",
           "settings": {
-            "question": "What delivery services do you offer?",
-            "answer": "<p><a href=\"https://drive.google.com/file/d/1PB6eT25OLu67b8AJl_vpbjt-1a3L34kC/view\" target=\"_blank\" title=\"https://drive.google.com/file/d/1PB6eT25OLu67b8AJl_vpbjt-1a3L34kC/view\">Download Our Modern Slavery and Human Trafficking Statement</a></p>",
+            "question": "View Our Statement",
+            "answer": "<p><a href=\"https://drive.google.com/file/d/1PB6eT25OLu67b8AJl_vpbjt-1a3L34kC/view\" target=\"_blank\" title=\"https://drive.google.com/file/d/1PB6eT25OLu67b8AJl_vpbjt-1a3L34kC/view\">Our Modern Slavery and Human Trafficking Statement</a></p>",
             "bullets": "",
             "answer_after": ""
           }
