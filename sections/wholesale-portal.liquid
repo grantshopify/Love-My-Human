@@ -129,9 +129,16 @@
 {%- endif -%}
 
 {% stylesheet %}
+  .wp-dash,
+  .wp-how {
+    inline-size: calc(100% - 32px);
+    max-inline-size: 1320px;
+    margin-inline: auto;
+  }
+
   /* Trade dashboard: same grid and cards as the collection page */
   .wp-dash {
-    padding: 40px var(--page-margin, 16px) 48px;
+    padding: 40px 0 48px;
   }
 
   .wp-dash__head {
@@ -279,6 +286,11 @@
   }
 
   @media screen and (min-width: 750px) {
+    .wp-dash,
+    .wp-how {
+      inline-size: calc(100% - 48px);
+    }
+
     .wp-grid {
       grid-template-columns: repeat(4, 1fr);
       gap: 32px 16px;
@@ -293,7 +305,7 @@
 
   /* Log in / apply: the street-level hero (snippets/wholesale-hero.liquid), then how trade works */
   .wp-how {
-    padding: 48px var(--page-margin, 16px) 80px;
+    padding: 48px 0 80px;
   }
 
   .wp-steps {
