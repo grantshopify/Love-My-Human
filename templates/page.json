@@ -59,72 +59,179 @@
         "padding-block-end": 80
       }
     },
-    "section_TqYU69": {
-      "type": "section",
+    "faq_editorial_K7m8Vi": {
+      "type": "faq-editorial",
       "blocks": {
-        "text_DeRPqW": {
-          "type": "text",
-          "name": "t:names.heading",
+        "group_dhj7WU": {
+          "type": "group",
           "settings": {
-            "text": "<h2>privacy policy</h2>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "title": "Online shopping",
+            "icon": "bag",
+            "open": true
+          }
+        },
+        "topic_gBxwrF": {
+          "type": "topic",
+          "settings": {
+            "title": "Our Privacy Policy"
+          }
+        },
+        "question_6TM8ek": {
+          "type": "question",
+          "settings": {
+            "question": "What delivery services do you offer?",
+            "answer": "<p>We offer Royal Mail Tracked 24 and Royal Mail Tracked for UK deliveries. All our orders are sent using tracked delivery services, so you can follow your parcel's journey from dispatch to delivery.</p><p>For international orders, available tracked delivery options and prices are displayed at checkout.</p>",
+            "bullets": "",
+            "answer_after": ""
+          }
+        },
+        "question_EwkQmN": {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer international shipping?",
+            "answer": "<p>Yes! We ship internationally.</p><p>Available destinations, tracked delivery options and shipping costs are calculated at checkout once you enter your delivery address.&nbsp;</p><p>Any applicable shipping charges will be displayed before you complete your purchase.</p>",
+            "bullets": "",
+            "answer_after": ""
+          }
+        },
+        "question_Km6Kte": {
+          "type": "question",
+          "settings": {
+            "question": "How much does delivery cost?",
+            "answer": "<p>Royal Mail Tracked 24 is £5, while Royal Mail Tracked 48 is £3.50 for UK orders.</p><p>All our orders are sent using tracked delivery services, so you can follow your parcel's journey from dispatch to delivery.</p><p>International shipping costs vary depending on your destination and the available service. All applicable charges will be displayed at checkout before you complete your purchase.</p>",
+            "bullets": "",
+            "answer_after": ""
+          }
+        },
+        "question_fUkhTL": {
+          "type": "question",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Once dispatched, Royal Mail Tracked 24 aims to delivery within one working day, while Royal Mail Tracked 48 aims to deliver within two to three working days. Delivery times are estimates and are not guaranteed.&nbsp;</p>",
+            "bullets": "",
+            "answer_after": ""
+          }
+        },
+        "group_gN9eeM": {
+          "type": "group",
+          "settings": {
+            "title": "The Townhouse",
+            "icon": "home",
+            "open": false
+          }
+        },
+        "topic_A9bd7X": {
+          "type": "topic",
+          "disabled": true,
+          "settings": {
+            "title": "Grooming and daycare"
+          }
+        },
+        "question_9bqNL7": {
+          "type": "question",
+          "disabled": true,
+          "settings": {
+            "question": "How do I book a grooming appointment?",
+            "answer": "<p>You can book online or by phone. We recommend booking [2 weeks] ahead, especially at weekends.</p>",
+            "bullets": "",
+            "answer_after": "<p><a href=\"/pages/contact\" title=\"Book a groom\">Book a groom</a></p>"
+          }
+        },
+        "question_d4iFWj": {
+          "type": "question",
+          "disabled": true,
+          "settings": {
+            "question": "What does a full groom include?",
+            "answer": "<p>Every full groom is tailored to your dog's coat and includes:</p>",
+            "bullets": "Bath with dog-friendly shampoo and conditioner\nBlow-dry and brush-out\nBreed or style cut\nNail trim and ear clean",
+            "answer_after": ""
+          }
+        },
+        "question_VTW3bp": {
+          "type": "question",
+          "settings": {
+            "question": "What is your cut-off time for same-day dispatch?",
+            "answer": "<p>Our order cut-off time is 4.00pm, Monday to Friday. Orders placed before 4.00pm on a working day will be dispatched the same day. Orders placed after 4.00pm wll be dispatched the next working day.</p><p>We dispatch Monday to Friday only, so orders placed over the weekend will be dispatched on Monday, provided it is a working day.</p>",
+            "bullets": "",
+            "answer_after": ""
+          }
+        },
+        "question_wKbTHq": {
+          "type": "question",
+          "settings": {
+            "question": "Does my dog need a trial day?",
+            "answer": "<p>Yes. New dogs join us for a short trial first, so we can make sure they're happy and settled before their first full day.</p>",
+            "bullets": "",
+            "answer_after": "<p>Please bring your dog's up-to-date vaccination record.</p>"
+          }
         }
       },
       "block_order": [
-        "text_DeRPqW"
+        "group_dhj7WU",
+        "topic_gBxwrF",
+        "question_6TM8ek",
+        "question_EwkQmN",
+        "question_Km6Kte",
+        "question_fUkhTL",
+        "group_gN9eeM",
+        "topic_A9bd7X",
+        "question_9bqNL7",
+        "question_d4iFWj",
+        "question_VTW3bp",
+        "question_wKbTHq"
       ],
-      "name": "t:names.rich_text_section",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 25,
-        "section_width": "page-width",
-        "section_height": "small",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "layout": "simple",
+        "simple_width": 900,
+        "sidebar_label": "FAQ topics",
+        "back_label": "Back",
+        "back_link": "",
+        "single_group": true,
+        "open_first": true,
+        "single_open": true,
+        "contact_image": "shopify://shop_images/wholesale.jpg",
+        "contact_image_height": 500,
+        "contact_heading": "More questions?",
+        "contact_text": "<p>Do you need to contact our team? We'll be delighted to answer your questions.</p>",
+        "contact_button_label": "Contact us",
+        "contact_button_link": "",
+        "show_form": true,
+        "form_columns": "one",
+        "form_show_name": true,
+        "form_name_label": "Name",
+        "form_name_placeholder": "Your name",
+        "form_name_required": true,
+        "form_email_label": "Email",
+        "form_email_placeholder": "you@example.com",
+        "form_show_phone": true,
+        "form_phone_label": "Phone",
+        "form_phone_placeholder": "+44",
+        "form_phone_required": false,
+        "form_show_topic": true,
+        "form_topic_label": "Topic",
+        "form_topic_options": "Orders\nDelivery\nReturns and exchanges\nGrooming\nDog daycare\nOther",
+        "form_message_label": "Message",
+        "form_message_placeholder": "How can we help?",
+        "form_note": "<p>We usually reply within one working day.</p>",
+        "form_submit_label": "Send message",
+        "form_button_style": "color",
+        "form_button_background": "{{ settings.color_palette.foreground }}",
+        "form_button_text": "{{ settings.color_palette.background }}",
+        "form_success": "Thank you, your message has been sent. We'll be in touch soon.",
+        "color_style": "brand",
+        "title_border_color": "",
+        "background_color": "{{ settings.color_palette.background }}",
+        "card_color": "#ffffff",
+        "text_color": "{{ settings.color_palette.foreground }}",
+        "muted_color": "{{ settings.color_palette.foreground }}",
+        "column_gap": 20,
+        "padding_top": 48,
+        "padding_bottom": 80
       }
     }
   },
   "order": [
     "main",
-    "section_TqYU69"
+    "faq_editorial_K7m8Vi"
   ]
 }
