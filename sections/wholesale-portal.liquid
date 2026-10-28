@@ -1,6 +1,7 @@
 {%- comment -%}
   Wholesale portal: logged out shows log in, logged in shows trade links if the customer has the wholesale tag.
-  Wholesale customers also see the products in the wholesale collection (the one picked here, or the collection with the handle "wholesale").
+  Wholesale customers also see the products in the wholesale collection (the one picked here, or the collection with the handle "wholesale"),
+  each added to the cart in a fixed quantity (100 by default).
   Log in uses Shopify customer accounts, which sign in on Shopify's own page, so it's a link.
 {%- endcomment -%}
 
@@ -8,6 +9,7 @@
   assign wholesale_tag = section.settings.tag | strip | downcase
   assign customer_tags = customer.tags | join: ',' | downcase | split: ','
   assign wholesale_collection = section.settings.collection | default: collections.wholesale
+  assign order_quantity = section.settings.quantity | default: 100
 -%}
 
 <div class="wp page-width">
@@ -32,10 +34,22 @@
             <a href="{{ product.url }}">
               {%- if product.featured_image -%}
                 {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 25vw, 50vw' }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag }}
               {%- endif -%}
               <span>{{ product.title }}</span>
             </a>
             <span>{{ product.price | money }}</span>
+            <span>Quantity: {{ order_quantity }}</span>
+            {%- form 'product', product -%}
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              <input type="hidden" name="quantity" value="{{ order_quantity }}">
+              {%- if product.available -%}
+                <button type="submit" class="button">Add to cart</button>
+              {%- else -%}
+                <button type="button" class="button" disabled>Sold out</button>
+              {%- endif -%}
+            {%- endform -%}
           </li>
         {%- endfor -%}
       </ul>
@@ -68,9 +82,15 @@
     display: block;
   }
 
-  .wp__products img {
+  .wp__products form {
+    margin-top: 8px;
+  }
+
+  .wp__products :is(img, svg) {
     width: 100%;
     height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
   }
 
   @media screen and (min-width: 750px) {
@@ -91,6 +111,13 @@
       "label": "Wholesale customer tag",
       "info": "Customers with this tag see the trade links and products.",
       "default": "wholesale"
+    },
+    {
+      "type": "number",
+      "id": "quantity",
+      "label": "Order quantity",
+      "info": "Each product is added to the cart in this quantity. Customers can't change it here.",
+      "default": 100
     },
     {
       "type": "collection",
