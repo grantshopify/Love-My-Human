@@ -164,6 +164,24 @@
             "bullets": "",
             "answer_after": "<p>Please bring your dog's up-to-date vaccination record.</p>"
           }
+        },
+        "question_9gHBti": {
+          "type": "question",
+          "settings": {
+            "question": "Marketing & Email Communications",
+            "answer": "<p>At LOVE MY HUMAN, we love keeping our customers informed about our latest collections, new arrivals, exclusive offers and everything happening across our brand. From time to time, we may send you marketing communications and updates that we believe may be of interest to you.</p><p>If you choose to subscribe to our newsletter or opt in to receive marketing communications, we may use your name and email address to send you information about new products, seasonal collections, special promotions, events, exclusive offers and other LOVE MY HUMAN news.</p><p>We may also use information about your previous purchases, browsing activity and preferences to make our communications more relevant to your interests and shopping habits, where permitted by applicable data protection laws.</p><p>We will only send you direct marketing communications where we have an appropriate legal basis to do so. You are always in control of your marketing preferences and can choose to stop receiving promotional emails at any time by clicking the unsubscribe link included at the bottom of our marketing emails.</p><p>Please note that even if you unsubscribe from marketing communications, we may still need to contact you with important non-promotional messages relating to your orders, purchases, account, deliveries, returns, refunds or other customer service matters.</p><p>We will never require you to receive marketing communications as a condition of making a purchase from LOVE MY HUMAN. Your decision to subscribe or unsubscribe will not affect your ability to shop with us or use our website.</p><p>We respect your preferences and are committed to ensuring that any marketing communications we send are relevant, appropriate and handled in accordance with applicable privacy and electronic marketing regulations.</p>",
+            "bullets": "",
+            "answer_after": "<p>Please bring your dog's up-to-date vaccination record.</p>"
+          }
+        },
+        "question_wPqNHC": {
+          "type": "question",
+          "settings": {
+            "question": "Sharing Your Personal Information",
+            "answer": "<p>At LOVE MY HUMAN, we respect your privacy and understand the importance of keeping your personal information confidential. We do not sell your personal information to third parties. However, in order to operate our business, fulfil your orders and provide you with our services, it may be necessary to share certain information with carefully selected third-party companies and service providers.</p><p>These may include payment processing providers who securely handle transactions, delivery and logistics partners who require your name and delivery address to fulfil orders, and website hosting and technology providers who help us operate and maintain our website.</p><p>We may also share relevant information with customer service platforms, email and marketing service providers, website analytics providers and other business partners who assist us in managing our day-to-day operations and improving the services we offer. These organisations are only permitted to use your information where necessary to provide services to us or for other lawful purposes.</p><p>In certain circumstances, we may also disclose personal information where required to do so by law, regulation, court order or a request from an authorised regulatory or law enforcement authority. We may also share information where reasonably necessary to protect our legal rights, prevent fraud, investigate suspected unlawful activity or safeguard the security of our business and customers.</p><p>Where we use third-party service providers, we take reasonable steps to ensure that appropriate contractual, technical and organisational safeguards are in place to protect your personal information and that it is handled in accordance with applicable data protection legislation.</p><p>We aim to ensure that any sharing of personal information is limited to what is necessary for the relevant purpose and that your privacy is respected at every stage.</p>",
+            "bullets": "",
+            "answer_after": "<p>Please bring your dog's up-to-date vaccination record.</p>"
+          }
         }
       },
       "block_order": [
@@ -178,7 +196,9 @@
         "question_9bqNL7",
         "question_d4iFWj",
         "question_VTW3bp",
-        "question_wKbTHq"
+        "question_wKbTHq",
+        "question_9gHBti",
+        "question_wPqNHC"
       ],
       "settings": {
         "layout": "simple",
