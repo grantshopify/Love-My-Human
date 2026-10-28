@@ -1,25 +1,71 @@
 {%- comment -%}
-  Wholesale account: the page title, a log in link and the BSS B2B app's sign-up form (from the page content).
-  The app only shows its form on its own page, /pages/wholesale-account-registration.
+  Wholesale account: log in on the left, the BSS B2B app's sign-up form on the right (stacked on phones).
+  The form comes from the page content; the app only shows it on its own page, /pages/wholesale-account-registration.
+  Log in uses Shopify customer accounts, which sign in on Shopify's own page, so the left side is a link to it.
 {%- endcomment -%}
 
 <div class="wa page-width">
-  <h1>{{ page.title }}</h1>
-  <p>Already have a trade account? <a href="{{ routes.account_login_url }}">Log in</a></p>
-  {{ page.content }}
+  <div class="wa__col">
+    <h2>Log in</h2>
+    <p>Already have a trade account?</p>
+    <a class="button" href="{{ routes.account_login_url }}">Log in</a>
+  </div>
+
+  <div class="wa__col">
+    <h2>Apply for a trade account</h2>
+    {{ page.content }}
+  </div>
 </div>
 
 {% stylesheet %}
   .wa {
+    display: grid;
+    gap: 48px;
     padding: 40px var(--page-margin, 16px) 80px;
   }
 
-  /* The app's form is a fixed 600px wide; keep it on screen on phones */
+  .wa h2 {
+    margin: 0 0 12px;
+  }
+
+  .wa__col p {
+    margin: 0 0 16px;
+  }
+
+  @media screen and (min-width: 990px) {
+    .wa {
+      grid-template-columns: 1fr 1.5fr;
+      gap: 80px;
+    }
+  }
+
+  /* Keep the app's form plain: no box, no big title, full width (it forces a fixed 600px with !important) */
   .wa :is(#bss-b2b-registration-form, #bss-b2b-register-form) {
     /* stylelint-disable-next-line declaration-no-important */
     width: 100% !important;
-    max-inline-size: 600px;
-    margin-inline: 0;
+    max-inline-size: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .wa #bss-b2b-registration-form .bss-b2b-registration-form-title h1 {
+    display: none;
+  }
+
+  .wa #bss-b2b-registration-form .bss-b2b-registration-form-content {
+    display: block;
+    margin: 0;
+  }
+
+  .wa #bss-b2b-registration-form .field-header {
+    display: block;
+    text-align: start;
+  }
+
+  .wa #bss-b2b-registration-form .field-header h4 {
+    margin: 16px 0 0;
+    font-size: 16px;
   }
 {% endstylesheet %}
 
