@@ -92,6 +92,27 @@
     --button-color: var(--lmh-accent-text);
   }
 
+  /* The theme's floating button grows to fit its text and zooms on hover, and shrinks to a circle after adding;
+     here it stays full width with its label in every state */
+  .lmh-card-add button.quick-add__button:is(:hover, :focus-visible, [data-added='true']) {
+    width: 100%;
+    inline-size: 100%;
+    padding-inline: 16px;
+    scale: none;
+  }
+
+  .lmh-card-add button.quick-add__button[data-added='true']:not(:hover, :focus-visible) {
+    color: var(--lmh-accent);
+  }
+
+  .lmh-card-add--solid button.quick-add__button[data-added='true'] {
+    color: var(--lmh-accent-text);
+  }
+
+  .lmh-card-add button.quick-add__button::before {
+    content: none;
+  }
+
   .lmh-card-add .quick-add__button > .add-to-cart-icon {
     display: none;
   }
