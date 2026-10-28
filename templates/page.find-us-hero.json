@@ -26,7 +26,10 @@
           }
         }
       },
-      "block_order": ["shop", "townhouse"],
+      "block_order": [
+        "shop",
+        "townhouse"
+      ],
       "settings": {
         "eyebrow": "Chelsea, London",
         "heading": "Find us on the King's Road",
@@ -35,5 +38,7 @@
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

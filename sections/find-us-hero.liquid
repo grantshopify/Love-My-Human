@@ -1,15 +1,21 @@
 {%- comment -%}
   Find us with a street-level hero: the homepage's King's Road video full width with the headline over it,
-  a card for each place overlapping its bottom edge, then one map. "Show on map" moves the map to that place.
+  one full-width map above the location cards.
+  "Show on map" moves the map to an open location.
 {%- endcomment -%}
 
 {%- liquid
   assign s = section.settings
   assign first_address = ''
+  assign first_place_index = ''
+  assign place_count = 0
   for block in section.blocks
-    if block.settings.address != blank
-      assign first_address = block.settings.address
-      break
+    if block.type == 'place' and block.settings.address != blank
+      assign place_count = place_count | plus: 1
+      if first_address == blank
+        assign first_address = block.settings.address
+        assign first_place_index = forloop.index
+      endif
     endif
   endfor
 -%}
@@ -35,13 +41,28 @@
   </div>
 
   <div class="fh__body page-width">
-    <ul class="fh__places">
+    {%- if first_address != blank -%}
+      <div class="fh__map">
+        <iframe
+          id="FindUsMap-{{ section.id }}"
+          class="fh__frame"
+          data-fh-map
+          src="https://maps.google.com/maps?q={{ first_address | url_encode }}&amp;output=embed"
+          title="Map showing {{ first_address | escape }}"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+    {%- endif -%}
+
+    <ul class="fh__places" role="list">
       {%- for block in section.blocks -%}
         {%- assign place = block.settings -%}
-        <li class="fh-place{% if forloop.first %} is-active{% endif %}" data-fh-place {{ block.shopify_attributes }}>
+        <li class="fh-place{% if forloop.index == first_place_index %} is-active{% endif %}" data-fh-place {{ block.shopify_attributes }}>
           {%- if place.image != blank -%}
             <div class="fh-place__media">
-              {{ place.image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 45vw, 100vw' }}
+              {{ place.image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 1368px) 427px, (min-width: 990px) 32vw, (min-width: 750px) 48vw, 100vw' }}
             </div>
           {%- endif -%}
           <div class="fh-place__body">
@@ -61,44 +82,33 @@
                 <a href="tel:{{ place.phone | remove: ' ' | remove: '(' | remove: ')' }}">{{ place.phone }}</a>
               </p>
             {%- endif -%}
-            <div class="fh-place__actions">
-              <a
-                class="fh-place__button"
-                href="https://www.google.com/maps/dir/?api=1&amp;destination={{ place.address | url_encode }}"
-                target="_blank"
-                rel="noopener"
-              >
-                Get directions
-              </a>
-              {%- if section.blocks.size > 1 -%}
-                <button
-                  type="button"
-                  class="fh-place__button fh-place__button--outline"
-                  data-fh-show="{{ place.address | escape }}"
-                  aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+            {%- if place.address != blank -%}
+              <div class="fh-place__actions">
+                <a
+                  class="fh-place__button"
+                  href="https://www.google.com/maps/dir/?api=1&amp;destination={{ place.address | url_encode }}"
+                  target="_blank"
+                  rel="noopener"
                 >
-                  Show on map
-                </button>
-              {%- endif -%}
-            </div>
+                  Get directions
+                </a>
+                {%- if place_count > 1 -%}
+                  <button
+                    type="button"
+                    class="fh-place__button fh-place__button--outline"
+                    data-fh-show="{{ place.address | escape }}"
+                    aria-controls="FindUsMap-{{ section.id }}"
+                    aria-pressed="{% if forloop.index == first_place_index %}true{% else %}false{% endif %}"
+                  >
+                    Show on map
+                  </button>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
           </div>
         </li>
       {%- endfor -%}
     </ul>
-
-    {%- if first_address != blank -%}
-      <div class="fh__map">
-        <iframe
-          class="fh__frame"
-          data-fh-map
-          src="https://maps.google.com/maps?q={{ first_address | url_encode }}&amp;output=embed"
-          title="Map showing {{ first_address | escape }}"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          allowfullscreen
-        ></iframe>
-      </div>
-    {%- endif -%}
   </div>
 </div>
 
@@ -111,7 +121,8 @@
     root.querySelectorAll('[data-fh-show]').forEach((button) => {
       button.addEventListener('click', () => {
         const address = button.dataset.fhShow;
-        map.src = 'https://maps.google.com/maps?q=' + encodeURIComponent(address) + '&output=embed';
+        const src = 'https://maps.google.com/maps?q=' + encodeURIComponent(address) + '&output=embed';
+        if (map.src !== src) map.src = src;
         map.title = 'Map showing ' + address;
 
         root.querySelectorAll('[data-fh-place]').forEach((place) => {
@@ -120,7 +131,8 @@
           place.querySelector('[data-fh-show]')?.setAttribute('aria-pressed', String(active));
         });
 
-        map.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        map.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth', block: 'center' });
       });
     });
   })();
@@ -154,12 +166,20 @@
     pointer-events: none;
   }
 
-  /* Bottom padding leaves room for the cards that overlap the hero */
+  /* Match the homepage's services, collections and journal content width. */
+  .fh__intro,
+  .fh__body {
+    inline-size: calc(100% - 32px);
+    max-inline-size: 1320px;
+    margin-inline: auto;
+    padding-inline: 0;
+  }
+
+  /* Bottom padding leaves room for the map that overlaps the hero */
   .fh__intro {
     position: relative;
     z-index: 1;
-    inline-size: 100%;
-    padding: 120px var(--page-margin, 16px) 96px;
+    padding-block: 120px 96px;
   }
 
   .fh .fh__eyebrow {
@@ -175,7 +195,7 @@
     margin: 0;
     max-inline-size: 12ch;
     font-family: var(--font-heading--family);
-    font-size: clamp(48px, 8vw, 104px);
+    font-size: clamp(48px, 8vw, 96px);
     line-height: 0.92;
     text-transform: uppercase;
     text-wrap: balance;
@@ -188,7 +208,7 @@
     display: grid;
     gap: 32px;
     margin-block-start: -64px;
-    padding: 0 var(--page-margin, 16px) 80px;
+    padding-block-end: 80px;
   }
 
   .fh__places {
@@ -200,12 +220,13 @@
   }
 
   .fh-place {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
     overflow: clip;
     border: 1px solid rgb(var(--color-foreground-rgb, 234 83 85) / 0.25);
     border-radius: 14px;
     background: #fff;
-    box-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.35);
     transition: border-color 0.2s ease;
   }
 
@@ -214,10 +235,14 @@
   }
 
   .fh-place__media {
+    position: relative;
+    flex-shrink: 0;
     aspect-ratio: 16 / 9;
   }
 
   .fh-place__media img {
+    position: absolute;
+    inset: 0;
     display: block;
     inline-size: 100%;
     block-size: 100%;
@@ -225,7 +250,9 @@
   }
 
   .fh-place__body {
-    display: grid;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     gap: 10px;
     padding: 20px;
   }
@@ -237,6 +264,8 @@
     line-height: 1.1;
     text-transform: uppercase;
     color: var(--color-foreground);
+    overflow-wrap: anywhere;
+    text-wrap: balance;
   }
 
   .fh .fh-place__address,
@@ -275,7 +304,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-block-start: 6px;
+    margin-block-start: auto;
+    padding-block-start: 6px;
   }
 
   .fh .fh-place__button {
@@ -323,6 +353,7 @@
   .fh__map {
     overflow: clip;
     border-radius: 14px;
+    scroll-margin-block-start: calc(var(--header-height, 0px) + 24px);
     background: rgb(var(--color-foreground-rgb, 234 83 85) / 0.06);
   }
 
@@ -334,6 +365,11 @@
   }
 
   @media screen and (min-width: 750px) {
+    .fh__intro,
+    .fh__body {
+      inline-size: calc(100% - 48px);
+    }
+
     .fh__places {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 20px;
@@ -345,6 +381,10 @@
   }
 
   @media screen and (min-width: 990px) {
+    .fh__places {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
     .fh__hero {
       min-block-size: 600px;
     }
