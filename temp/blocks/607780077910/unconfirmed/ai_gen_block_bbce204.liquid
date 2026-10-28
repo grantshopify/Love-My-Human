@@ -1,0 +1,149 @@
+{% doc %}
+  @prompt
+    Make a map for our address is 308 kings road chelsea
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-location-map-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    color: #171717;
+    font-family: inherit;
+  }
+
+  .ai-location-map-{{ ai_gen_id }}__heading {
+    margin: 0 0 8px;
+    color: #171717;
+    font-size: clamp(24px, 4vw, 36px);
+    line-height: 1.15;
+  }
+
+  .ai-location-map-{{ ai_gen_id }}__address {
+    margin: 0 0 18px;
+    color: #333333;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .ai-location-map-{{ ai_gen_id }}__frame {
+    display: block;
+    width: 100%;
+    height: {{ block.settings.map_height }}px;
+    border: 0;
+    border-radius: {{ block.settings.corner_radius }}px;
+    background: #f1f1ed;
+  }
+
+  .ai-location-map-{{ ai_gen_id }}__link {
+    display: inline-block;
+    margin-top: 14px;
+    color: #171717;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .ai-location-map-{{ ai_gen_id }}__link:focus-visible {
+    outline: 2px solid #171717;
+    outline-offset: 4px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-location-map-{{ ai_gen_id }}__frame {
+      height: {{ block.settings.mobile_map_height }}px;
+    }
+  }
+{% endstyle %}
+
+{% assign map_query = block.settings.address | url_encode %}
+<div class="ai-location-map-{{ ai_gen_id }}" style="width: {{ block.settings.desktop_width_percent }}%;" {{ block.shopify_attributes }}>
+  {% if block.settings.heading != blank %}
+    <h2 class="ai-location-map-{{ ai_gen_id }}__heading">{{ block.settings.heading | escape }}</h2>
+  {% endif %}
+  <p class="ai-location-map-{{ ai_gen_id }}__address">{{ block.settings.address | escape }}</p>
+  <iframe
+    class="ai-location-map-{{ ai_gen_id }}__frame"
+    src="https://maps.google.com/maps?q={{ map_query }}&amp;output=embed"
+    title="Map showing {{ block.settings.address | escape }}"
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    allowfullscreen
+  ></iframe>
+  <a class="ai-location-map-{{ ai_gen_id }}__link" href="https://www.google.com/maps/search/?api=1&amp;query={{ map_query }}" target="_blank" rel="noopener noreferrer">{{ block.settings.directions_label | escape }}</a>
+</div>
+
+{% schema %}
+{
+  "name": "Location map",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find us"
+    },
+    {
+      "type": "text",
+      "id": "address",
+      "label": "Address",
+      "default": "308 King's Road, Chelsea, London, UK"
+    },
+    {
+      "type": "text",
+      "id": "directions_label",
+      "label": "Directions link",
+      "default": "Get directions"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "map_height",
+      "label": "Map height on desktop",
+      "min": 250,
+      "max": 700,
+      "step": 50,
+      "unit": "px",
+      "default": 450
+    },
+    {
+      "type": "range",
+      "id": "mobile_map_height",
+      "label": "Map height on mobile",
+      "min": 200,
+      "max": 500,
+      "step": 25,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Location map"
+    }
+  ],
+  "tag": null,
+  "class": "location-map-block"
+}
+{% endschema %}
