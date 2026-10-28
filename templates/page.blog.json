@@ -66,6 +66,7 @@
           "type": "_slide",
           "settings": {
             "media_type_1": "image",
+            "image_1": "shopify://shop_images/lmh-dog-ski-holiday-europe-main-head-france-megeve-dog-in-snow_c62ec939-eceb-463c-a285-664fd0c04c6b_1.webp",
             "content_direction": "column",
             "vertical_on_mobile": true,
             "horizontal_alignment": "flex-start",
