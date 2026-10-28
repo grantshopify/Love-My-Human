@@ -219,6 +219,15 @@
             "bullets": "",
             "answer_after": "<p>Please bring your dog's up-to-date vaccination record.</p>"
           }
+        },
+        "question_WWBXkJ": {
+          "type": "question",
+          "settings": {
+            "question": "Contact Us",
+            "answer": "<p>If you have any questions about this Privacy Policy, how LOVE MY HUMAN collects or uses your personal information, or how your information is protected, please contact us using the details below.</p><p><strong>Business name:</strong> The Love My Human Group Limited, trading as LOVE MY HUMAN</p><p><strong>Registered office:</strong> 308 King’s Road, London SW3 5UH, United Kingdom</p><p><strong>Email:</strong> <a href=\"mailto:hello@lovemyhuman.co.uk\">hello@lovemyhuman.co.uk</a></p><p>If you wish to exercise any of your data protection rights or raise a concern about how your personal information is handled, please contact us by email. We will review your request and respond within the timeframe required by applicable data protection laws.</p><p>You also have the right to raise a concern with the UK Information Commissioner's Office (ICO) if you believe your personal information has been handled unlawfully or your data protection rights have not been respected. Further information is available at <a href=\"https://www.ico.org.uk/\">www.ico.org.uk</a>.</p>",
+            "bullets": "",
+            "answer_after": "<p>Please bring your dog's up-to-date vaccination record.</p>"
+          }
         }
       },
       "block_order": [
@@ -239,7 +248,8 @@
         "question_mtAWgq",
         "question_7mMz4B",
         "question_JxQgJ3",
-        "question_igJHxn"
+        "question_igJHxn",
+        "question_WWBXkJ"
       ],
       "settings": {
         "layout": "simple",
