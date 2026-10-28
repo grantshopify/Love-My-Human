@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "wholesale-account",
+      "settings": {
+        "heading": "Wholesale account",
+        "login_text": "Already have a trade account?",
+        "login_label": "Log in",
+        "logged_in_text": "You're logged in as [name].",
+        "account_label": "My account",
+        "register_heading": "Apply for a trade account"
+      }
+    }
+  },
+  "order": ["main"]
+}

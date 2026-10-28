@@ -1,0 +1,100 @@
+{%- comment -%}
+  Wholesale account: a log in button for trade customers and the BSS B2B app's sign-up form.
+  The form comes from the page's content (<div id="bss-b2b-registration-form">), which the app only fills
+  on its own form page, /pages/wholesale-account-registration. Log in uses Shopify customer accounts.
+{%- endcomment -%}
+
+{%- assign s = section.settings -%}
+
+<div class="wa page-width">
+  <h1 class="wa__heading">{{ s.heading }}</h1>
+
+  <div class="wa__login">
+    {%- if customer -%}
+      <p>{{ s.logged_in_text | replace: '[name]', customer.first_name }}</p>
+      <a class="button" href="{{ routes.account_url }}">{{ s.account_label }}</a>
+    {%- else -%}
+      <p>{{ s.login_text }}</p>
+      <a class="button" href="{{ routes.account_login_url }}">{{ s.login_label }}</a>
+    {%- endif -%}
+  </div>
+
+  {%- unless customer -%}
+    <div class="wa__register">
+      <h2 class="wa__subheading">{{ s.register_heading }}</h2>
+      {{ page.content }}
+    </div>
+  {%- endunless -%}
+</div>
+
+{% stylesheet %}
+  .wa {
+    max-inline-size: 640px;
+    margin-inline: auto;
+    padding: 48px var(--page-margin, 16px) 80px;
+  }
+
+  /* The app's form is a fixed 600px wide ("width: 90% !important" in its inline styles); keep it on screen */
+  .wa__register :is(#bss-b2b-registration-form, #bss-b2b-register-form) {
+    /* stylelint-disable-next-line declaration-no-important */
+    width: 100% !important;
+    max-inline-size: 100%;
+    margin-inline: 0;
+  }
+
+  .wa__login,
+  .wa__register {
+    margin-block-start: 32px;
+  }
+
+  .wa__login p {
+    margin: 0 0 12px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Wholesale account",
+  "tag": "section",
+  "class": "wholesale-account-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Wholesale account"
+    },
+    {
+      "type": "text",
+      "id": "login_text",
+      "label": "Log in text",
+      "default": "Already have a trade account?"
+    },
+    {
+      "type": "text",
+      "id": "login_label",
+      "label": "Log in button",
+      "default": "Log in"
+    },
+    {
+      "type": "text",
+      "id": "logged_in_text",
+      "label": "Text when logged in",
+      "default": "You're logged in as [name].",
+      "info": "[name] is the customer's first name."
+    },
+    {
+      "type": "text",
+      "id": "account_label",
+      "label": "Account button",
+      "default": "My account"
+    },
+    {
+      "type": "text",
+      "id": "register_heading",
+      "label": "Sign-up heading",
+      "default": "Apply for a trade account"
+    }
+  ]
+}
+{% endschema %}
