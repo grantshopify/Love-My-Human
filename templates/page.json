@@ -112,41 +112,6 @@
             "answer_after": ""
           }
         },
-        "group_gN9eeM": {
-          "type": "group",
-          "settings": {
-            "title": "The Townhouse",
-            "icon": "home",
-            "open": false
-          }
-        },
-        "topic_A9bd7X": {
-          "type": "topic",
-          "disabled": true,
-          "settings": {
-            "title": "Grooming and daycare"
-          }
-        },
-        "question_9bqNL7": {
-          "type": "question",
-          "disabled": true,
-          "settings": {
-            "question": "How do I book a grooming appointment?",
-            "answer": "<p>You can book online or by phone. We recommend booking [2 weeks] ahead, especially at weekends.</p>",
-            "bullets": "",
-            "answer_after": "<p><a href=\"/pages/contact\" title=\"Book a groom\">Book a groom</a></p>"
-          }
-        },
-        "question_d4iFWj": {
-          "type": "question",
-          "disabled": true,
-          "settings": {
-            "question": "What does a full groom include?",
-            "answer": "<p>Every full groom is tailored to your dog's coat and includes:</p>",
-            "bullets": "Bath with dog-friendly shampoo and conditioner\nBlow-dry and brush-out\nBreed or style cut\nNail trim and ear clean",
-            "answer_after": ""
-          }
-        },
         "question_VTW3bp": {
           "type": "question",
           "settings": {
@@ -245,6 +210,15 @@
             "bullets": "",
             "answer_after": "<p>Please bring your dog's up-to-date vaccination record.</p>"
           }
+        },
+        "question_igJHxn": {
+          "type": "question",
+          "settings": {
+            "question": "Changes to This Privacy Policy",
+            "answer": "<p>We may update this Privacy Policy from time to time to reflect changes in our business, website, services, the way we handle personal information or applicable data protection laws. Where we make changes, we will publish the updated version on our website and amend the “Last updated” date, where displayed.</p><p>We encourage you to review this Privacy Policy periodically so that you remain informed about how LOVE MY HUMAN collects, uses, stores and protects your personal information. Where a change is significant and we are required to notify you directly by law, we will take reasonable steps to bring that change to your attention.</p>",
+            "bullets": "",
+            "answer_after": "<p>Please bring your dog's up-to-date vaccination record.</p>"
+          }
         }
       },
       "block_order": [
@@ -254,10 +228,6 @@
         "question_EwkQmN",
         "question_Km6Kte",
         "question_fUkhTL",
-        "group_gN9eeM",
-        "topic_A9bd7X",
-        "question_9bqNL7",
-        "question_d4iFWj",
         "question_VTW3bp",
         "question_wKbTHq",
         "question_9gHBti",
@@ -268,7 +238,8 @@
         "question_RUr7LJ",
         "question_mtAWgq",
         "question_7mMz4B",
-        "question_JxQgJ3"
+        "question_JxQgJ3",
+        "question_igJHxn"
       ],
       "settings": {
         "layout": "simple",
