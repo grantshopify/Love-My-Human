@@ -1,0 +1,577 @@
+{%- comment -%}
+  Find us, by visit ("Plan your visit"): a tile for each thing people come for (shop, grooming, day-care, café, academy).
+  Picking a tile shows which building it's in, the hours and a button to its page, and moves the map to that building.
+  The two buildings' names and addresses are section settings; each service picks one of them.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign first = section.blocks.first
+  assign first_address = s.shop_address
+  if first.settings.location == 'townhouse'
+    assign first_address = s.townhouse_address
+  endif
+-%}
+
+<div class="fv page-width">
+  <header class="fv__head">
+    {%- if s.eyebrow != blank -%}
+      <p class="fv__eyebrow">{{ s.eyebrow }}</p>
+    {%- endif -%}
+    <h1 class="fv__title">{{ s.heading }}</h1>
+    {%- if s.text != blank -%}
+      <p class="fv__text">{{ s.text }}</p>
+    {%- endif -%}
+  </header>
+
+  <ul class="fv__tiles" role="list">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        case block.settings.location
+          when 'shop'
+            assign chip = s.shop_label
+          when 'townhouse'
+            assign chip = s.townhouse_label
+          else
+            assign chip = 'Ask us'
+        endcase
+      -%}
+      <li {{ block.shopify_attributes }}>
+        <button
+          type="button"
+          class="fv-tile"
+          data-fv-tile="{{ block.id }}"
+          aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-controls="FindUsVisit-{{ block.id }}"
+        >
+          <span class="fv-tile__chip">{{ chip }}</span>
+          <span class="fv-tile__name">{{ block.settings.name }}</span>
+        </button>
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  <div class="fv__panel">
+    <div class="fv__cards">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign b = block.settings
+          case b.location
+            when 'shop'
+              assign building = s.shop_name
+              assign address = s.shop_address
+            when 'townhouse'
+              assign building = s.townhouse_name
+              assign address = s.townhouse_address
+            else
+              assign building = ''
+              assign address = ''
+          endcase
+        -%}
+        <article
+          class="fv-card"
+          id="FindUsVisit-{{ block.id }}"
+          data-fv-card="{{ block.id }}"
+          data-fv-address="{{ address | escape }}"
+          {% unless forloop.first %}
+            hidden
+          {% endunless %}
+        >
+          {%- if b.image != blank -%}
+            <div class="fv-card__media">
+              {{ b.image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 45vw, 100vw' }}
+            </div>
+          {%- endif -%}
+          <div class="fv-card__body">
+            <h2 class="fv-card__name">{{ b.name }}</h2>
+            {%- if address != blank -%}
+              <p class="fv-card__address">
+                {%- if building != blank -%}{{ building }}, {% endif -%}
+                {{- address -}}
+              </p>
+            {%- else -%}
+              <p class="fv-card__address">Ask us which building to come to.</p>
+            {%- endif -%}
+            {%- if b.description != blank -%}
+              <p class="fv-card__description">{{ b.description }}</p>
+            {%- endif -%}
+            {%- if b.hours != blank -%}
+              <div class="fv-card__hours">
+                <h3>{{ b.hours_heading | default: 'Opening hours' }}</h3>
+                <p>{{ b.hours | escape | newline_to_br }}</p>
+              </div>
+            {%- endif -%}
+            <div class="fv-card__actions">
+              {%- if b.button_label != blank and b.button_link != blank -%}
+                <a class="fv-card__button" href="{{ b.button_link }}">{{ b.button_label }}</a>
+              {%- endif -%}
+              {%- if address != blank -%}
+                <a
+                  class="fv-card__button fv-card__button--outline"
+                  href="https://www.google.com/maps/dir/?api=1&amp;destination={{ address | url_encode }}"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Get directions
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+
+    <div class="fv__map">
+      <iframe
+        class="fv__frame"
+        data-fv-map
+        src="https://maps.google.com/maps?q={{ first_address | url_encode }}&amp;output=embed"
+        title="Map showing {{ first_address | escape }}"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const root = document.currentScript.previousElementSibling;
+    const map = root.querySelector('[data-fv-map]');
+
+    root.querySelectorAll('[data-fv-tile]').forEach((tile) => {
+      tile.addEventListener('click', () => {
+        const id = tile.dataset.fvTile;
+        root.querySelectorAll('[data-fv-tile]').forEach((t) => t.setAttribute('aria-pressed', String(t === tile)));
+
+        let card;
+        root.querySelectorAll('[data-fv-card]').forEach((c) => {
+          c.hidden = c.dataset.fvCard !== id;
+          if (!c.hidden) card = c;
+        });
+
+        // Move the map to this service's building; a service with no building leaves the map where it is
+        const address = card?.dataset.fvAddress;
+        if (map && address) {
+          const src = 'https://maps.google.com/maps?q=' + encodeURIComponent(address) + '&output=embed';
+          if (map.src !== src) map.src = src;
+          map.title = 'Map showing ' + address;
+        }
+      });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .fv {
+    padding: 48px var(--page-margin, 16px) 80px;
+  }
+
+  .fv__head {
+    margin-block-end: 28px;
+  }
+
+  .fv .fv__eyebrow {
+    margin: 0 0 10px;
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .fv .fv__title {
+    margin: 0 0 12px;
+    max-inline-size: 14ch;
+    font-family: var(--font-heading--family);
+    font-size: clamp(44px, 7vw, 88px);
+    line-height: 0.95;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--color-foreground);
+  }
+
+  .fv .fv__text {
+    margin: 0;
+    max-inline-size: 48ch;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  /* Tiles like the homepage "What we do" section: a chip with the building, the name below */
+  .fv__tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0 0 18px;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Phones: an odd last tile spans both columns instead of sitting alone */
+  .fv__tiles > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .fv-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+    inline-size: 100%;
+    min-block-size: 120px;
+    padding: 16px;
+    border: 1px solid rgb(var(--color-foreground-rgb, 234 83 85) / 0.3);
+    border-radius: 16px;
+    background: #fff;
+    color: var(--color-foreground);
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .fv-tile:hover {
+    border-color: var(--color-foreground);
+  }
+
+  .fv-tile[aria-pressed='true'] {
+    border-color: var(--color-foreground);
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .fv-tile:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 3px;
+  }
+
+  .fv-tile__chip {
+    align-self: flex-start;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgb(var(--color-foreground-rgb, 234 83 85) / 0.12);
+    font-family: var(--font-heading--family);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .fv-tile[aria-pressed='true'] .fv-tile__chip {
+    background: rgb(255 255 255 / 0.2);
+  }
+
+  .fv-tile__name {
+    font-family: var(--font-heading--family);
+    font-size: 22px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .fv__panel {
+    display: grid;
+    gap: 16px;
+  }
+
+  .fv-card {
+    display: grid;
+    overflow: clip;
+    border: 1px solid rgb(var(--color-foreground-rgb, 234 83 85) / 0.25);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .fv-card[hidden] {
+    display: none;
+  }
+
+  .fv-card__media {
+    aspect-ratio: 16 / 9;
+  }
+
+  .fv-card__media img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .fv-card__body {
+    display: grid;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  .fv .fv-card__name {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 26px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .fv .fv-card__address,
+  .fv .fv-card__description {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .fv .fv-card__address {
+    font-weight: 600;
+  }
+
+  .fv-card__hours {
+    padding-block-start: 10px;
+    border-block-start: 1px solid rgb(var(--color-foreground-rgb, 234 83 85) / 0.2);
+  }
+
+  .fv .fv-card__hours h3 {
+    margin: 0 0 4px;
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .fv .fv-card__hours p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .fv-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-block-start: 6px;
+  }
+
+  .fv .fv-card__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 44px;
+    padding: 10px 20px;
+    border: 1px solid var(--color-foreground);
+    border-radius: 999px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  .fv .fv-card__button:hover {
+    background: transparent;
+    color: var(--color-foreground);
+  }
+
+  .fv .fv-card__button--outline {
+    background: transparent;
+    color: var(--color-foreground);
+  }
+
+  .fv .fv-card__button--outline:hover {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .fv .fv-card__button:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 3px;
+  }
+
+  .fv__map {
+    overflow: clip;
+    border-radius: 14px;
+    background: rgb(var(--color-foreground-rgb, 234 83 85) / 0.06);
+  }
+
+  .fv__frame {
+    display: block;
+    inline-size: 100%;
+    block-size: 320px;
+    border: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .fv__tiles {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .fv__tiles > li:last-child:nth-child(odd) {
+      grid-column: auto;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .fv {
+      padding-block-start: 72px;
+    }
+
+    .fv__panel {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: stretch;
+      gap: 20px;
+    }
+
+    .fv__frame {
+      block-size: 100%;
+      min-block-size: 480px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fv-tile,
+    .fv .fv-card__button {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Find us: plan your visit",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Chelsea, London"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What are you coming for?"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Pick what you're visiting for and we'll show you which door to come to."
+    },
+    {
+      "type": "header",
+      "content": "Shop"
+    },
+    {
+      "type": "text",
+      "id": "shop_name",
+      "label": "Name",
+      "default": "Love My Human shop"
+    },
+    {
+      "type": "text",
+      "id": "shop_address",
+      "label": "Address",
+      "info": "Also used for the map and directions.",
+      "default": "308 King's Road, London SW3 5UH"
+    },
+    {
+      "type": "text",
+      "id": "shop_label",
+      "label": "Tile label",
+      "default": "308"
+    },
+    {
+      "type": "header",
+      "content": "Townhouse"
+    },
+    {
+      "type": "text",
+      "id": "townhouse_name",
+      "label": "Name",
+      "default": "The Townhouse"
+    },
+    {
+      "type": "text",
+      "id": "townhouse_address",
+      "label": "Address",
+      "info": "Also used for the map and directions.",
+      "default": "330 King's Road, London"
+    },
+    {
+      "type": "text",
+      "id": "townhouse_label",
+      "label": "Tile label",
+      "default": "330"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "service",
+      "name": "Service",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Shop"
+        },
+        {
+          "type": "select",
+          "id": "location",
+          "label": "Where it is",
+          "options": [
+            { "value": "shop", "label": "The shop (308)" },
+            { "value": "townhouse", "label": "The Townhouse (330)" },
+            { "value": "unknown", "label": "Not set: shows \"Ask us\"" }
+          ],
+          "default": "shop"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "hours_heading",
+          "label": "Hours heading",
+          "default": "Opening hours"
+        },
+        {
+          "type": "textarea",
+          "id": "hours",
+          "label": "Hours",
+          "info": "One line per day or group of days. Leave empty to hide."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Find us: plan your visit",
+      "blocks": [{ "type": "service" }]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "main": {
+      "type": "find-us-hero",
+      "blocks": {
+        "shop": {
+          "type": "place",
+          "settings": {
+            "name": "Love My Human shop",
+            "address": "308 King's Road, London SW3 5UH",
+            "image": "shopify://shop_images/homesplash.jpg",
+            "description": "Toys, treats, beds and accessories, all chosen and tested by our dogs.",
+            "hours": "Monday to Friday: 9 AM – 6 PM\nSaturday: 9 AM – 5 PM",
+            "phone": ""
+          }
+        },
+        "townhouse": {
+          "type": "place",
+          "settings": {
+            "name": "The Townhouse",
+            "address": "330 King's Road, London",
+            "image": "shopify://shop_images/Jenny_Matthews_at_the_LMH_Townhouse.webp",
+            "description": "Home of our café and doggy day-care.",
+            "hours": "",
+            "phone": ""
+          }
+        }
+      },
+      "block_order": ["shop", "townhouse"],
+      "settings": {
+        "eyebrow": "Chelsea, London",
+        "heading": "Find us on the King's Road",
+        "hero_video": "shopify://files/videos/LMH About us vid (1).mp4",
+        "hero_image": "shopify://shop_images/homesplash.jpg"
+      }
+    }
+  },
+  "order": ["main"]
+}

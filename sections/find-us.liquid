@@ -1,0 +1,419 @@
+{%- comment -%}
+  Find us: a headline, a card for each place (photo, what's there, hours, directions) and one map.
+  Tapping a card's "Show on map" moves the map to that address. On phones the map sits above the cards.
+{%- endcomment -%}
+
+{%- liquid
+  assign first_address = ''
+  for block in section.blocks
+    if block.settings.address != blank
+      assign first_address = block.settings.address
+      break
+    endif
+  endfor
+-%}
+
+<div class="fu page-width">
+  <header class="fu__head">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="fu__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <h1 class="fu__title">{{ section.settings.heading }}</h1>
+    {%- if section.settings.text != blank -%}
+      <p class="fu__text">{{ section.settings.text }}</p>
+    {%- endif -%}
+  </header>
+
+  <div class="fu__layout">
+    <div class="fu__map">
+      {%- if first_address != blank -%}
+        <iframe
+          class="fu__frame"
+          data-find-us-map
+          src="https://maps.google.com/maps?q={{ first_address | url_encode }}&amp;output=embed"
+          title="Map showing {{ first_address | escape }}"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      {%- endif -%}
+    </div>
+
+    <ul class="fu__places">
+      {%- for block in section.blocks -%}
+        {%- assign place = block.settings -%}
+        <li class="fu-place{% if forloop.first %} is-active{% endif %}" data-find-us-place {{ block.shopify_attributes }}>
+          {%- if place.image != blank -%}
+            <div class="fu-place__media">
+              {{ place.image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 25vw, 100vw' }}
+            </div>
+          {%- endif -%}
+          <div class="fu-place__body">
+            <h2 class="fu-place__name">{{ place.name }}</h2>
+            <p class="fu-place__address">{{ place.address | escape | newline_to_br }}</p>
+            {%- if place.description != blank -%}
+              <p class="fu-place__description">{{ place.description }}</p>
+            {%- endif -%}
+            {%- if place.hours != blank -%}
+              <div class="fu-place__hours">
+                <h3>Opening hours</h3>
+                <p>{{ place.hours | escape | newline_to_br }}</p>
+              </div>
+            {%- endif -%}
+            {%- if place.phone != blank -%}
+              <p class="fu-place__phone">
+                <a href="tel:{{ place.phone | remove: ' ' | remove: '(' | remove: ')' }}">{{ place.phone }}</a>
+              </p>
+            {%- endif -%}
+            <div class="fu-place__actions">
+              <a
+                class="fu-place__button"
+                href="https://www.google.com/maps/dir/?api=1&amp;destination={{ place.address | url_encode }}"
+                target="_blank"
+                rel="noopener"
+              >
+                Get directions
+              </a>
+              {%- if section.blocks.size > 1 -%}
+                <button
+                  type="button"
+                  class="fu-place__button fu-place__button--outline"
+                  data-find-us-show="{{ place.address | escape }}"
+                  aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+                >
+                  Show on map
+                </button>
+              {%- endif -%}
+            </div>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const root = document.currentScript.previousElementSibling;
+    const map = root.querySelector('[data-find-us-map]');
+    if (!map) return;
+
+    root.querySelectorAll('[data-find-us-show]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const address = button.dataset.findUsShow;
+        map.src = 'https://maps.google.com/maps?q=' + encodeURIComponent(address) + '&output=embed';
+        map.title = 'Map showing ' + address;
+
+        root.querySelectorAll('[data-find-us-place]').forEach((place) => {
+          const active = place.contains(button);
+          place.classList.toggle('is-active', active);
+          place.querySelector('[data-find-us-show]')?.setAttribute('aria-pressed', String(active));
+        });
+
+        if (window.matchMedia('(max-width: 989px)').matches) map.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .fu {
+    padding: 48px var(--page-margin, 16px) 80px;
+  }
+
+  .fu__head {
+    margin-block-end: 32px;
+  }
+
+  .fu .fu__eyebrow {
+    margin: 0 0 10px;
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .fu .fu__title {
+    margin: 0 0 12px;
+    max-inline-size: 14ch;
+    font-family: var(--font-heading--family);
+    font-size: clamp(44px, 7vw, 88px);
+    line-height: 0.95;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--color-foreground);
+  }
+
+  .fu .fu__text {
+    margin: 0;
+    max-inline-size: 48ch;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  .fu__layout {
+    display: grid;
+    gap: 24px;
+  }
+
+  .fu__map {
+    overflow: clip;
+    border-radius: 14px;
+    background: rgb(var(--color-foreground-rgb, 234 83 85) / 0.06);
+  }
+
+  .fu__frame {
+    display: block;
+    inline-size: 100%;
+    block-size: 340px;
+    border: 0;
+  }
+
+  .fu__places {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fu-place {
+    display: grid;
+    overflow: clip;
+    border: 1px solid rgb(var(--color-foreground-rgb, 234 83 85) / 0.25);
+    border-radius: 14px;
+    background: #fff;
+    transition: border-color 0.2s ease;
+  }
+
+  .fu-place.is-active {
+    border-color: var(--color-foreground);
+  }
+
+  .fu-place__media {
+    aspect-ratio: 16 / 9;
+  }
+
+  .fu-place__media img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .fu-place__body {
+    display: grid;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  .fu .fu-place__name {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 24px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .fu .fu-place__address,
+  .fu .fu-place__description,
+  .fu .fu-place__phone {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .fu .fu-place__address {
+    font-weight: 600;
+  }
+
+  .fu-place__hours {
+    padding-block-start: 10px;
+    border-block-start: 1px solid rgb(var(--color-foreground-rgb, 234 83 85) / 0.2);
+  }
+
+  .fu .fu-place__hours h3 {
+    margin: 0 0 4px;
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .fu .fu-place__hours p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .fu-place__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-block-start: 6px;
+  }
+
+  .fu .fu-place__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 44px;
+    padding: 10px 20px;
+    border: 1px solid var(--color-foreground);
+    border-radius: 999px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  .fu .fu-place__button:hover {
+    background: transparent;
+    color: var(--color-foreground);
+  }
+
+  .fu .fu-place__button--outline {
+    background: transparent;
+    color: var(--color-foreground);
+  }
+
+  .fu .fu-place__button--outline:hover,
+  .fu .fu-place__button--outline[aria-pressed='true'] {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .fu .fu-place__button:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 3px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .fu__places {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .fu__frame {
+      block-size: 420px;
+    }
+  }
+
+  /* Desktop: cards on the left, the map on the right and staying in view while the cards scroll */
+  @media screen and (min-width: 990px) {
+    .fu {
+      padding-block-start: 72px;
+    }
+
+    .fu__layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      align-items: start;
+      gap: 32px;
+    }
+
+    .fu__places {
+      grid-template-columns: 1fr;
+    }
+
+    .fu__map {
+      position: sticky;
+      inset-block-start: 24px;
+      order: 2;
+    }
+
+    .fu__frame {
+      block-size: 600px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fu-place,
+    .fu .fu-place__button {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Find us",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Chelsea, London"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find us on the King's Road"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "place",
+      "name": "Place",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Love My Human"
+        },
+        {
+          "type": "textarea",
+          "id": "address",
+          "label": "Address",
+          "info": "Also used for the map and directions.",
+          "default": "308 King's Road, London SW3 5UH"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "What's here"
+        },
+        {
+          "type": "textarea",
+          "id": "hours",
+          "label": "Opening hours",
+          "info": "One line per day or group of days. Leave empty to hide."
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone",
+          "info": "Leave empty to hide."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Find us",
+      "blocks": [{ "type": "place" }]
+    }
+  ]
+}
+{% endschema %}

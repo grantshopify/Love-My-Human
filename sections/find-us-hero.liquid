@@ -1,0 +1,450 @@
+{%- comment -%}
+  Find us with a street-level hero: the homepage's King's Road video full width with the headline over it,
+  a card for each place overlapping its bottom edge, then one map. "Show on map" moves the map to that place.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign first_address = ''
+  for block in section.blocks
+    if block.settings.address != blank
+      assign first_address = block.settings.address
+      break
+    endif
+  endfor
+-%}
+
+<div class="fh">
+  <div class="fh__hero">
+    <div class="fh__media" aria-hidden="true">
+      {%- if s.hero_video != blank -%}
+        {{
+          s.hero_video
+          | video_tag: image_size: '1600x', autoplay: true, loop: true, controls: false, muted: true, playsinline: true
+        }}
+      {%- elsif s.hero_image != blank -%}
+        {{ s.hero_image | image_url: width: 2000 | image_tag: sizes: '100vw', loading: 'eager', alt: '' }}
+      {%- endif -%}
+    </div>
+    <div class="fh__intro page-width">
+      {%- if s.eyebrow != blank -%}
+        <p class="fh__eyebrow">{{ s.eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="fh__title">{{ s.heading }}</h1>
+    </div>
+  </div>
+
+  <div class="fh__body page-width">
+    <ul class="fh__places">
+      {%- for block in section.blocks -%}
+        {%- assign place = block.settings -%}
+        <li class="fh-place{% if forloop.first %} is-active{% endif %}" data-fh-place {{ block.shopify_attributes }}>
+          {%- if place.image != blank -%}
+            <div class="fh-place__media">
+              {{ place.image | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 45vw, 100vw' }}
+            </div>
+          {%- endif -%}
+          <div class="fh-place__body">
+            <h2 class="fh-place__name">{{ place.name }}</h2>
+            <p class="fh-place__address">{{ place.address | escape | newline_to_br }}</p>
+            {%- if place.description != blank -%}
+              <p class="fh-place__description">{{ place.description }}</p>
+            {%- endif -%}
+            {%- if place.hours != blank -%}
+              <div class="fh-place__hours">
+                <h3>Opening hours</h3>
+                <p>{{ place.hours | escape | newline_to_br }}</p>
+              </div>
+            {%- endif -%}
+            {%- if place.phone != blank -%}
+              <p class="fh-place__description">
+                <a href="tel:{{ place.phone | remove: ' ' | remove: '(' | remove: ')' }}">{{ place.phone }}</a>
+              </p>
+            {%- endif -%}
+            <div class="fh-place__actions">
+              <a
+                class="fh-place__button"
+                href="https://www.google.com/maps/dir/?api=1&amp;destination={{ place.address | url_encode }}"
+                target="_blank"
+                rel="noopener"
+              >
+                Get directions
+              </a>
+              {%- if section.blocks.size > 1 -%}
+                <button
+                  type="button"
+                  class="fh-place__button fh-place__button--outline"
+                  data-fh-show="{{ place.address | escape }}"
+                  aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+                >
+                  Show on map
+                </button>
+              {%- endif -%}
+            </div>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if first_address != blank -%}
+      <div class="fh__map">
+        <iframe
+          class="fh__frame"
+          data-fh-map
+          src="https://maps.google.com/maps?q={{ first_address | url_encode }}&amp;output=embed"
+          title="Map showing {{ first_address | escape }}"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  (() => {
+    const root = document.currentScript.previousElementSibling;
+    const map = root.querySelector('[data-fh-map]');
+    if (!map) return;
+
+    root.querySelectorAll('[data-fh-show]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const address = button.dataset.fhShow;
+        map.src = 'https://maps.google.com/maps?q=' + encodeURIComponent(address) + '&output=embed';
+        map.title = 'Map showing ' + address;
+
+        root.querySelectorAll('[data-fh-place]').forEach((place) => {
+          const active = place.contains(button);
+          place.classList.toggle('is-active', active);
+          place.querySelector('[data-fh-show]')?.setAttribute('aria-pressed', String(active));
+        });
+
+        map.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .fh__hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-block-size: 480px;
+    overflow: hidden;
+    background: var(--color-foreground);
+  }
+
+  .fh__media,
+  .fh__media :is(video, img) {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* Darker towards the bottom so the cream headline reads over any frame */
+  .fh__hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(0 0 0 / 0.15), rgb(0 0 0 / 0.6));
+    pointer-events: none;
+  }
+
+  /* Bottom padding leaves room for the cards that overlap the hero */
+  .fh__intro {
+    position: relative;
+    z-index: 1;
+    inline-size: 100%;
+    padding: 120px var(--page-margin, 16px) 96px;
+  }
+
+  .fh .fh__eyebrow {
+    margin: 0 0 10px;
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-background);
+  }
+
+  .fh .fh__title {
+    margin: 0;
+    max-inline-size: 12ch;
+    font-family: var(--font-heading--family);
+    font-size: clamp(48px, 8vw, 104px);
+    line-height: 0.92;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--color-background);
+  }
+
+  .fh__body {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: 32px;
+    margin-block-start: -64px;
+    padding: 0 var(--page-margin, 16px) 80px;
+  }
+
+  .fh__places {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fh-place {
+    display: grid;
+    overflow: clip;
+    border: 1px solid rgb(var(--color-foreground-rgb, 234 83 85) / 0.25);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.35);
+    transition: border-color 0.2s ease;
+  }
+
+  .fh-place.is-active {
+    border-color: var(--color-foreground);
+  }
+
+  .fh-place__media {
+    aspect-ratio: 16 / 9;
+  }
+
+  .fh-place__media img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .fh-place__body {
+    display: grid;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  .fh .fh-place__name {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 24px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .fh .fh-place__address,
+  .fh .fh-place__description {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .fh .fh-place__address {
+    font-weight: 600;
+  }
+
+  .fh-place__hours {
+    padding-block-start: 10px;
+    border-block-start: 1px solid rgb(var(--color-foreground-rgb, 234 83 85) / 0.2);
+  }
+
+  .fh .fh-place__hours h3 {
+    margin: 0 0 4px;
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .fh .fh-place__hours p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .fh-place__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-block-start: 6px;
+  }
+
+  .fh .fh-place__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 44px;
+    padding: 10px 20px;
+    border: 1px solid var(--color-foreground);
+    border-radius: 999px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    font-family: var(--font-heading--family);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  .fh .fh-place__button:hover {
+    background: transparent;
+    color: var(--color-foreground);
+  }
+
+  .fh .fh-place__button--outline {
+    background: transparent;
+    color: var(--color-foreground);
+  }
+
+  .fh .fh-place__button--outline:hover,
+  .fh .fh-place__button--outline[aria-pressed='true'] {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .fh .fh-place__button:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 3px;
+  }
+
+  .fh__map {
+    overflow: clip;
+    border-radius: 14px;
+    background: rgb(var(--color-foreground-rgb, 234 83 85) / 0.06);
+  }
+
+  .fh__frame {
+    display: block;
+    inline-size: 100%;
+    block-size: 340px;
+    border: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .fh__places {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .fh__frame {
+      block-size: 480px;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .fh__hero {
+      min-block-size: 600px;
+    }
+
+    .fh__intro {
+      padding-block: 160px 120px;
+    }
+
+    .fh__body {
+      margin-block-start: -88px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fh-place,
+    .fh .fh-place__button {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Find us: street hero",
+  "tag": "section",
+  "class": "fh",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Chelsea, London"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find us on the King's Road"
+    },
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Hero video",
+      "info": "Plays behind the headline, like the homepage."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image",
+      "info": "Shown when there is no video."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "place",
+      "name": "Place",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Love My Human"
+        },
+        {
+          "type": "textarea",
+          "id": "address",
+          "label": "Address",
+          "info": "Also used for the map and directions.",
+          "default": "308 King's Road, London SW3 5UH"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "What's here"
+        },
+        {
+          "type": "textarea",
+          "id": "hours",
+          "label": "Opening hours",
+          "info": "One line per day or group of days. Leave empty to hide."
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone",
+          "info": "Leave empty to hide."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Find us: street hero",
+      "blocks": [{ "type": "place" }]
+    }
+  ]
+}
+{% endschema %}

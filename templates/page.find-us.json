@@ -1,116 +1,38 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
-      "type": "main-page",
+      "type": "find-us",
       "blocks": {
-        "heading": {
-          "type": "text",
-          "name": "t:names.title",
+        "shop": {
+          "type": "place",
           "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "name": "Love My Human shop",
+            "address": "308 King's Road, London SW3 5UH",
+            "image": "shopify://shop_images/homesplash.jpg",
+            "description": "Toys, treats, beds and accessories, all chosen and tested by our dogs.",
+            "hours": "Monday to Friday: 9 AM – 6 PM\nSaturday: 9 AM – 5 PM",
+            "phone": ""
+          }
         },
-        "page-content": {
-          "type": "page-content",
+        "townhouse": {
+          "type": "place",
           "settings": {
-            "text_color": ""
-          },
-          "blocks": {}
+            "name": "The Townhouse",
+            "address": "330 King's Road, London",
+            "image": "shopify://shop_images/Jenny_Matthews_at_the_LMH_Townhouse.webp",
+            "description": "Home of our café and doggy day-care.",
+            "hours": "",
+            "phone": ""
+          }
         }
       },
-      "block_order": [
-        "heading",
-        "page-content"
-      ],
-      "disabled": true,
+      "block_order": ["shop", "townhouse"],
       "settings": {
-        "content_direction": "column",
-        "gap": 32,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 40,
-        "padding-block-end": 80
-      }
-    },
-    "17931898887edb9770": {
-      "type": "_blocks",
-      "blocks": {
-        "ai_gen_block_bbce204_DiAWdQ": {
-          "type": "ai_gen_block_bbce204",
-          "settings": {
-            "heading": "Find Us",
-            "address": "Love My Human 308 King's Road, London, SW3 5UH",
-            "directions_label": "",
-            "desktop_width_percent": 100,
-            "map_height": 450,
-            "mobile_map_height": 300,
-            "corner_radius": 8
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "ai_gen_block_bbce204_DiAWdQ"
-      ],
-      "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "eyebrow": "Chelsea, London",
+        "heading": "Find us on the King's Road",
+        "text": "Our shop and the Townhouse are a short walk apart on the King's Road."
       }
     }
   },
-  "order": [
-    "main",
-    "17931898887edb9770"
-  ]
+  "order": ["main"]
 }

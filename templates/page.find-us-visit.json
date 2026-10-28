@@ -1,0 +1,87 @@
+{
+  "sections": {
+    "main": {
+      "type": "find-us-visit",
+      "blocks": {
+        "shop": {
+          "type": "service",
+          "settings": {
+            "name": "Shop",
+            "location": "shop",
+            "image": "shopify://shop_images/homesplash.jpg",
+            "description": "Toys, treats, beds and accessories, all chosen and tested by our dogs.",
+            "hours_heading": "Opening hours",
+            "hours": "Monday to Friday: 9 AM – 6 PM\nSaturday: 9 AM – 5 PM",
+            "button_label": "Shop online",
+            "button_link": "shopify://collections/all"
+          }
+        },
+        "grooming": {
+          "type": "service",
+          "settings": {
+            "name": "Grooming",
+            "location": "unknown",
+            "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-london-main-head-poodle-finished-groom_f3960ddd-c51e-4e56-99ac-e0c800078d43_1.webp",
+            "description": "Book your dog's groom with our team.",
+            "hours_heading": "Opening hours",
+            "hours": "",
+            "button_label": "Book a groom",
+            "button_link": "shopify://pages/grooming"
+          }
+        },
+        "daycare": {
+          "type": "service",
+          "settings": {
+            "name": "Day-care",
+            "location": "townhouse",
+            "image": "shopify://shop_images/Jenny_Matthews_at_the_LMH_Townhouse.webp",
+            "description": "A supervised day of play, rest and company at the Townhouse.",
+            "hours_heading": "Opening hours",
+            "hours": "",
+            "button_label": "Day-care enquiries",
+            "button_link": "shopify://pages/dog-daycare-enquiries"
+          }
+        },
+        "cafe": {
+          "type": "service",
+          "settings": {
+            "name": "Café",
+            "location": "townhouse",
+            "image": "shopify://shop_images/lmh-dogs-improve-daily-wellbeing-main-header-french-bulldog-resting-cafe_8e8f090a-5b4e-4489-9513-2b12b09389a1.webp",
+            "description": "Our café at the Townhouse.",
+            "hours_heading": "Opening hours",
+            "hours": "",
+            "button_label": "Visit the café",
+            "button_link": "shopify://pages/townhouse-cafe"
+          }
+        },
+        "academy": {
+          "type": "service",
+          "settings": {
+            "name": "Academy",
+            "location": "unknown",
+            "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-aoife-journey-main-header-grooming-academy-training_ebb4d686-9f0a-4132-9d95-5488fcef8bef.webp",
+            "description": "Train as a dog groomer with our team.",
+            "hours_heading": "Course days",
+            "hours": "",
+            "button_label": "About the academy",
+            "button_link": "shopify://pages/academy"
+          }
+        }
+      },
+      "block_order": ["shop", "grooming", "daycare", "cafe", "academy"],
+      "settings": {
+        "eyebrow": "Chelsea, London",
+        "heading": "What are you coming for?",
+        "text": "Pick what you're visiting for and we'll show you which door to come to.",
+        "shop_name": "Love My Human shop",
+        "shop_address": "308 King's Road, London SW3 5UH",
+        "shop_label": "308",
+        "townhouse_name": "The Townhouse",
+        "townhouse_address": "330 King's Road, London",
+        "townhouse_label": "330"
+      }
+    }
+  },
+  "order": ["main"]
+}
