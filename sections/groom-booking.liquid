@@ -1,0 +1,728 @@
+{%- comment -%}
+  Book a groom: the homepage's King's Road video as a hero, then one card per service from the grooming product
+  (its first option, e.g. "Service"), each listing that service's sizes and prices.
+  "Book" opens the product on that variant, where Apntly swaps Add to cart for its date, time and groomer picker,
+  and payment goes through Shopify checkout.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign groom = s.product | default: all_products['dog-groom']
+
+  # The option that holds the services ("Service"), and the one that holds the sizes
+  assign service_index = 0
+  assign size_index = 1
+  # A draft product comes back empty on the storefront, so only show services when it has variants
+  if groom.variants.size == 0
+    assign groom = nil
+  endif
+
+  if groom
+    for option in groom.options_with_values
+      assign option_name = option.name | downcase
+      if option_name contains 'size'
+        assign size_index = forloop.index0
+      elsif option_name contains 'service'
+        assign service_index = forloop.index0
+      endif
+    endfor
+  endif
+-%}
+
+<div class="gb">
+  <div class="gb__hero">
+    <div class="gb__media" aria-hidden="true">
+      {%- if s.hero_video != blank -%}
+        {{
+          s.hero_video
+          | video_tag: image_size: '1600x', autoplay: true, loop: true, controls: false, muted: true, playsinline: true
+        }}
+      {%- elsif s.hero_image != blank -%}
+        {{ s.hero_image | image_url: width: 2000 | image_tag: sizes: '100vw', loading: 'eager', alt: '' }}
+      {%- endif -%}
+    </div>
+    <div class="gb__intro">
+      {%- if s.eyebrow != blank -%}
+        <p class="gb__eyebrow">{{ s.eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="gb__title">{{ s.heading }}</h1>
+      {%- if s.text != blank -%}
+        <p class="gb__text">{{ s.text }}</p>
+      {%- endif -%}
+      {%- if groom -%}
+        <a class="gb__button gb__button--light" href="#GroomServices-{{ section.id }}">Choose a groom</a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="gb__body">
+    <ol class="gb__steps">
+      <li>
+        <h2>Choose your groom</h2>
+        <p>Pick a service and your dog's size.</p>
+      </li>
+      <li>
+        <h2>Pick a day and time</h2>
+        <p>See when our groomers are free and choose a groomer if you like.</p>
+      </li>
+      <li>
+        <h2>Pay securely</h2>
+        <p>Check out as usual and we'll email your confirmation.</p>
+      </li>
+    </ol>
+
+    {%- if groom -%}
+      <ul class="gb__services" id="GroomServices-{{ section.id }}" role="list">
+        {%- for service in groom.options_with_values[service_index].values -%}
+          {%- liquid
+            assign details = blank
+            for block in section.blocks
+              assign block_name = block.settings.name | strip | downcase
+              assign value_name = service | strip | downcase
+              if block_name == value_name
+                assign details = block
+              endif
+            endfor
+          -%}
+          <li class="gb-service" {% if details %}{{ details.shopify_attributes }}{% endif %}>
+            <h2 class="gb-service__name">{{ service }}</h2>
+            {%- if details.settings.duration != blank -%}
+              <p class="gb-service__duration">{{ details.settings.duration }}</p>
+            {%- endif -%}
+            {%- if details.settings.description != blank -%}
+              <p class="gb-service__description">{{ details.settings.description }}</p>
+            {%- endif -%}
+
+            <ul class="gb-service__sizes" role="list">
+              {%- for variant in groom.variants -%}
+                {%- if variant.options[service_index] == service -%}
+                  <li class="gb-size">
+                    <span class="gb-size__name">{{ variant.options[size_index] }}</span>
+                    <span class="gb-size__price">{{ variant.price | money_without_trailing_zeros }}</span>
+                    {%- if variant.available -%}
+                      <a
+                        class="gb__button gb__button--small"
+                        href="{{ variant.url }}"
+                        data-gb-pick="{{ variant.id }}"
+                        aria-label="Book {{ service | escape }}, {{ variant.options[size_index] | escape }}"
+                      >
+                        Book
+                      </a>
+                    {%- else -%}
+                      <span class="gb__button gb__button--small gb__button--disabled">Full</span>
+                    {%- endif -%}
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- comment -%}
+        The booking itself, on this page: a product form for the grooming product, so Apntly's app embed can swap
+        its button for the date, time and groomer picker. The service and size pickers choose the variant.
+      {%- endcomment -%}
+      {%- assign first_variant = groom.selected_or_first_available_variant -%}
+      <div class="gb-book" id="GroomBook-{{ section.id }}" data-gb-book>
+        <div class="gb-book__intro">
+          <h2 class="gb-book__title">Book your groom</h2>
+          <p class="gb-book__text">Choose a service and your dog's size, then pick a day, time and groomer.</p>
+        </div>
+
+        {%- form 'product', groom, class: 'gb-book__form', data-type: 'add-to-cart-form' -%}
+          <input type="hidden" name="id" value="{{ first_variant.id }}" data-gb-variant>
+
+          <div class="gb-book__fields">
+            {%- for option in groom.options_with_values -%}
+              <div class="gb-book__field">
+                <label class="gb-book__label" for="GroomBook-{{ section.id }}-{{ forloop.index }}">{{ option.name }}</label>
+                <div class="gb-book__select">
+                  <select id="GroomBook-{{ section.id }}-{{ forloop.index }}" data-gb-option="{{ forloop.index0 }}">
+                    {%- for value in option.values -%}
+                      <option value="{{ value | escape }}"{% if first_variant.options[forloop.parentloop.index0] == value %} selected{% endif %}>{{ value }}</option>
+                    {%- endfor -%}
+                  </select>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          <div class="gb-book__footer">
+            <p class="gb-book__price" data-gb-price>{{ first_variant.price | money_without_trailing_zeros }}</p>
+            <button type="submit" name="add" class="gb__button gb-book__submit" data-gb-submit{% unless first_variant.available %} disabled{% endunless %}>
+              Book now
+            </button>
+          </div>
+        {%- endform -%}
+
+        <script type="application/json" data-gb-variants>
+          [
+            {%- for variant in groom.variants -%}
+              {"id": {{ variant.id }}, "options": {{ variant.options | json }}, "price": {{ variant.price | money_without_trailing_zeros | json }}, "available": {{ variant.available }}}{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          ]
+        </script>
+      </div>
+    {%- elsif request.design_mode -%}
+      <p class="gb__empty">Choose the grooming product in this section's settings. It needs to be active or unlisted to show here.</p>
+    {%- endif -%}
+
+    {%- if s.note != blank -%}
+      <p class="gb__note">{{ s.note }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  (() => {
+    const root = document.currentScript.previousElementSibling;
+    const book = root.querySelector('[data-gb-book]');
+    if (!book) return;
+
+    const variants = JSON.parse(book.querySelector('[data-gb-variants]').textContent);
+    const selects = [...book.querySelectorAll('[data-gb-option]')];
+    const idInput = book.querySelector('[data-gb-variant]');
+    const price = book.querySelector('[data-gb-price]');
+    const submit = book.querySelector('[data-gb-submit]');
+
+    const update = () => {
+      const chosen = selects.map((select) => select.value);
+      const variant = variants.find((item) => item.options.every((value, index) => value === chosen[index]));
+      if (!variant) return;
+      idInput.value = variant.id;
+      idInput.dispatchEvent(new Event('change', { bubbles: true }));
+      price.textContent = variant.price;
+      submit.disabled = !variant.available;
+    };
+    selects.forEach((select) => select.addEventListener('change', update));
+
+    // "Book" on a service card picks that service and size here instead of leaving the page
+    root.querySelectorAll('[data-gb-pick]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const variant = variants.find((item) => String(item.id) === link.dataset.gbPick);
+        if (!variant) return;
+        event.preventDefault();
+        selects.forEach((select, index) => (select.value = variant.options[index]));
+        update();
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        book.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth', block: 'center' });
+        selects[0]?.focus({ preventScroll: true });
+      });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .gb__hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-block-size: 440px;
+    overflow: hidden;
+    background: var(--color-foreground);
+  }
+
+  .gb__media,
+  .gb__media :is(video, img) {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* Darker towards the bottom so the cream headline reads over any frame */
+  .gb__hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(0 0 0 / 0.15), rgb(0 0 0 / 0.6));
+    pointer-events: none;
+  }
+
+  /* Same content width as the homepage and Find us */
+  .gb__intro,
+  .gb__body {
+    inline-size: calc(100% - 32px);
+    max-inline-size: 1320px;
+    margin-inline: auto;
+  }
+
+  .gb__intro {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: start;
+    gap: 16px;
+    padding-block: 120px 40px;
+  }
+
+  .gb .gb__eyebrow {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-background);
+  }
+
+  .gb .gb__title {
+    margin: 0;
+    max-inline-size: 12ch;
+    font-family: var(--font-heading--family);
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 0.92;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--color-background);
+  }
+
+  .gb .gb__text {
+    margin: 0;
+    max-inline-size: 44ch;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--color-background);
+  }
+
+  .gb .gb__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 48px;
+    padding: 12px 24px;
+    border: 1px solid var(--color-foreground);
+    border-radius: 999px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    font-family: var(--font-heading--family);
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  .gb .gb__button:hover {
+    background: transparent;
+    color: var(--color-foreground);
+  }
+
+  .gb .gb__button:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 3px;
+  }
+
+  .gb .gb__button--light {
+    border-color: var(--color-background);
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .gb .gb__button--light:hover {
+    background: transparent;
+    color: var(--color-background);
+  }
+
+  .gb .gb__button--light:focus-visible {
+    outline-color: var(--color-background);
+  }
+
+  .gb .gb__button--small {
+    min-block-size: 40px;
+    padding: 8px 18px;
+    font-size: 13px;
+  }
+
+  .gb .gb__button--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .gb__body {
+    display: grid;
+    gap: 40px;
+    padding-block: 48px 80px;
+  }
+
+  .gb__steps {
+    display: grid;
+    gap: 24px;
+    margin: 0;
+    padding: 0 0 32px;
+    border-block-end: 1px solid rgb(234 83 85 / 0.25);
+    list-style: none;
+    counter-reset: gb-step;
+  }
+
+  .gb__steps li {
+    counter-increment: gb-step;
+  }
+
+  .gb__steps li::before {
+    content: counter(gb-step);
+    display: block;
+    margin-block-end: 8px;
+    font-family: var(--font-heading--family);
+    font-size: 40px;
+    line-height: 1;
+    color: var(--color-foreground);
+  }
+
+  .gb .gb__steps h2 {
+    margin: 0 0 6px;
+    font-family: var(--font-heading--family);
+    font-size: 20px;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .gb .gb__steps p {
+    margin: 0;
+    max-inline-size: 32ch;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .gb__services {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    scroll-margin-block-start: calc(var(--header-height, 0px) + 24px);
+  }
+
+  .gb-service {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-inline-size: 0;
+    padding: 24px 20px;
+    border: 1px solid rgb(234 83 85 / 0.25);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .gb .gb-service__name {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 26px;
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+    text-wrap: balance;
+  }
+
+  .gb .gb-service__duration {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+
+  .gb .gb-service__description {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .gb-service__sizes {
+    display: grid;
+    margin: auto 0 0;
+    padding: 8px 0 0;
+    list-style: none;
+  }
+
+  .gb-size {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 12px;
+    align-items: center;
+    padding-block: 10px;
+    border-block-start: 1px solid rgb(234 83 85 / 0.18);
+  }
+
+  .gb-size__name {
+    font-size: 15px;
+  }
+
+  .gb-size__price {
+    font-size: 15px;
+    font-weight: 600;
+    color: #000;
+  }
+
+  /* Booking panel: coral card with white pickers */
+  .gb-book {
+    display: grid;
+    gap: 24px;
+    padding: 28px 20px;
+    border-radius: 20px;
+    background: var(--color-foreground);
+    color: var(--color-background);
+    scroll-margin-block: calc(var(--header-height, 0px) + 24px);
+  }
+
+  .gb .gb-book__title {
+    margin: 0 0 8px;
+    font-family: var(--font-heading--family);
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--color-background);
+  }
+
+  .gb .gb-book__text {
+    margin: 0;
+    max-inline-size: 40ch;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-background);
+  }
+
+  .gb-book__form {
+    display: grid;
+    gap: 20px;
+  }
+
+  .gb-book__fields {
+    display: grid;
+    gap: 16px;
+  }
+
+  .gb .gb-book__label {
+    display: block;
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-background);
+  }
+
+  .gb-book__select {
+    position: relative;
+  }
+
+  .gb-book__select select {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: 52px;
+    padding: 12px 44px 12px 16px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: #fff;
+    color: #2b1f1f;
+    font-family: var(--font-body--family);
+    font-size: 16px;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .gb-book__select select:focus-visible {
+    outline: 2px solid var(--color-background);
+    outline-offset: 3px;
+  }
+
+  .gb-book__select::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: 18px;
+    inline-size: 8px;
+    block-size: 8px;
+    border-block-end: 2px solid var(--color-foreground);
+    border-inline-end: 2px solid var(--color-foreground);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  .gb-book__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .gb .gb-book__price {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 32px;
+    line-height: 1;
+    color: var(--color-background);
+  }
+
+  .gb .gb-book__submit {
+    flex: 1 1 200px;
+    border-color: var(--color-background);
+    background: var(--color-background);
+    color: var(--color-foreground);
+    cursor: pointer;
+  }
+
+  .gb .gb-book__submit:hover {
+    background: transparent;
+    color: var(--color-background);
+  }
+
+  .gb .gb-book__submit:focus-visible {
+    outline-color: var(--color-background);
+  }
+
+  .gb .gb-book__submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .gb .gb__note,
+  .gb .gb__empty {
+    margin: 0;
+    max-inline-size: 70ch;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  @media screen and (min-width: 750px) {
+    .gb__intro,
+    .gb__body {
+      inline-size: calc(100% - 48px);
+    }
+
+    .gb__steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 40px;
+    }
+
+    .gb__services {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .gb-book {
+      padding: 40px;
+    }
+
+    .gb-book__fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .gb .gb-book__submit {
+      flex: 0 0 auto;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .gb__hero {
+      min-block-size: 560px;
+    }
+
+    .gb__intro {
+      padding-block: 160px 56px;
+    }
+
+    .gb__body {
+      padding-block-start: 64px;
+    }
+
+    .gb__services {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .gb-service {
+      padding: 28px;
+    }
+
+    .gb-book {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      align-items: center;
+      gap: 48px;
+      padding: 48px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gb .gb__button {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Book a groom",
+  "tag": "section",
+  "class": "gb",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Chelsea, King's Road"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Book a groom"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Our senior groomers give every dog a groom tailored to their coat."
+    },
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Hero video",
+      "info": "Plays behind the headline, like the homepage."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image",
+      "info": "Shown when there is no video."
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Grooming product",
+      "info": "Its first option is the service (e.g. Full groom) and the other is the size. Leave empty to use the product with the handle \"dog-groom\"."
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Note under the services",
+      "default": "Heavily matted coats may need extra time, fees or a clip-off for healthy regrowth."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "service",
+      "name": "Service details",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Service",
+          "info": "Must match the service name on the product, e.g. Full groom."
+        },
+        {
+          "type": "text",
+          "id": "duration",
+          "label": "How long it takes"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "What's included"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

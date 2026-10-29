@@ -59,72 +59,52 @@
         "padding-block-end": 80
       }
     },
-    "section_hXaLtA": {
-      "type": "section",
+    "groom_booking": {
+      "type": "groom-booking",
       "blocks": {
-        "text_VyVLpp": {
-          "type": "text",
-          "name": "t:names.heading",
+        "wash_blow_dry": {
+          "type": "service",
           "settings": {
-            "text": "<h2>book a grooming appointment MAATE!</h2>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "name": "Wash and blow dry",
+            "duration": "1 to 2 hours, depending on breed and size",
+            "description": "A double cleanse, brush and de-matt if needed, a gentle warm blow dry and a spritz of scent."
+          }
+        },
+        "wash_tidy": {
+          "type": "service",
+          "settings": {
+            "name": "Wash and tidy",
+            "duration": "1.5 to 2.5 hours, depending on breed and size",
+            "description": "Everything in a wash and blow dry, plus nails, a sanitary tidy and a clean around the eyes and paws."
+          }
+        },
+        "full_groom": {
+          "type": "service",
+          "settings": {
+            "name": "Full groom",
+            "duration": "1.5 hours for short coats, 2+ hours for long or complex coats",
+            "description": "Two shampoos, de-matting and hand-drying, then a strip or a trim to your chosen style, with nails, ears and a sanitary tidy."
+          }
         }
       },
       "block_order": [
-        "text_VyVLpp"
+        "wash_blow_dry",
+        "wash_tidy",
+        "full_groom"
       ],
-      "name": "t:names.rich_text_section",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 25,
-        "section_width": "page-width",
-        "section_height": "small",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "eyebrow": "Chelsea, King's Road",
+        "heading": "Book a groom",
+        "text": "Our senior groomers give every dog a groom tailored to their coat.",
+        "hero_video": "shopify://files/videos/LMH About us vid (1).mp4",
+        "hero_image": "shopify://shop_images/homesplash.jpg",
+        "product": "dog-groom",
+        "note": "Heavily matted coats may need extra time, fees or a clip-off for healthy regrowth."
       }
     }
   },
   "order": [
-    "main",
-    "section_hXaLtA"
+    "groom_booking",
+    "main"
   ]
 }
