@@ -168,6 +168,93 @@
       <p class="gb__empty">Choose the grooming product in this section's settings. It needs to be active or unlisted to show here.</p>
     {%- endif -%}
 
+    {%- comment -%} Groom request: a Shopify contact form, so each request is emailed to the store {%- endcomment -%}
+    {%- assign form_id = 'GroomRequest-' | append: section.id -%}
+    <div class="gb-request" id="{{ form_id }}">
+      <div class="gb-request__intro">
+        <h2 class="gb-request__title">{{ s.form_heading }}</h2>
+        {%- if s.form_text != blank -%}
+          <p class="gb-request__text">{{ s.form_text }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- form 'contact', id: form_id, class: 'gb-request__form' -%}
+        <input type="hidden" name="contact[Request]" value="Groom request">
+
+        {%- if form.posted_successfully? -%}
+          <p class="gb-request__status" role="status" tabindex="-1" autofocus>{{ s.form_success }}</p>
+        {%- else -%}
+          {%- if form.errors -%}
+            <div class="gb-request__status gb-request__status--error" role="alert" tabindex="-1" autofocus>
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+
+          <div class="gb-request__fields">
+            <div class="gb-request__field">
+              <label for="{{ form_id }}-pet">1. Is it a dog or a cat? *</label>
+              <div class="gb-book__select">
+                <select id="{{ form_id }}-pet" name="contact[Dog or cat]" required>
+                  <option value="Dog">Dog</option>
+                  <option value="Cat">Cat</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="gb-request__field">
+              <label for="{{ form_id }}-breed">2. Your pet's name and breed *</label>
+              <input id="{{ form_id }}-breed" type="text" name="contact[Pet name and breed]" placeholder="e.g. Biscuit, Cockapoo" required>
+            </div>
+
+            <div class="gb-request__field">
+              <label for="{{ form_id }}-service">3. Which service? *</label>
+              <div class="gb-book__select">
+                <select id="{{ form_id }}-service" name="contact[Service]" required>
+                  {%- assign services = s.form_services | newline_to_br | split: '<br />' -%}
+                  {%- for option in services -%}
+                    {%- assign option_text = option | strip -%}
+                    {%- if option_text != blank -%}<option value="{{ option_text | escape }}">{{ option_text }}</option>{%- endif -%}
+                  {%- endfor -%}
+                </select>
+              </div>
+            </div>
+
+            <div class="gb-request__field">
+              <label for="{{ form_id }}-when">4. Preferred day and time *</label>
+              <input id="{{ form_id }}-when" type="datetime-local" name="contact[Preferred day and time]" required>
+            </div>
+
+            <div class="gb-request__field">
+              <label for="{{ form_id }}-groomer">5. Which groomer?</label>
+              <input id="{{ form_id }}-groomer" type="text" name="contact[Groomer]" placeholder="No preference">
+            </div>
+
+            <div class="gb-request__field gb-request__field--full">
+              <label for="{{ form_id }}-notes">6. Anything we should know?</label>
+              <textarea id="{{ form_id }}-notes" name="contact[body]" rows="3" placeholder="Matting, health, temperament, the style you'd like">{{ form.body }}</textarea>
+            </div>
+
+            <div class="gb-request__field">
+              <label for="{{ form_id }}-name">Your name *</label>
+              <input id="{{ form_id }}-name" type="text" name="contact[name]" autocomplete="name" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" required>
+            </div>
+
+            <div class="gb-request__field">
+              <label for="{{ form_id }}-email">Email *</label>
+              <input id="{{ form_id }}-email" type="email" name="contact[email]" autocomplete="email" autocapitalize="off" spellcheck="false" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required>
+            </div>
+
+            <div class="gb-request__field gb-request__field--full">
+              <label for="{{ form_id }}-phone">Phone *</label>
+              <input id="{{ form_id }}-phone" type="tel" name="contact[phone]" autocomplete="tel" value="{{ form.phone }}" required>
+            </div>
+          </div>
+
+          <button type="submit" class="gb__button gb-request__submit">Send request</button>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+
     {%- if s.note != blank -%}
       <p class="gb__note">{{ s.note }}</p>
     {%- endif -%}
@@ -578,6 +665,101 @@
     cursor: not-allowed;
   }
 
+  /* Groom request form: white card under the booking panel */
+  .gb-request {
+    display: grid;
+    gap: 24px;
+    padding: 28px 20px;
+    border: 1px solid rgb(234 83 85 / 0.25);
+    border-radius: 20px;
+    background: #fff;
+  }
+
+  .gb .gb-request__title {
+    margin: 0 0 8px;
+    font-family: var(--font-heading--family);
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+
+  .gb .gb-request__text {
+    margin: 0;
+    max-inline-size: 44ch;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .gb-request__form {
+    display: grid;
+    gap: 20px;
+  }
+
+  .gb-request__fields {
+    display: grid;
+    gap: 16px;
+  }
+
+  .gb-request__field {
+    min-inline-size: 0;
+  }
+
+  .gb .gb-request__field label {
+    display: block;
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+
+  .gb-request__field :is(input, textarea),
+  .gb-request .gb-book__select select {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: 48px;
+    padding: 10px 14px;
+    border: 1px solid rgb(234 83 85 / 0.35);
+    border-radius: 10px;
+    background: #fff;
+    color: #2b1f1f;
+    font-family: var(--font-body--family);
+    font-size: 16px;
+  }
+
+  .gb-request .gb-book__select select {
+    padding-inline-end: 44px;
+  }
+
+  .gb-request__field textarea {
+    min-block-size: 96px;
+    resize: vertical;
+  }
+
+  .gb-request__field :is(input, textarea, select):focus-visible {
+    border-color: var(--color-foreground);
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(234 83 85 / 0.18);
+  }
+
+  .gb .gb-request__submit {
+    justify-self: stretch;
+    cursor: pointer;
+  }
+
+  .gb .gb-request__status {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .gb .gb-request__status--error {
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: rgb(234 83 85 / 0.08);
+    color: var(--color-foreground);
+  }
+
   .gb .gb__note,
   .gb .gb__empty {
     margin: 0;
@@ -613,6 +795,22 @@
     .gb .gb-book__submit {
       flex: 0 0 auto;
     }
+
+    .gb-request {
+      padding: 40px;
+    }
+
+    .gb-request__fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .gb-request__field--full {
+      grid-column: 1 / -1;
+    }
+
+    .gb .gb-request__submit {
+      justify-self: start;
+    }
   }
 
   @media screen and (min-width: 990px) {
@@ -639,6 +837,13 @@
     .gb-book {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
       align-items: center;
+      gap: 48px;
+      padding: 48px;
+    }
+
+    .gb-request {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      align-items: start;
       gap: 48px;
       padding: 48px;
     }
@@ -692,6 +897,35 @@
       "id": "product",
       "label": "Grooming product",
       "info": "Its first option is the service (e.g. Full groom) and the other is the size. Leave empty to use the product with the handle \"dog-groom\"."
+    },
+    {
+      "type": "header",
+      "content": "Request form"
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Heading",
+      "default": "Request a groom"
+    },
+    {
+      "type": "textarea",
+      "id": "form_text",
+      "label": "Text",
+      "default": "Prefer to ask first? Answer a few questions and we'll get back to you to confirm your time, groomer and price."
+    },
+    {
+      "type": "textarea",
+      "id": "form_services",
+      "label": "Services",
+      "info": "One per line.",
+      "default": "Wash and blow dry\nWash and tidy\nFull groom\nPuppy introduction groom\nCat groom\nNot sure, please advise"
+    },
+    {
+      "type": "text",
+      "id": "form_success",
+      "label": "Thank you message",
+      "default": "Thanks, we've got your request. We'll be in touch to confirm your groom."
     },
     {
       "type": "textarea",
