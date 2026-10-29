@@ -226,7 +226,15 @@
 
             <div class="gb-request__field">
               <label for="{{ form_id }}-groomer">5. Which groomer?</label>
-              <input id="{{ form_id }}-groomer" type="text" name="contact[Groomer]" placeholder="No preference">
+              <div class="gb-book__select">
+                <select id="{{ form_id }}-groomer" name="contact[Groomer]">
+                  {%- assign groomers = s.form_groomers | newline_to_br | split: '<br />' -%}
+                  {%- for option in groomers -%}
+                    {%- assign option_text = option | strip -%}
+                    {%- if option_text != blank -%}<option value="{{ option_text | escape }}">{{ option_text }}</option>{%- endif -%}
+                  {%- endfor -%}
+                </select>
+              </div>
             </div>
 
             <div class="gb-request__field gb-request__field--full">
@@ -920,6 +928,13 @@
       "label": "Services",
       "info": "One per line.",
       "default": "Wash and blow dry\nWash and tidy\nFull groom\nPuppy introduction groom\nCat groom\nNot sure, please advise"
+    },
+    {
+      "type": "textarea",
+      "id": "form_groomers",
+      "label": "Groomers",
+      "info": "One per line. Replace Groomer 1, 2 and 3 with your groomers' names.",
+      "default": "No preference\nGroomer 1\nGroomer 2\nGroomer 3"
     },
     {
       "type": "text",
