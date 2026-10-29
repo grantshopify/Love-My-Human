@@ -88,6 +88,11 @@
         "type": "shopify://apps/bss-b2b-solution/blocks/config-header/451233f2-9631-4c49-8b6f-057e4ebcde7f",
         "disabled": false,
         "settings": {}
+      },
+      "1850493961649900144": {
+        "type": "shopify://apps/apntly-appointment-booking-app/blocks/main-app-embed/17a520a2-4844-483a-826a-11cb5dd0370d",
+        "disabled": false,
+        "settings": {}
       }
     },
     "color_palette": {
