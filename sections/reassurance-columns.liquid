@@ -22,8 +22,18 @@
       assign r_text = palette.foreground
       assign r_divider = palette.color3
   endcase
+
+  # Optionally limit the row to the shop pages (homepage, product and collection pages)
+  assign show_here = true
+  if s.shop_pages_only
+    assign show_here = false
+    if template.name == 'index' or template.name == 'product' or template.name == 'collection'
+      assign show_here = true
+    endif
+  endif
 -%}
 
+{%- if show_here -%}
 <div
   class="reassurance{% if s.show_divider %} reassurance--divider{% endif %}"
   style="
@@ -55,6 +65,7 @@
     {%- endfor -%}
   </ul>
 </div>
+{%- endif -%}
 
 {% stylesheet %}
   .reassurance {
@@ -248,6 +259,12 @@
     }
   ],
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "shop_pages_only",
+      "label": "Only show on the homepage, product and collection pages",
+      "default": false
+    },
     {
       "type": "header",
       "content": "Layout"

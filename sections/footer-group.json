@@ -62,7 +62,8 @@
         "color_style": "brand",
         "background_color": "{{ settings.color_palette.background }}",
         "text_color": "{{ settings.color_palette.foreground }}",
-        "divider_color": "{{ settings.color_palette.color3 }}"
+        "divider_color": "{{ settings.color_palette.color3 }}",
+        "shop_pages_only": true
       }
     },
     "footer_editorial": {
