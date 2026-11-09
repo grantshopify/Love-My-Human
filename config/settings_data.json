@@ -96,8 +96,8 @@
       }
     },
     "color_palette": {
-      "background": "#F6F7F1",
-      "foreground": "#EA5355",
+      "background": "#FCF7EB",
+      "foreground": "#ea5355",
       "color1": "#000000",
       "color2": "#e8d5c7",
       "color3": "#e6e6e6"
