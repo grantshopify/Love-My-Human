@@ -18,6 +18,7 @@
     --lmh-pb: {{ s.padding_bottom }}px;
     --lmh-banner-h: {{ s.banner_height }}px;
     --lmh-cols: {{ s.columns }};
+    --lmh-inner: {{ s.content_width | default: 1100 }}px;
     --lmh-btn-fill: {{ s.button_fill | default: s.text_color }};
     --lmh-btn-text: {{ s.button_text | default: s.background }};
   "
@@ -151,7 +152,7 @@
   .lmh-m--banner, .lmh-m--video { padding: 0; }
   .lmh-m--banner:has(.lmh-m__inner) { padding: var(--lmh-pt) 0 var(--lmh-pb); }
   .lmh-m__banner-below { text-align: var(--lmh-align); padding-top: 28px; max-width: 780px; margin-inline: auto; }
-  .lmh-m__inner { width: min(1100px, calc(100% - 40px)); margin-inline: auto; }
+  .lmh-m__inner { width: min(var(--lmh-inner, 1100px), calc(100% - 48px)); margin-inline: auto; }
   .lmh-m--full .lmh-m__inner { width: 100%; }
 
   .lmh-m__heading { font-family: var(--font-heading--family); font-size: 40px; line-height: 1.3; font-weight: 400; letter-spacing: 0.6px; color: inherit; margin: 0 0 20px; text-transform: none; }
@@ -347,6 +348,7 @@
       "default": "row"
     },
     { "type": "video", "id": "video", "label": "Video" },
+    { "type": "range", "id": "content_width", "label": "Content width", "min": 900, "max": 1800, "step": 20, "unit": "px", "default": 1100 },
     { "type": "range", "id": "banner_height", "label": "Image height", "min": 200, "max": 900, "step": 10, "unit": "px", "default": 560 },
     { "type": "blog", "id": "blog", "label": "Blog" },
     { "type": "checkbox", "id": "show_pagination", "label": "Show page numbers", "default": false },
