@@ -7,548 +7,104 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
+/*
+ * Mirrors the original lovemyhuman.co.uk page section by section (LMH classic section).
+ * Edit freely in the theme editor.
+ */
 {
   "sections": {
-    "section_qDPtBg": {
-      "type": "section",
-      "blocks": {
-        "text_c6HXpW": {
-          "type": "text",
-          "name": "t:names.heading",
-          "settings": {
-            "text": "<h2>Necessity is the mother of invention</h2>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "{{ settings.color_palette.color1 }}",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "text_gfTVpk": {
-          "type": "text",
-          "name": "t:names.text",
-          "settings": {
-            "text": "<p>Love My Human Ltd. was founded by Jenny, a creative visionary with a deep passion for both design and the well-being of dogs. After graduating from the Royal College of Art, Jenny worked with international luxury brands such as Jasper Conran and Shanghai Tang, before making her mark in the restaurant and hospitality industry, with her final project being at the Mandarin Oriental Hyde Park.</p>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "custom",
-            "font": "var(--font-body--family)",
-            "font_size": "1.25rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "{{ settings.color_palette.color1 }}",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "text_c6HXpW",
-        "text_gfTVpk"
-      ],
-      "name": "t:names.rich_text_section",
+    "lmh_00_rich_text": {
+      "type": "lmh-mirror",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 25,
-        "section_width": "page-width",
-        "section_height": "small",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "padding-block-start": 5,
-        "padding-block-end": 5
+        "background": "#FCF7EB",
+        "text_color": "#3F4040",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "Necessity is the mother of invention",
+        "heading_style": "title",
+        "text": "<p>Love My Human Ltd. was founded by Jenny, a creative visionary with a deep passion for both design and the well-being of dogs. After graduating from the Royal College of Art, Jenny worked with international luxury brands such as Jasper Conran and Shanghai Tang, before making her mark in the restaurant and hospitality industry, with her final project being at the Mandarin Oriental Hyde Park.</p>"
       }
     },
-    "main": {
-      "type": "main-page",
-      "blocks": {
-        "heading": {
-          "type": "text",
-          "name": "t:names.title",
-          "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "page-content": {
-          "type": "page-content",
-          "settings": {
-            "text_color": ""
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "heading",
-        "page-content"
-      ],
-      "disabled": true,
+    "lmh_01_collage": {
+      "type": "lmh-mirror",
       "settings": {
-        "content_direction": "column",
-        "gap": 32,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 40,
-        "padding-block-end": 80
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "layout": "images",
+        "collage": "row",
+        "image": "shopify://shop_images/ABOUT-US-min.webp",
+        "banner_height": 610
       }
     },
-    "hero_bVdd39": {
-      "type": "hero",
-      "name": "t:names.hero",
+    "lmh_02_rich_text": {
+      "type": "lmh-mirror",
       "settings": {
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/ABOUT-US-min.webp",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "large",
-        "section_height_custom": 50,
-        "background_color": "",
-        "toggle_overlay": true,
-        "overlay_color": "#00000026",
-        "overlay_style": "gradient",
-        "gradient_direction": "to top",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "background": "#FCF7EB",
+        "text_color": "#3F4040",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading_style": "section",
+        "text": "<p>In 2012, Jenny’s life was forever changed when she became the adopted human to two Tibetan Terriers, Alfie and Belle, her \"furry children.\" This sparked the creation of Love My Human in 2018, a contemporary pet shop and refined grooming service. Her creative and conceptual mindset led her to expand the business further, and LMH Townhouse was born. Designed with the comfort and well-being of dogs at the forefront, LMH Townhouse offers a range of essential services for dogs, including a dog-friendly café, daycare, and wellness center. From a small team of four, Love My Human has grown into a dedicated and passionate team of 24 individuals, all driven by a shared love for dogs and a commitment to enriching the lives of both pets and their owners. Each team member plays a vital role in creating a welcoming, caring, and professional environment for our community.</p>"
       }
     },
-    "section_pbtwbq": {
-      "type": "section",
-      "blocks": {
-        "text_ijDWyG": {
-          "type": "text",
-          "name": "t:names.text",
-          "settings": {
-            "text": "<p>In 2012, Jenny’s life was forever changed when she became the adopted human to two Tibetan Terriers, Alfie and Belle, her \"furry children.\" This sparked the creation of Love My Human in 2018, a contemporary pet shop and refined grooming service. Her creative and conceptual mindset led her to expand the business further, and LMH Townhouse was born. Designed with the comfort and well-being of dogs at the forefront, LMH Townhouse offers a range of essential services for dogs, including a dog-friendly café, daycare, and wellness center. From a small team of four, Love My Human has grown into a dedicated and passionate team of 24 individuals, all driven by a shared love for dogs and a commitment to enriching the lives of both pets and their owners. Each team member plays a vital role in creating a welcoming, caring, and professional environment for our community.<br/><br/></p>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "custom",
-            "font": "var(--font-body--family)",
-            "font_size": "1.25rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "{{ settings.color_palette.color1 }}",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "text_ijDWyG"
-      ],
-      "name": "t:names.rich_text_section",
+    "lmh_03_collage": {
+      "type": "lmh-mirror",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 25,
-        "section_width": "page-width",
-        "section_height": "small",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "layout": "images",
+        "collage": "left",
+        "image": "shopify://shop_images/Group_238.webp",
+        "image_2": "shopify://shop_images/IMG_0410.webp",
+        "image_3": "shopify://shop_images/IMG_9688.webp",
+        "banner_height": 690
       }
     },
-    "services_bento_RzB4fN": {
-      "type": "services-bento",
-      "blocks": {
-        "service_e4TUTV": {
-          "type": "service",
-          "settings": {
-            "image": "shopify://shop_images/Group_238.webp",
-            "title": "",
-            "chip": "",
-            "text": "",
-            "link": ""
-          }
-        },
-        "service_nJNd4D": {
-          "type": "service",
-          "settings": {
-            "image": "shopify://shop_images/IMG_0410.webp",
-            "title": "",
-            "chip": "",
-            "text": "",
-            "link": ""
-          }
-        },
-        "service_GwRtYR": {
-          "type": "service",
-          "settings": {
-            "image": "shopify://shop_images/IMG_9688.webp",
-            "title": "",
-            "chip": "",
-            "text": "",
-            "link": ""
-          }
-        },
-        "service_xwV7BV": {
-          "type": "service",
-          "settings": {
-            "image": "shopify://shop_images/9DD5360C-D432-42BD-8A06-D2334AF721CF.webp",
-            "title": "",
-            "chip": "",
-            "text": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "service_e4TUTV",
-        "service_nJNd4D",
-        "service_GwRtYR",
-        "service_xwV7BV"
-      ],
-      "name": "Services bento",
+    "lmh_04_collage": {
+      "type": "lmh-mirror",
       "settings": {
-        "eyebrow": "",
-        "heading": "",
-        "heading_size": 38,
-        "title_size": 32,
-        "link_label": "All services",
-        "link": "",
-        "animate": true,
-        "tile_height": 280,
-        "tile_height_mobile": 180,
-        "gap": 12,
-        "radius": 16,
-        "max_width": 1320,
-        "background_color": "{{ settings.color_palette.background }}",
-        "accent_color": "{{ settings.color_palette.foreground }}",
-        "chip_color": "{{ settings.color_palette.background }}",
-        "padding_top": 56,
-        "padding_bottom": 56
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "layout": "images",
+        "collage": "right",
+        "image": "shopify://shop_images/9DD5360C-D432-42BD-8A06-D2334AF721CF.webp",
+        "image_2": "shopify://shop_images/IMG_0556.jpg",
+        "image_3": "shopify://shop_images/Group_239.jpg",
+        "banner_height": 690
       }
     },
-    "section_jncUNx": {
-      "type": "section",
-      "blocks": {
-        "video_7R9etV": {
-          "type": "video",
-          "name": "t:names.video",
-          "settings": {
-            "source": "uploaded",
-            "video": "shopify://files/videos/LMH About us vid (1).mp4",
-            "video_autoplay": false,
-            "video_loop": true,
-            "alt": "",
-            "custom_width": 100,
-            "custom_width_mobile": 100,
-            "aspect_ratio": "16/9",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_color": "",
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "group_EwdJmi": {
-          "type": "group",
-          "name": "t:names.caption",
-          "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "background_media": "none",
-            "background_color": "",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_color": "",
-            "border_radius": 0,
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "video_7R9etV",
-        "group_EwdJmi"
-      ],
-      "name": "t:names.video_section",
+    "lmh_05_video": {
+      "type": "lmh-mirror",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "padding-block-start": 32,
-        "padding-block-end": 32
-      }
-    },
-    "about_gallery_more": {
-      "type": "section",
-      "blocks": {
-        "photo0": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "center",
-            "vertical_alignment_flex_direction_column": "space-between",
-            "gap": 32,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fill",
-            "custom_height": 100,
-            "background_media": "image",
-            "background_color": "",
-            "video_position": "cover",
-            "background_image": "shopify://shop_images/IMG_0556.jpg",
-            "background_image_position": "cover",
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_color": "",
-            "border_radius": 16,
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "hero-apparel-2",
-            "padding-block-start": 40,
-            "padding-block-end": 40,
-            "padding-inline-start": 40,
-            "padding-inline-end": 40
-          },
-          "blocks": {}
-        },
-        "photo1": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "center",
-            "vertical_alignment_flex_direction_column": "space-between",
-            "gap": 32,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fill",
-            "custom_height": 100,
-            "background_media": "image",
-            "background_color": "",
-            "video_position": "cover",
-            "background_image": "shopify://shop_images/Group_239.jpg",
-            "background_image_position": "cover",
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_color": "",
-            "border_radius": 16,
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "hero-apparel-2",
-            "padding-block-start": 40,
-            "padding-block-end": 40,
-            "padding-inline-start": 40,
-            "padding-inline-end": 40
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "photo0",
-        "photo1"
-      ],
-      "name": "t:names.split_showcase",
-      "settings": {
-        "content_direction": "row",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "padding-block-start": 0,
-        "padding-block-end": 56
+        "background": "#FFFFFF",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "video",
+        "video": "shopify://files/videos/LMH About us vid (1).mp4"
       }
     }
   },
   "order": [
-    "section_qDPtBg",
-    "main",
-    "hero_bVdd39",
-    "section_pbtwbq",
-    "services_bento_RzB4fN",
-    "about_gallery_more",
-    "section_jncUNx"
+    "lmh_00_rich_text",
+    "lmh_01_collage",
+    "lmh_02_rich_text",
+    "lmh_03_collage",
+    "lmh_04_collage",
+    "lmh_05_video"
   ]
 }

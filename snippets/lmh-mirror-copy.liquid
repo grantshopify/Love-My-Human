@@ -1,0 +1,20 @@
+{%- doc -%}
+  Heading, text and buttons for the LMH classic section (text band and image-with-text layouts).
+  @param {object} s - The section settings
+{%- enddoc -%}
+{%- if s.heading != blank -%}
+  <h2 class="lmh-m__heading{% if s.heading_style == 'title' %} lmh-m__heading--title{% endif %}">{{ s.heading }}</h2>
+{%- endif -%}
+{%- if s.text != blank -%}
+  <div class="lmh-m__text">{{ s.text }}</div>
+{%- endif -%}
+{%- if s.button_label != blank or s.button_label_2 != blank -%}
+  <div class="lmh-m__buttons">
+    {%- if s.button_label != blank -%}
+      <a class="lmh-m__button lmh-m__button--{{ s.button_style }}" href="{{ s.button_link }}">{{ s.button_label }}</a>
+    {%- endif -%}
+    {%- if s.button_label_2 != blank -%}
+      <a class="lmh-m__button lmh-m__button--{{ s.button_style_2 | default: s.button_style }}" href="{{ s.button_link_2 }}">{{ s.button_label_2 }}</a>
+    {%- endif -%}
+  </div>
+{%- endif -%}

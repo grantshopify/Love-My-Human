@@ -1,0 +1,354 @@
+{% comment %}
+  Mirrors the section styles of the original lovemyhuman.co.uk pages (Dawn theme):
+  coloured text bands, image + text, boxed cards, FAQ, full-width images and video.
+  One section with a "layout" setting so every part of those pages can be rebuilt and edited in the theme editor.
+{% endcomment %}
+{%- liquid
+  assign s = section.settings
+  assign layout = s.layout
+-%}
+
+<section
+  class="lmh-m lmh-m--{{ layout }}{% if s.full_width %} lmh-m--full{% endif %}"
+  style="
+    --lmh-bg: {{ s.background }};
+    --lmh-text: {{ s.text_color }};
+    --lmh-align: {{ s.align }};
+    --lmh-pt: {{ s.padding_top }}px;
+    --lmh-pb: {{ s.padding_bottom }}px;
+    --lmh-banner-h: {{ s.banner_height }}px;
+    --lmh-cols: {{ s.columns }};
+    --lmh-btn-fill: {{ s.button_fill | default: s.text_color }};
+    --lmh-btn-text: {{ s.button_text | default: s.background }};
+  "
+>
+  {%- case layout -%}
+    {%- when 'banner' -%}
+      {%- if s.image != blank -%}
+        <div class="lmh-m__banner">
+          {{ s.image | image_url: width: 2400 | image_tag: loading: 'lazy', widths: '750, 1100, 1500, 2000, 2400', sizes: '100vw', alt: s.image.alt }}
+          {%- if s.heading != blank or s.text != blank or s.button_label != blank -%}
+            <div class="lmh-m__banner-copy">
+              <div class="lmh-m__banner-box"{% if s.box_background != blank %} style="background: {{ s.box_background }}; padding: 40px 50px;"{% endif %}>
+                {%- render 'lmh-mirror-copy', s: s -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    {%- when 'video' -%}
+      {%- if s.video != blank -%}
+        <div class="lmh-m__video">
+          {{ s.video | video_tag: controls: true, playsinline: true, preload: 'metadata', image_size: '2000x' }}
+        </div>
+      {%- endif -%}
+
+    {%- when 'images' -%}
+      <div class="lmh-m__inner lmh-m__images lmh-m__images--{{ s.collage }}">
+        {%- if s.image != blank -%}<div class="lmh-m__image">{{ s.image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1600', sizes: '(min-width: 750px) 50vw, 100vw', alt: s.image.alt }}</div>{%- endif -%}
+        {%- if s.image_2 != blank -%}<div class="lmh-m__image">{{ s.image_2 | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1600', sizes: '(min-width: 750px) 50vw, 100vw', alt: s.image_2.alt }}</div>{%- endif -%}
+        {%- if s.image_3 != blank -%}<div class="lmh-m__image">{{ s.image_3 | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1600', sizes: '(min-width: 750px) 50vw, 100vw', alt: s.image_3.alt }}</div>{%- endif -%}
+      </div>
+
+    {%- when 'image_text' -%}
+      <div class="lmh-m__inner lmh-m__split{% if s.image_right %} lmh-m__split--right{% endif %}{% if s.boxed %} lmh-m__split--boxed{% endif %}"{% if s.boxed %} style="background: {{ s.box_background }}; color: {{ s.text_color }}; text-align: {{ s.align }};"{% endif %}>
+        {%- if s.image != blank -%}
+          <div class="lmh-m__split-media">{{ s.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1400', sizes: '(min-width: 750px) 50vw, 100vw', alt: s.image.alt }}</div>
+        {%- endif -%}
+        <div class="lmh-m__split-copy">
+          {%- render 'lmh-mirror-copy', s: s -%}
+        </div>
+      </div>
+
+    {%- when 'cards' -%}
+      <div class="lmh-m__inner">
+        {%- if s.heading != blank -%}<h2 class="lmh-m__heading lmh-m__heading--cards">{{ s.heading }}</h2>{%- endif -%}
+        <div class="lmh-m__cards">
+          {%- for block in section.blocks -%}
+            <div
+              class="lmh-m__card lmh-m__card--{{ block.settings.style }}"
+              style="--card-bg: {{ block.settings.background }}; --card-text: {{ block.settings.text_color }}; --lmh-card-title: {{ block.settings.title_size | default: 18 }}px;{% if block.settings.title_font == 'heading' %} --lmh-card-title-font: var(--font-heading--family);{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.image != blank -%}
+                <div class="lmh-m__card-image">{{ block.settings.image | image_url: width: 300 | image_tag: loading: 'lazy', alt: '' }}</div>
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}<h3 class="lmh-m__card-title">{{ block.settings.title }}</h3>{%- endif -%}
+              {%- if block.settings.text != blank -%}<div class="lmh-m__card-text">{{ block.settings.text }}</div>{%- endif -%}
+              {%- if block.settings.button_label != blank -%}
+                <a class="lmh-m__card-link" href="{{ block.settings.button_link }}">{{ block.settings.button_label }}</a>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+    {%- when 'blog' -%}
+      {%- assign blog = s.blog | default: blogs.news -%}
+      {%- if s.heading != blank -%}
+        <div class="lmh-m__inner"><h1 class="lmh-m__heading lmh-m__heading--blog">{{ s.heading }}</h1></div>
+      {%- endif -%}
+      {%- paginate blog.articles by s.post_limit -%}
+      <div class="lmh-m__inner lmh-m__posts">
+        {%- for article in blog.articles -%}
+          <a class="lmh-m__post" href="{{ article.url }}">
+            {%- if article.image -%}
+              <div class="lmh-m__post-image">{{ article.image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '500, 800, 1100', sizes: '(min-width: 750px) 50vw, 100vw', alt: article.title }}</div>
+            {%- endif -%}
+            <h3 class="lmh-m__post-title">{{ article.title | truncate: 50 }}</h3>
+            <p class="lmh-m__post-date">{{ article.published_at | date: '%B %-d, %Y' }}</p>
+            <p class="lmh-m__post-excerpt">{{ article.excerpt_or_content | strip_html | truncate: 180 }}</p>
+          </a>
+        {%- endfor -%}
+      </div>
+      {%- if s.show_pagination and paginate.pages > 1 -%}
+        <nav class="lmh-m__inner lmh-m__pagination" aria-label="Pagination">
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>
+            {%- elsif part.title == paginate.current_page -%}<span aria-current="page">{{ part.title }}</span>
+            {%- else -%}<span>{{ part.title }}</span>{%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}<a href="{{ paginate.next.url }}" aria-label="Next page">›</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+      {%- endpaginate -%}
+
+    {%- when 'faq' -%}
+      <div class="lmh-m__inner">
+        {%- if s.heading != blank -%}<h2 class="lmh-m__heading" style="text-align: center;">{{ s.heading }}</h2>{%- endif -%}
+        <div class="lmh-m__faq">
+          {%- for block in section.blocks -%}
+            <details class="lmh-m__faq-item" {{ block.shopify_attributes }}>
+              <summary>{{ block.settings.title }}<span aria-hidden="true"></span></summary>
+              <div class="lmh-m__faq-answer">{{ block.settings.text }}</div>
+            </details>
+          {%- endfor -%}
+        </div>
+      </div>
+
+    {%- else -%}
+      <div class="lmh-m__inner lmh-m__rich">
+        {%- render 'lmh-mirror-copy', s: s -%}
+      </div>
+  {%- endcase -%}
+</section>
+
+{% stylesheet %}
+  .lmh-m { background: var(--lmh-bg); color: var(--lmh-text); padding: var(--lmh-pt) 0 var(--lmh-pb); }
+  .lmh-m--banner, .lmh-m--video { padding: 0; }
+  .lmh-m__inner { width: min(1100px, calc(100% - 40px)); margin-inline: auto; }
+  .lmh-m--full .lmh-m__inner { width: 100%; }
+
+  .lmh-m__heading { font-family: var(--font-heading--family); font-size: 40px; line-height: 1.3; font-weight: 400; letter-spacing: 0.6px; color: inherit; margin: 0 0 20px; text-transform: none; }
+  .lmh-m__heading--title { font-family: var(--font-body--family); font-size: 72px; line-height: 1.1; font-weight: 600; max-width: 726px; margin-inline: auto; }
+  .lmh-m__text { font-family: var(--font-body--family); font-size: 16px; line-height: 1.8; letter-spacing: 0.6px; }
+  .lmh-m__text p { margin: 0 0 12px; }
+  .lmh-m__text p:last-child { margin-bottom: 0; }
+  .lmh-m__text a { color: inherit; }
+
+  .lmh-m__rich { text-align: var(--lmh-align); }
+  .lmh-m__rich .lmh-m__text { max-width: 780px; margin-inline: auto; }
+  .lmh-m__buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; justify-content: var(--lmh-buttons-justify, center); }
+  .lmh-m__split .lmh-m__buttons { --lmh-buttons-justify: flex-start; }
+  .lmh-m__button {
+    display: inline-flex; align-items: center; justify-content: center; min-height: 45px; padding: 0 30px;
+    font-family: var(--font-body--family); font-size: 15px; font-weight: 600; letter-spacing: 1px;
+    color: inherit; text-decoration: none; border: 2px solid currentColor; background: transparent;
+  }
+  .lmh-m__button--dashed { border-style: dashed; }
+  .lmh-m__button--filled { background: var(--lmh-btn-fill); border-color: var(--lmh-btn-fill); color: var(--lmh-btn-text); }
+  .lmh-m__button:hover { background: var(--lmh-text); color: var(--lmh-bg); }
+
+  .lmh-m__split { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
+  .lmh-m__split--right .lmh-m__split-media { order: 2; }
+  .lmh-m__split-media img { display: block; width: 100%; height: auto; }
+  .lmh-m__split-copy { padding: 40px 50px; text-align: left; }
+  .lmh-m__split--boxed { padding: 35px; gap: 0; }
+  .lmh-m__split--boxed .lmh-m__split-copy { text-align: inherit; }
+  .lmh-m__split--boxed .lmh-m__buttons { --lmh-buttons-justify: center; }
+
+  .lmh-m__banner { height: var(--lmh-banner-h); overflow: hidden; position: relative; }
+  .lmh-m__banner-copy { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+  .lmh-m__banner-box { max-width: 780px; }
+  .lmh-m__banner-copy .lmh-m__buttons { --lmh-buttons-justify: center; }
+  .lmh-m__banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .lmh-m__video video { display: block; width: 100%; height: auto; }
+
+  .lmh-m__images { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 8px; }
+  .lmh-m--full .lmh-m__images { gap: 0; }
+  .lmh-m__images--row .lmh-m__image, .lmh-m__images--two_wide .lmh-m__image { height: var(--lmh-banner-h); overflow: hidden; }
+  .lmh-m__images--row .lmh-m__image img, .lmh-m__images--two_wide .lmh-m__image img { max-height: none; }
+  .lmh-m__images--two_wide { grid-template-columns: 2fr 1fr; }
+  .lmh-m__images--left, .lmh-m__images--right { grid-template-columns: 2fr 1fr; grid-template-rows: calc(var(--lmh-banner-h) / 2) calc(var(--lmh-banner-h) / 2); }
+  .lmh-m__images--right { grid-template-columns: 1fr 2fr; }
+  .lmh-m__images--left .lmh-m__image:first-child { grid-row: 1 / span 2; }
+  .lmh-m__images--right .lmh-m__image:first-child { grid-column: 1; grid-row: 1; }
+  .lmh-m__images--right .lmh-m__image:nth-child(2) { grid-column: 1; grid-row: 2; }
+  .lmh-m__images--right .lmh-m__image:nth-child(3) { grid-column: 2; grid-row: 1 / span 2; }
+  .lmh-m__images--left .lmh-m__image, .lmh-m__images--right .lmh-m__image { height: 100%; overflow: hidden; }
+  .lmh-m__images--left .lmh-m__image img, .lmh-m__images--right .lmh-m__image img { max-height: none; }
+  .lmh-m__image img { display: block; width: 100%; height: 100%; object-fit: cover; max-height: var(--lmh-banner-h); }
+
+  .lmh-m__heading--cards { text-align: var(--lmh-align); }
+  .lmh-m__cards { display: grid; grid-template-columns: repeat(var(--lmh-cols), minmax(0, 1fr)); gap: 8px; }
+  .lmh-m__card { background: var(--card-bg); color: var(--card-text); padding: 25px 25px 30px; text-align: left; display: flex; flex-direction: column; }
+  .lmh-m__card-text { flex: 1 1 auto; }
+  .lmh-m__card--dashed { border: 1px dashed currentColor; }
+  .lmh-m__card-image img { display: block; max-width: 100px; height: auto; margin-bottom: 12px; }
+  .lmh-m__card-title { font-family: var(--lmh-card-title-font, var(--font-body--family)); font-size: var(--lmh-card-title, 18px); line-height: 1.5; font-weight: 600; letter-spacing: 0.6px; margin: 0 0 12px; color: inherit; text-transform: none; }
+  .lmh-m__card-text { font-family: var(--font-body--family); font-size: 16px; line-height: 1.8; letter-spacing: 0.6px; }
+  .lmh-m__card-text p { margin: 0 0 8px; }
+  .lmh-m__card-text ul, .lmh-m__card-text ol { margin: 0 0 8px; padding-left: 20px; }
+  .lmh-m__card-text ul { list-style: circle; }
+  .lmh-m__card-text h6 { font-family: var(--font-body--family); font-size: 10.7px; line-height: 1.8; font-weight: 700; letter-spacing: 0.6px; text-transform: none; margin: 12px 0 0; color: inherit; }
+  .lmh-m__card-text h4 { font-family: var(--font-body--family); font-size: 24px; line-height: 1.3; font-weight: 600; letter-spacing: 0.6px; text-transform: none; margin: 12px 0; color: inherit; }
+  .lmh-m__card-link::after { content: ' →'; }
+  .lmh-m__card-link { display: inline-block; align-self: flex-start; margin-top: 20px; text-decoration: none; text-transform: uppercase; color: inherit; font-family: var(--font-body--family); font-size: 15px; font-weight: 600; letter-spacing: 1px; }
+
+  .lmh-m__posts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 8px; }
+  .lmh-m__post { display: block; color: var(--lmh-text); text-decoration: none; }
+  .lmh-m__post-image { aspect-ratio: 546 / 329; overflow: hidden; background: rgb(234 83 85 / 0.1); }
+  .lmh-m__post-image img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .lmh-m__post-title { font-family: var(--font-heading--family); font-size: 24px; line-height: 1.3; font-weight: 400; letter-spacing: 0.6px; color: #EA5355; margin: 16px 0 6px; text-transform: none; }
+  .lmh-m__post-date { font-family: var(--font-body--family); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 10px; }
+  .lmh-m__post-excerpt { font-family: var(--font-body--family); font-size: 16px; line-height: 1.8; letter-spacing: 0.6px; margin: 0; }
+  .lmh-m__heading--blog { color: #EA5355; font-weight: 600; text-align: left; margin-bottom: 16px; }
+  .lmh-m__post-date { font-weight: 700; }
+  .lmh-m__pagination { display: flex; justify-content: center; gap: 28px; margin-top: 70px; font-family: var(--font-body--family); font-size: 14px; }
+  .lmh-m__pagination a, .lmh-m__pagination span { color: #121212; text-decoration: none; padding-bottom: 4px; }
+  .lmh-m__pagination [aria-current] { border-bottom: 1px solid currentColor; }
+  .lmh-m__faq { border-top: 1px solid rgb(80 92 49 / 0.08); }
+  .lmh-m__faq-item { border-bottom: 1px solid rgb(80 92 49 / 0.08); }
+  .lmh-m__faq-item summary {
+    list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px 0;
+    font-family: var(--font-heading--family); font-size: 15px; letter-spacing: 0.6px;
+  }
+  .lmh-m__faq-item summary::-webkit-details-marker { display: none; }
+  .lmh-m__faq-item summary span::before { content: '+'; font-family: var(--font-body--family); font-size: 20px; }
+  .lmh-m__faq-item[open] summary span::before { content: '–'; }
+  .lmh-m__faq-answer { font-family: var(--font-body--family); font-size: 16px; line-height: 1.8; letter-spacing: 0.6px; padding-bottom: 22px; }
+
+  @media screen and (max-width: 749px) {
+    .lmh-m__heading { font-size: 30px; }
+    .lmh-m__heading--title { font-size: 40px; }
+    .lmh-m__split { grid-template-columns: 1fr; }
+    .lmh-m__split--right .lmh-m__split-media { order: 0; }
+    .lmh-m__split-copy { padding: 30px 20px; }
+    .lmh-m__cards { grid-template-columns: 1fr; }
+    .lmh-m__posts { grid-template-columns: 1fr; }
+    .lmh-m__images, .lmh-m__images--two_wide { grid-template-columns: 1fr; }
+    .lmh-m__images--row .lmh-m__image, .lmh-m__images--two_wide .lmh-m__image { height: auto; }
+    .lmh-m__banner { height: calc(var(--lmh-banner-h) * 0.6); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "LMH classic section",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "rich_text", "label": "Text band" },
+        { "value": "image_text", "label": "Image with text" },
+        { "value": "cards", "label": "Boxes / columns" },
+        { "value": "faq", "label": "FAQ" },
+        { "value": "blog", "label": "Latest blog posts" },
+        { "value": "banner", "label": "Full-width image" },
+        { "value": "images", "label": "Images side by side" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "rich_text"
+    },
+    { "type": "color", "id": "background", "label": "Background", "default": "#FCF7EB" },
+    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#505C31" },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "options": [{ "value": "center", "label": "Centre" }, { "value": "left", "label": "Left" }],
+      "default": "center"
+    },
+    { "type": "checkbox", "id": "full_width", "label": "Full width", "default": false },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    {
+      "type": "select",
+      "id": "heading_style",
+      "label": "Heading style",
+      "options": [{ "value": "section", "label": "Section heading" }, { "value": "title", "label": "Large page title" }],
+      "default": "section"
+    },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "text", "id": "button_label_2", "label": "Second button label" },
+    {
+      "type": "select",
+      "id": "button_style_2",
+      "label": "Second button border",
+      "options": [{ "value": "solid", "label": "Solid" }, { "value": "dashed", "label": "Dashed" }, { "value": "filled", "label": "Filled" }],
+      "default": "dashed"
+    },
+    { "type": "url", "id": "button_link_2", "label": "Second button link" },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button border",
+      "options": [{ "value": "solid", "label": "Solid" }, { "value": "dashed", "label": "Dashed" }, { "value": "filled", "label": "Filled" }],
+      "default": "dashed"
+    },
+    { "type": "color", "id": "button_fill", "label": "Filled button colour" },
+    { "type": "color", "id": "button_text", "label": "Filled button text colour" },
+    { "type": "color", "id": "box_background", "label": "Banner text box background" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "checkbox", "id": "image_right", "label": "Image on the right", "default": false },
+    { "type": "checkbox", "id": "boxed", "label": "Show as a coloured box (uses Banner text box background)", "default": false },
+    { "type": "image_picker", "id": "image_2", "label": "Second image (images side by side)" },
+    { "type": "image_picker", "id": "image_3", "label": "Third image (images side by side)" },
+    {
+      "type": "select",
+      "id": "collage",
+      "label": "Three images layout",
+      "options": [{ "value": "row", "label": "In a row" }, { "value": "left", "label": "Large on the left" }, { "value": "right", "label": "Large on the right" }, { "value": "two_wide", "label": "Two images, first wider" }],
+      "default": "row"
+    },
+    { "type": "video", "id": "video", "label": "Video" },
+    { "type": "range", "id": "banner_height", "label": "Image height", "min": 200, "max": 900, "step": 10, "unit": "px", "default": 560 },
+    { "type": "blog", "id": "blog", "label": "Blog" },
+    { "type": "checkbox", "id": "show_pagination", "label": "Show page numbers", "default": false },
+    { "type": "range", "id": "post_limit", "label": "Number of posts", "min": 2, "max": 12, "step": 2, "default": 4 },
+    { "type": "range", "id": "columns", "label": "Columns", "min": 1, "max": 4, "step": 1, "default": 2 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 52 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 52 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Box / question",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title / question" },
+        { "type": "range", "id": "title_size", "label": "Title size", "min": 14, "max": 48, "step": 1, "unit": "px", "default": 18 },
+        { "type": "select", "id": "title_font", "label": "Title font", "options": [{ "value": "body", "label": "Body" }, { "value": "heading", "label": "Heading" }], "default": "body" },
+        { "type": "richtext", "id": "text", "label": "Text / answer" },
+        { "type": "image_picker", "id": "image", "label": "Small image (e.g. stars)" },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Box style",
+          "options": [{ "value": "filled", "label": "Filled" }, { "value": "dashed", "label": "Dashed border" }, { "value": "plain", "label": "Plain" }],
+          "default": "filled"
+        },
+        { "type": "color", "id": "background", "label": "Box background", "default": "#9CCA7E" },
+        { "type": "color", "id": "text_color", "label": "Box text colour", "default": "#3F4040" },
+        { "type": "text", "id": "button_label", "label": "Link label" },
+        { "type": "url", "id": "button_link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "LMH classic section" }]
+}
+{% endschema %}
