@@ -25,8 +25,11 @@
   {%- case layout -%}
     {%- when 'banner' -%}
       {%- if s.image != blank -%}
-        <div class="lmh-m__banner">
-          {{ s.image | image_url: width: 2400 | image_tag: loading: 'lazy', widths: '750, 1100, 1500, 2000, 2400', sizes: '100vw', alt: s.image.alt }}
+        <div class="lmh-m__banner{% if s.whole_image %} lmh-m__banner--whole{% endif %}">
+          {%- if s.image_mobile != blank -%}
+            {{ s.image_mobile | image_url: width: 1500 | image_tag: loading: 'eager', widths: '500, 750, 1000, 1500', sizes: '100vw', alt: s.image_mobile.alt, class: 'lmh-m__banner-mobile' }}
+          {%- endif -%}
+          {{ s.image | image_url: width: 3000 | image_tag: loading: 'eager', widths: '750, 1100, 1500, 2000, 2400, 3000', sizes: '100vw', alt: s.image.alt, class: 'lmh-m__banner-main' }}
           {%- if s.heading != blank or s.text != blank or s.button_label != blank -%}
             <div class="lmh-m__banner-copy">
               <div class="lmh-m__banner-box"{% if s.box_background != blank %} style="background: {{ s.box_background }}; padding: 40px 50px;"{% endif %}>
@@ -169,6 +172,9 @@
   .lmh-m__split--boxed .lmh-m__buttons { --lmh-buttons-justify: center; }
 
   .lmh-m__banner { height: var(--lmh-banner-h); overflow: hidden; position: relative; }
+  .lmh-m__banner--whole { height: auto; }
+  .lmh-m__banner--whole img { height: auto; object-fit: initial; }
+  .lmh-m__banner-mobile { display: none !important; }
   .lmh-m__banner-copy { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; }
   .lmh-m__banner-box { max-width: 780px; }
   .lmh-m__banner-copy .lmh-m__buttons { --lmh-buttons-justify: center; }
@@ -240,6 +246,9 @@
     .lmh-m__images, .lmh-m__images--two_wide { grid-template-columns: 1fr; }
     .lmh-m__images--row .lmh-m__image, .lmh-m__images--two_wide .lmh-m__image { height: auto; }
     .lmh-m__banner { height: calc(var(--lmh-banner-h) * 0.6); }
+    .lmh-m__banner--whole { height: auto; }
+    .lmh-m__banner:has(.lmh-m__banner-mobile) .lmh-m__banner-main { display: none !important; }
+    .lmh-m__banner-mobile { display: block !important; }
   }
 {% endstylesheet %}
 
@@ -305,6 +314,8 @@
     { "type": "color", "id": "button_text", "label": "Filled button text colour" },
     { "type": "color", "id": "box_background", "label": "Banner text box background" },
     { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "image_picker", "id": "image_mobile", "label": "Phone image (optional)" },
+    { "type": "checkbox", "id": "whole_image", "label": "Full-width image: show the whole image (no cropping)", "default": false },
     { "type": "checkbox", "id": "image_right", "label": "Image on the right", "default": false },
     { "type": "checkbox", "id": "boxed", "label": "Show as a coloured box (uses Banner text box background)", "default": false },
     { "type": "image_picker", "id": "image_2", "label": "Second image (images side by side)" },

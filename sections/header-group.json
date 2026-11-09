@@ -141,7 +141,7 @@
         "logo_height_mobile": 36,
         "gutter": 24,
         "sticky_mode": "scroll_up",
-        "transparent_home": true,
+        "transparent_home": false,
         "color_style": "website_red",
         "background_color": "{{ settings.color_palette.foreground }}",
         "text_color": "{{ settings.color_palette.background }}",

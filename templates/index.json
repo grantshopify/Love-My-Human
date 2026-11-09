@@ -122,7 +122,8 @@
         "reflection_opacity": 75,
         "padding-block-start": 40,
         "padding-block-end": 40
-      }
+      },
+      "disabled": true
     },
     "services_bento": {
       "type": "services-bento",
@@ -475,9 +476,22 @@
         "padding_top": 56,
         "padding_bottom": 56
       }
+    },
+    "lmh_kings_road_banner": {
+      "type": "lmh-mirror",
+      "settings": {
+        "layout": "banner",
+        "image": "shopify://shop_images/LMH-Kings-Road-banner.jpg",
+        "image_mobile": "shopify://shop_images/LMH-Kings-Road-banner-mobile.jpg",
+        "whole_image": true,
+        "background": "#FCFBF8",
+        "text_color": "#3F4040",
+        "banner_height": 560
+      }
     }
   },
   "order": [
+    "lmh_kings_road_banner",
     "hero_igzHdQ",
     "services_bento",
     "collection_bubbles",
