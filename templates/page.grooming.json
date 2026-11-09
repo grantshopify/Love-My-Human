@@ -55,8 +55,10 @@
         "form_groomers": "No preference\nGroomer 1\nGroomer 2\nGroomer 3",
         "form_success": "Thanks, we've got your request. We'll be in touch to confirm your groom.",
         "note": "Heavily matted coats may need extra time, fees or a clip-off for healthy regrowth.",
-        "hero_height": 760,
-        "hero_position": 62
+        "hero_height": 560,
+        "hero_position": 52,
+        "hero_whole": false,
+        "hero_text_right": true
       }
     },
     "main": {

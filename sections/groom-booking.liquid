@@ -30,7 +30,7 @@
 -%}
 
 <div class="gb">
-  <div class="gb__hero" style="--gb-hero-h: {{ s.hero_height | default: 560 }}px; --gb-hero-pos: {{ s.hero_position | default: 50 }}%;">
+  <div class="gb__hero{% if s.hero_whole %} gb__hero--whole{% endif %}{% if s.hero_text_right %} gb__hero--text-right{% endif %}" style="--gb-hero-h: {{ s.hero_height | default: 560 }}px; --gb-hero-pos: {{ s.hero_position | default: 50 }}%;">
     <div class="gb__media" aria-hidden="true">
       {%- if s.hero_video != blank -%}
         {{
@@ -38,7 +38,10 @@
           | video_tag: image_size: '1600x', autoplay: true, loop: true, controls: false, muted: true, playsinline: true
         }}
       {%- elsif s.hero_image != blank -%}
-        {{ s.hero_image | image_url: width: 2000 | image_tag: sizes: '100vw', loading: 'eager', alt: '' }}
+        {%- if s.hero_whole -%}
+          {{ s.hero_image | image_url: width: 600 | image_tag: loading: 'eager', alt: '', class: 'gb__media-backdrop' }}
+        {%- endif -%}
+        {{ s.hero_image | image_url: width: 2000 | image_tag: sizes: '100vw', loading: 'eager', alt: '', class: 'gb__media-main' }}
       {%- endif -%}
     </div>
     <div class="gb__intro">
@@ -350,6 +353,12 @@
     min-block-size: 440px;
     overflow: hidden;
     background: var(--color-foreground);
+  }
+
+  .gb__media-backdrop { display: none; }
+  .gb__hero--whole .gb__media-backdrop { display: block; }
+  @media screen and (max-width: 989px) {
+    .gb__hero--whole .gb__media-backdrop { display: none; }
   }
 
   .gb__media,
@@ -883,6 +892,24 @@
       min-block-size: var(--gb-hero-h, 560px);
     }
 
+    /* Whole photo on desktop: portrait photos sit on the right in full, over a blurred copy of themselves */
+    .gb__hero--whole .gb__media .gb__media-main {
+      object-fit: contain;
+      object-position: 78% center;
+    }
+    .gb__hero--whole .gb__media .gb__media-backdrop {
+      filter: blur(28px) brightness(0.85);
+      transform: scale(1.15);
+    }
+
+    .gb__hero--text-right .gb__intro {
+      padding-inline-start: 52%;
+    }
+    .gb__hero--text-right .gb__title {
+      white-space: nowrap;
+      max-inline-size: none;
+    }
+
     .gb__intro {
       padding-block: 160px 56px;
     }
@@ -976,6 +1003,18 @@
       "step": 1,
       "unit": "%",
       "default": 50
+    },
+    {
+      "type": "checkbox",
+      "id": "hero_whole",
+      "label": "Show the whole image on desktop (no cropping)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hero_text_right",
+      "label": "Put the banner text on the right (desktop)",
+      "default": false
     },
     {
       "type": "product",

@@ -15,6 +15,7 @@
         "layout": "banner",
         "background": "#fcfbf8",
         "text_color": "#222222",
+        "heading_color": "#e9545a",
         "align": "center",
         "full_width": false,
         "heading": "COLOURFUL FRIDAY",
@@ -45,8 +46,7 @@
         "post_limit": 4,
         "columns": 2,
         "padding_top": 52,
-        "padding_bottom": 52,
-        "heading_color": "#E9545A"
+        "padding_bottom": 52
       }
     },
     "hero_igzHdQ": {
@@ -171,7 +171,7 @@
         "groom": {
           "type": "service",
           "settings": {
-            "image": "shopify://shop_images/lmh-how-to-become-dog-groomer-london-main-head-poodle-finished-groom_f3960ddd-c51e-4e56-99ac-e0c800078d43_1.webp",
+            "image": "shopify://shop_images/Book_A_Dog_Groom.jpg",
             "title": "Book a dog groom",
             "chip": "",
             "text": "",
@@ -272,6 +272,7 @@
         "layout": "banner",
         "background": "#fcf7eb",
         "text_color": "#e9545a",
+        "heading_color": "",
         "align": "center",
         "full_width": false,
         "heading": "",
