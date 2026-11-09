@@ -47,6 +47,10 @@
         "heading": "Book a groom",
         "text": "Our senior groomers give every dog a groom tailored to their coat.",
         "hero_image": "shopify://shop_images/Book_A_Dog_Groom.jpg",
+        "hero_height": 560,
+        "hero_position": 52,
+        "hero_whole": false,
+        "hero_text_right": false,
         "product": "dog-groom",
         "times": "9:00 am\n10:00 am\n11:00 am\n12:00 pm\n1:00 pm\n2:00 pm\n3:00 pm\n4:00 pm",
         "form_heading": "Request a groom",
@@ -54,11 +58,7 @@
         "form_services": "Wash and blow dry\nWash and tidy\nFull groom\nPuppy introduction groom\nCat groom\nNot sure, please advise",
         "form_groomers": "No preference\nGroomer 1\nGroomer 2\nGroomer 3",
         "form_success": "Thanks, we've got your request. We'll be in touch to confirm your groom.",
-        "note": "Heavily matted coats may need extra time, fees or a clip-off for healthy regrowth.",
-        "hero_height": 560,
-        "hero_position": 52,
-        "hero_whole": false,
-        "hero_text_right": true
+        "note": "Heavily matted coats may need extra time, fees or a clip-off for healthy regrowth."
       }
     },
     "main": {
