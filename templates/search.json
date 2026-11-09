@@ -78,7 +78,7 @@
             "enable_sorting": true,
             "enable_grid_density": true,
             "background_color": "{{ settings.color_palette.background }}",
-            "text_color": "",
+            "text_color": "{{ settings.color_palette.foreground }}",
             "padding-block-start": 8,
             "padding-block-end": 8,
             "padding-inline-start": 40,
