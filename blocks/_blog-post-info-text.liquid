@@ -11,6 +11,10 @@
 {% assign block_settings = block.settings %}
 {% assign alignment = alignment | default: block_settings.alignment %}
 {% assign display_author = author | default: article.author %}
+{%- comment -%} Posts were moved over by the agency account, so show the shop's name instead of the agency's {%- endcomment -%}
+{%- if display_author == 'Same Day Store' -%}
+  {%- assign display_author = shop.name -%}
+{%- endif -%}
 {% assign display_date = date | default: article.published_at %}
 
 {%- if block_settings.show_date or block_settings.show_author -%}
