@@ -9,6 +9,43 @@
  */
 {
   "sections": {
+    "lmh_kings_road_banner": {
+      "type": "lmh-mirror",
+      "settings": {
+        "layout": "banner",
+        "background": "#fcfbf8",
+        "text_color": "#3f4040",
+        "align": "center",
+        "full_width": false,
+        "heading": "",
+        "heading_style": "section",
+        "text": "",
+        "button_label": "SHOP THE SALE",
+        "button_link": "shopify://collections/all",
+        "button_label_2": "",
+        "button_style_2": "dashed",
+        "button_link_2": "",
+        "button_style": "dashed",
+        "button_fill": "",
+        "button_text": "",
+        "box_background": "",
+        "image": "shopify://shop_images/colourful-friday-banner-v2.webp",
+        "image_mobile": "shopify://shop_images/colourful-friday-banner-v2.webp",
+        "whole_image": true,
+        "page_width": false,
+        "copy_position": "over",
+        "image_right": false,
+        "boxed": false,
+        "collage": "row",
+        "banner_height": 560,
+        "blog": "",
+        "show_pagination": false,
+        "post_limit": 4,
+        "columns": 2,
+        "padding_top": 52,
+        "padding_bottom": 52
+      }
+    },
     "hero_igzHdQ": {
       "type": "hero",
       "blocks": {
@@ -90,6 +127,7 @@
         "text_JYNiVP",
         "button_cpkJFy"
       ],
+      "disabled": true,
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "video",
@@ -122,8 +160,7 @@
         "reflection_opacity": 75,
         "padding-block-start": 40,
         "padding-block-end": 40
-      },
-      "disabled": true
+      }
     },
     "services_bento": {
       "type": "services-bento",
@@ -224,6 +261,43 @@
         "accent_color": "",
         "padding_top": 48,
         "padding_bottom": 48
+      }
+    },
+    "lmh_kings_road_inline": {
+      "type": "lmh-mirror",
+      "settings": {
+        "layout": "banner",
+        "background": "{{ settings.color_palette.background }}",
+        "text_color": "#e9545a",
+        "align": "center",
+        "full_width": false,
+        "heading": "",
+        "heading_style": "section",
+        "text": "",
+        "button_label": "",
+        "button_link": "",
+        "button_label_2": "",
+        "button_style_2": "dashed",
+        "button_link_2": "",
+        "button_style": "dashed",
+        "button_fill": "",
+        "button_text": "",
+        "box_background": "",
+        "image": "shopify://shop_images/LMH-Kings-Road-banner.jpg",
+        "image_mobile": "shopify://shop_images/LMH-Kings-Road-banner-mobile.jpg",
+        "whole_image": true,
+        "page_width": true,
+        "copy_position": "below",
+        "image_right": false,
+        "boxed": false,
+        "collage": "row",
+        "banner_height": 560,
+        "blog": "",
+        "show_pagination": false,
+        "post_limit": 4,
+        "columns": 2,
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "story_collage": {
@@ -475,35 +549,6 @@
         "text_color": "",
         "padding_top": 56,
         "padding_bottom": 56
-      }
-    },
-    "lmh_kings_road_banner": {
-      "type": "lmh-mirror",
-      "settings": {
-        "layout": "banner",
-        "image": "shopify://shop_images/LMH-Kings-Road-banner.jpg",
-        "image_mobile": "shopify://shop_images/LMH-Kings-Road-banner-mobile.jpg",
-        "whole_image": true,
-        "background": "#FCFBF8",
-        "text_color": "#3F4040",
-        "banner_height": 560
-      }
-    },
-    "lmh_kings_road_inline": {
-      "type": "lmh-mirror",
-      "settings": {
-        "layout": "banner",
-        "image": "shopify://shop_images/LMH-Kings-Road-banner.jpg",
-        "image_mobile": "shopify://shop_images/LMH-Kings-Road-banner-mobile.jpg",
-        "whole_image": true,
-        "page_width": true,
-        "copy_position": "below",
-        "align": "center",
-        "background": "{{ settings.color_palette.background }}",
-        "text_color": "#E9545A",
-        "padding_top": 40,
-        "padding_bottom": 40,
-        "banner_height": 560
       }
     }
   },
