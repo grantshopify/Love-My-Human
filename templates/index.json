@@ -14,7 +14,7 @@
       "settings": {
         "layout": "banner",
         "background": "#fcfbf8",
-        "text_color": "{{ settings.color_palette.foreground }}",
+        "text_color": "#222222",
         "align": "center",
         "full_width": false,
         "heading": "COLOURFUL FRIDAY",
@@ -33,7 +33,7 @@
         "image_mobile": "shopify://shop_images/banner-no-text.png",
         "whole_image": true,
         "page_width": false,
-        "copy_top": 53,
+        "copy_top": 0,
         "copy_position": "over",
         "image_right": false,
         "boxed": false,
@@ -45,7 +45,8 @@
         "post_limit": 4,
         "columns": 2,
         "padding_top": 52,
-        "padding_bottom": 52
+        "padding_bottom": 52,
+        "heading_color": "#E9545A"
       }
     },
     "hero_igzHdQ": {

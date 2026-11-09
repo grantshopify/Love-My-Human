@@ -18,6 +18,7 @@
     --lmh-pb: {{ s.padding_bottom }}px;
     --lmh-banner-h: {{ s.banner_height }}px;
     --lmh-cols: {{ s.columns }};
+    --lmh-heading-color: {{ s.heading_color | default: s.text_color }};
     --lmh-inner: {{ s.content_width | default: 1100 }}px;
     --lmh-btn-fill: {{ s.button_fill | default: s.text_color }};
     --lmh-btn-text: {{ s.button_text | default: s.background }};
@@ -192,6 +193,19 @@
   .lmh-m__banner-copy--placed { align-items: flex-start; }
   .lmh-m__banner-copy--placed .lmh-m__banner-box { position: absolute; top: var(--lmh-copy-top); left: 0; right: 0; margin-inline: auto; }
   .lmh-m__banner-copy .lmh-m__buttons { margin-top: 0; }
+  /* Promo text typed on a full-width image: big bold headline, bold capitals subheading, even spacing to the button */
+  .lmh-m__banner-copy .lmh-m__banner-box { max-width: min(92%, 1400px); }
+  .lmh-m__banner-copy .lmh-m__heading { color: var(--lmh-heading-color); margin: 0; }
+  .lmh-m__banner-copy .lmh-m__heading--title {
+    font-family: var(--font-body--family); font-weight: 800; font-size: clamp(30px, 6.6vw, 128px);
+    line-height: 0.95; letter-spacing: -0.02em; max-width: none; text-transform: uppercase;
+  }
+  .lmh-m__banner-copy .lmh-m__text {
+    font-family: var(--font-body--family); font-weight: 700; text-transform: uppercase;
+    font-size: clamp(12px, 1.75vw, 32px); line-height: 1.2; letter-spacing: 0.01em; margin-top: clamp(6px, 1.1vw, 20px);
+  }
+  .lmh-m__banner-copy .lmh-m__text p { margin: 0; }
+  .lmh-m__banner-copy .lmh-m__buttons { margin-top: clamp(12px, 2vw, 40px); }
   .lmh-m__banner-copy .lmh-m__buttons { --lmh-buttons-justify: center; }
   .lmh-m__banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .lmh-m__video video { display: block; width: 100%; height: auto; }
@@ -291,6 +305,7 @@
     },
     { "type": "color", "id": "background", "label": "Background", "default": "#FCF7EB" },
     { "type": "color", "id": "text_color", "label": "Text colour", "default": "#505C31" },
+    { "type": "color", "id": "heading_color", "label": "Heading colour (optional)" },
     {
       "type": "select",
       "id": "align",
