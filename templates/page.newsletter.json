@@ -14,12 +14,27 @@
       "blocks": {
         "heading": {
           "type": "text",
-          "name": "t:names.title",
           "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "left",
+            "text": "<h1>{{ closest.page.title }}</h1>"
+          }
+        }
+      },
+      "block_order": [
+        "heading"
+      ],
+      "disabled": true,
+      "settings": {}
+    },
+    "banner_0": {
+      "type": "hero",
+      "blocks": {
+        "text_qak4b0": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>JOIN THE PACK</h2>",
+            "width": "fit-content",
+            "max_width": "narrow",
+            "alignment": "center",
             "type_preset": "h2",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
@@ -27,9 +42,9 @@
             "letter_spacing": "normal",
             "case": "none",
             "wrap": "pretty",
-            "text_color": "",
-            "background": false,
-            "background_color": "#00000026",
+            "text_color": "#505C31",
+            "background": true,
+            "background_color": "{{ settings.color_palette.background }}",
             "corner_radius": 0,
             "padding-block-start": 0,
             "padding-block-end": 0,
@@ -38,35 +53,98 @@
           },
           "blocks": {}
         },
-        "page-content": {
-          "type": "page-content",
+        "text_qak4b1": {
+          "type": "text",
           "settings": {
-            "text_color": ""
+            "text": "<p>Receive our newsletter and discover our stories, collections, and surprises.</p>",
+            "width": "100%",
+            "max_width": "none",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "1.25rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "#505C31",
+            "background": true,
+            "background_color": "{{ settings.color_palette.background }}",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 32,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "button_qak4b2": {
+          "type": "button",
+          "name": "t:names.button",
+          "disabled": true,
+          "settings": {
+            "label": "Make a booking",
+            "link": "https://web.dojo.app/create_booking/vendor/0FTNuQ2Ak58Nt1LLVh5Jn716Lkn36KgKa9NGaixazCY_restaurant",
+            "open_in_new_tab": false,
+            "style_class": "button-secondary",
+            "custom_button_background": "{{ settings.color_palette.foreground }}",
+            "custom_button_text": "{{ settings.color_palette.background }}",
+            "custom_button_border": "{{ settings.color_palette.background }}",
+            "link_text_color": "",
+            "width": "fit-content",
+            "custom_width": 100,
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100
           },
           "blocks": {}
         }
       },
       "block_order": [
-        "heading",
-        "page-content"
+        "text_qak4b0",
+        "text_qak4b1",
+        "button_qak4b2"
       ],
-      "disabled": true,
+      "name": "t:names.hero",
       "settings": {
+        "media_type_1": "image",
+        "image_1": "shopify://shop_images/0house.gif",
+        "media_type_2": "image",
+        "stack_media_on_mobile": false,
+        "custom_mobile_media": false,
+        "media_type_1_mobile": "image",
+        "media_type_2_mobile": "image",
+        "link": "",
+        "open_in_new_tab": false,
         "content_direction": "column",
-        "gap": 32,
-        "background_color": "{{ settings.color_palette.background }}",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "section_height": "large",
+        "section_height_custom": 50,
+        "background_color": "",
+        "toggle_overlay": true,
+        "overlay_color": "#00000026",
+        "overlay_style": "gradient",
+        "gradient_direction": "to top",
+        "blurred_reflection": false,
+        "reflection_opacity": 75,
         "padding-block-start": 40,
-        "padding-block-end": 80
+        "padding-block-end": 40
       }
     },
-    "section_TYgWqx": {
+    "copy_1": {
       "type": "section",
       "blocks": {
-        "text_FkVMEh": {
+        "text_qak4c3": {
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<h2>Subscribe to our emails</h2>",
+            "text": "<h2>SUBSCRIBE TO OUR NEWSLETTER</h2>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -88,10 +166,10 @@
           },
           "blocks": {}
         },
-        "text_RiLJfM": {
+        "text_qak4c4": {
           "type": "text",
           "settings": {
-            "text": "<p>Be the first to know about new collections and special offers. </p>",
+            "text": "<p>Be the first to hear about new collections, events at the LMH Townhouse, Pup Club news and special offers.</p>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -113,7 +191,7 @@
           },
           "blocks": {}
         },
-        "email_signup_gDEYD9": {
+        "emailsignup_qak4c5": {
           "type": "email-signup",
           "settings": {
             "width": "custom",
@@ -147,9 +225,9 @@
         }
       },
       "block_order": [
-        "text_FkVMEh",
-        "text_RiLJfM",
-        "email_signup_gDEYD9"
+        "text_qak4c3",
+        "text_qak4c4",
+        "emailsignup_qak4c5"
       ],
       "name": "t:names.email_signup",
       "settings": {
@@ -184,6 +262,7 @@
   },
   "order": [
     "main",
-    "section_TYgWqx"
+    "banner_0",
+    "copy_1"
   ]
 }
