@@ -30,7 +30,7 @@
 -%}
 
 <div class="gb">
-  <div class="gb__hero">
+  <div class="gb__hero" style="--gb-hero-h: {{ s.hero_height | default: 560 }}px; --gb-hero-pos: {{ s.hero_position | default: 50 }}%;">
     <div class="gb__media" aria-hidden="true">
       {%- if s.hero_video != blank -%}
         {{
@@ -359,6 +359,7 @@
     inline-size: 100%;
     block-size: 100%;
     object-fit: cover;
+    object-position: center var(--gb-hero-pos, 50%);
   }
 
   /* Darker towards the bottom so the cream headline reads over any frame */
@@ -879,7 +880,7 @@
 
   @media screen and (min-width: 990px) {
     .gb__hero {
-      min-block-size: 560px;
+      min-block-size: var(--gb-hero-h, 560px);
     }
 
     .gb__intro {
@@ -955,6 +956,26 @@
       "id": "hero_image",
       "label": "Hero image",
       "info": "Shown when there is no video."
+    },
+    {
+      "type": "range",
+      "id": "hero_height",
+      "label": "Banner height (desktop)",
+      "min": 440,
+      "max": 960,
+      "step": 20,
+      "unit": "px",
+      "default": 560
+    },
+    {
+      "type": "range",
+      "id": "hero_position",
+      "label": "Banner image position (0 = top, 100 = bottom)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
     },
     {
       "type": "product",
