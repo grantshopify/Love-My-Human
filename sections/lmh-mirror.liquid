@@ -24,13 +24,16 @@
 >
   {%- case layout -%}
     {%- when 'banner' -%}
+      {%- assign copy_below = false -%}
+      {%- if s.copy_position == 'below' -%}{%- assign copy_below = true -%}{%- endif -%}
       {%- if s.image != blank -%}
+        {%- if s.page_width -%}<div class="lmh-m__inner">{%- endif -%}
         <div class="lmh-m__banner{% if s.whole_image %} lmh-m__banner--whole{% endif %}">
           {%- if s.image_mobile != blank -%}
             {{ s.image_mobile | image_url: width: 1500 | image_tag: loading: 'eager', widths: '500, 750, 1000, 1500', sizes: '100vw', alt: s.image_mobile.alt, class: 'lmh-m__banner-mobile' }}
           {%- endif -%}
           {{ s.image | image_url: width: 3000 | image_tag: loading: 'eager', widths: '750, 1100, 1500, 2000, 2400, 3000', sizes: '100vw', alt: s.image.alt, class: 'lmh-m__banner-main' }}
-          {%- if s.heading != blank or s.text != blank or s.button_label != blank -%}
+          {%- if copy_below == false and s.heading != blank or copy_below == false and s.text != blank or copy_below == false and s.button_label != blank -%}
             <div class="lmh-m__banner-copy">
               <div class="lmh-m__banner-box"{% if s.box_background != blank %} style="background: {{ s.box_background }}; padding: 40px 50px;"{% endif %}>
                 {%- render 'lmh-mirror-copy', s: s -%}
@@ -38,6 +41,12 @@
             </div>
           {%- endif -%}
         </div>
+        {%- if copy_below -%}
+          {%- if s.heading != blank or s.text != blank or s.button_label != blank -%}
+            <div class="lmh-m__banner-below">{%- render 'lmh-mirror-copy', s: s -%}</div>
+          {%- endif -%}
+        {%- endif -%}
+        {%- if s.page_width -%}</div>{%- endif -%}
       {%- endif -%}
 
     {%- when 'video' -%}
@@ -140,6 +149,8 @@
 {% stylesheet %}
   .lmh-m { background: var(--lmh-bg); color: var(--lmh-text); padding: var(--lmh-pt) 0 var(--lmh-pb); }
   .lmh-m--banner, .lmh-m--video { padding: 0; }
+  .lmh-m--banner:has(.lmh-m__inner) { padding: var(--lmh-pt) 0 var(--lmh-pb); }
+  .lmh-m__banner-below { text-align: var(--lmh-align); padding-top: 28px; max-width: 780px; margin-inline: auto; }
   .lmh-m__inner { width: min(1100px, calc(100% - 40px)); margin-inline: auto; }
   .lmh-m--full .lmh-m__inner { width: 100%; }
 
@@ -316,6 +327,14 @@
     { "type": "image_picker", "id": "image", "label": "Image" },
     { "type": "image_picker", "id": "image_mobile", "label": "Phone image (optional)" },
     { "type": "checkbox", "id": "whole_image", "label": "Full-width image: show the whole image (no cropping)", "default": false },
+    { "type": "checkbox", "id": "page_width", "label": "Full-width image: keep within page width (not edge to edge)", "default": false },
+    {
+      "type": "select",
+      "id": "copy_position",
+      "label": "Full-width image: heading and text position",
+      "options": [{ "value": "over", "label": "On the image" }, { "value": "below", "label": "Under the image" }],
+      "default": "over"
+    },
     { "type": "checkbox", "id": "image_right", "label": "Image on the right", "default": false },
     { "type": "checkbox", "id": "boxed", "label": "Show as a coloured box (uses Banner text box background)", "default": false },
     { "type": "image_picker", "id": "image_2", "label": "Second image (images side by side)" },

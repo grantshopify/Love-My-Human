@@ -488,6 +488,23 @@
         "text_color": "#3F4040",
         "banner_height": 560
       }
+    },
+    "lmh_kings_road_inline": {
+      "type": "lmh-mirror",
+      "settings": {
+        "layout": "banner",
+        "image": "shopify://shop_images/LMH-Kings-Road-banner.jpg",
+        "image_mobile": "shopify://shop_images/LMH-Kings-Road-banner-mobile.jpg",
+        "whole_image": true,
+        "page_width": true,
+        "copy_position": "below",
+        "align": "center",
+        "background": "{{ settings.color_palette.background }}",
+        "text_color": "#E9545A",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "banner_height": 560
+      }
     }
   },
   "order": [
@@ -495,6 +512,7 @@
     "hero_igzHdQ",
     "services_bento",
     "collection_bubbles",
+    "lmh_kings_road_inline",
     "story_collage",
     "product_list_XPKFNn",
     "journal_calendar"
