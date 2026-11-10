@@ -83,8 +83,13 @@
             const copy = document.getElementById('CsiCopy-{{ section.id }}');
             const button = copy && copy.nextElementSibling;
             if (!button) return;
-            // Only offer "Read more" when the text is longer than the preview
-            const check = () => { if (!copy.classList.contains('is-open')) button.hidden = copy.scrollHeight <= copy.clientHeight + 2; };
+            // Only offer "Read more" when there is more than the first paragraph, or it is trimmed
+            const check = () => {
+              if (copy.classList.contains('is-open')) return;
+              const first = copy.firstElementChild;
+              const trimmed = first && first.scrollHeight > first.clientHeight + 2;
+              button.hidden = !(copy.children.length > 1 || trimmed);
+            };
             check();
             window.addEventListener('resize', check);
             button.addEventListener('click', () => {
@@ -173,12 +178,18 @@
     max-inline-size: none;
   }
 
-  /* Dropdown: a short preview of the copy, the rest opens with "Read more" */
-  .csi__copy--collapsible:not(.is-open) {
-    max-block-size: calc(var(--csi-collapsed-lines) * 1.65em);
+  /* Dropdown: only the first paragraph shows (trimmed with "…" if it is long); the rest opens with "Read more" */
+  .csi__copy--collapsible:not(.is-open) > :not(:first-child) {
+    display: none;
+  }
+
+  .csi__copy--collapsible:not(.is-open) > :first-child {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--csi-collapsed-lines);
+    line-clamp: var(--csi-collapsed-lines);
     overflow: hidden;
-    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
-    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+    margin-block-end: 0;
   }
 
   .csi__copy--collapsible > :first-child {
@@ -386,7 +397,7 @@
     {
       "type": "range",
       "id": "collapsed_lines",
-      "label": "Lines in the preview",
+      "label": "Most lines for the first paragraph in the preview",
       "min": 1,
       "max": 6,
       "step": 1,
