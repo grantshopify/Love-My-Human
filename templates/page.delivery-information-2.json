@@ -98,16 +98,16 @@
           "type": "question",
           "settings": {
             "question": "How much does delivery cost?",
-            "answer": "<p>Royal Mail Tracked 24 is £5, while Royal Mail Tracked 48 is £3.50 for UK orders.</p><p>All our orders are sent using tracked delivery services, so you can follow your parcel's journey from dispatch to delivery.</p><p>International shipping costs vary depending on your destination and the available service. All applicable charges will be displayed at checkout before you complete your purchase.</p>",
-            "bullets": "",
-            "answer_after": ""
+            "answer": "<p><strong>UK delivery</strong></p>",
+            "bullets": "Orders under £50: Royal Mail 1st Class, £3.50, 48 hours\nOrders over £50: courier, £6, 24 hours\nFree delivery on orders over £75",
+            "answer_after": "<p><strong>Europe</strong></p><p>Tracked and signed courier from £25. For larger items such as dog beds, email <a href=\"mailto:hello@lovemyhuman.co.uk\" title=\"mailto:hello@lovemyhuman.co.uk\">hello@lovemyhuman.co.uk</a> and we will arrange the best way to send them.</p><p>For other international destinations, shipping costs are shown at checkout before you complete your purchase.</p>"
           }
         },
         "question_itnmFV": {
           "type": "question",
           "settings": {
             "question": "How long does delivery take?",
-            "answer": "<p>Once dispatched, Royal Mail Tracked 24 aims to delivery within one working day, while Royal Mail Tracked 48 aims to deliver within two to three working days. Delivery times are estimates and are not guaranteed.&nbsp;</p>",
+            "answer": "<p>Orders under £50 are sent by Royal Mail 1st Class and arrive within 48 hours. Orders over £50 are sent by courier and arrive within 24 hours. Delivery times are estimates and are not guaranteed.</p>",
             "bullets": "",
             "answer_after": ""
           }
