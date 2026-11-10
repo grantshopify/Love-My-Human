@@ -57,6 +57,14 @@
   if s.video != blank or s.video_file != blank
     assign has_file_video = true
   endif
+
+  # A pasted video link like https://www.<domain>/cdn/shop/videos/... only works on the domain it was copied from
+  # (and not at all if it came from another store), so point it at Shopify's global video address instead
+  assign video_file_src = s.video_file
+  if video_file_src contains '/cdn/shop/videos/'
+    assign video_file_path = video_file_src | split: '/cdn/shop/videos/' | last
+    assign video_file_src = 'https://cdn.shopify.com/videos/' | append: video_file_path
+  endif
 -%}
 
 {%- if s.animate -%}{% render 'editorial-reveal' %}{%- endif -%}
@@ -116,7 +124,7 @@
       {%- else -%}
         <video
           class="{{ video_class }}"
-          src="{{ s.video_file }}"
+          src="{{ video_file_src }}"
           {% if s.image != blank %}
             poster="{{ s.image | image_url: width: 1920 }}"
           {% endif %}
