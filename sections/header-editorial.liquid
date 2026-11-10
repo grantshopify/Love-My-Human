@@ -50,6 +50,7 @@
   style="
     --he-background: {{ he_background }};
     --he-text: {{ he_text }};
+    --he-transparent-text: {{ s.transparent_text_color | default: '#ffffff' }};
     --he-panel-background: {{ he_panel_background }};
     --he-panel-text: {{ he_panel_text }};
     --he-logo-height: {{ s.logo_height }}px;
@@ -436,9 +437,16 @@
     inset-inline: 0;
   }
 
+  /* Phones: the hero is short, so the header sits above it (still transparent) instead of over the hero copy */
+  @media screen and (max-width: 749px) {
+    .he--transparent {
+      position: relative;
+    }
+  }
+
   .he--transparent:not(.he--solid) .he__bar {
     background: transparent;
-    color: #fff;
+    color: var(--he-transparent-text, #fff);
   }
 
   .he__logo--has-inverse {
@@ -1309,6 +1317,14 @@
         }
       ],
       "default": "scroll",
+      "visible_if": "{{ section.settings.transparent_home }}"
+    },
+    {
+      "type": "color",
+      "id": "transparent_text_color",
+      "label": "Logo, menu and icons over the hero",
+      "info": "Use a dark or brand colour when the top of the hero is light. Set Logo colour to Header text colour so the logo follows it.",
+      "default": "#ffffff",
       "visible_if": "{{ section.settings.transparent_home }}"
     },
     {

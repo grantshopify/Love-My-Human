@@ -26,8 +26,9 @@
 -%}
 
 <div
-  class="csi csi--{{ s.alignment }}"
+  class="csi csi--{{ s.alignment }}{% if s.full_width %} csi--full{% endif %}"
   style="
+    --csi-collapsed-lines: {{ s.collapsed_lines | default: 2 }};
     --csi-background: {{ s.background_color | default: settings.color_palette.background }};
     --csi-accent: {{ s.accent_color | default: settings.color_palette.foreground }};
     --csi-text: {{ s.text_color | default: settings.color_palette.color1 }};
@@ -61,7 +62,38 @@
     <h1 class="csi__heading">{{ heading }}</h1>
 
     {%- if intro != blank -%}
-      <div class="csi__copy">{{ intro }}</div>
+      {%- if s.collapsible -%}
+        <div class="csi__copy csi__copy--collapsible" id="CsiCopy-{{ section.id }}" data-csi-copy>{{ intro }}</div>
+        <button
+          type="button"
+          class="csi__more"
+          aria-expanded="false"
+          aria-controls="CsiCopy-{{ section.id }}"
+          data-more="{{ s.read_more_label | default: 'Read more' | escape }}"
+          data-less="{{ s.read_less_label | default: 'Read less' | escape }}"
+          hidden
+        >
+          {{ s.read_more_label | default: 'Read more' }}
+        </button>
+        <script>
+          (() => {
+            const copy = document.getElementById('CsiCopy-{{ section.id }}');
+            const button = copy && copy.nextElementSibling;
+            if (!button) return;
+            // Only offer "Read more" when the text is longer than the preview
+            const check = () => { if (!copy.classList.contains('is-open')) button.hidden = copy.scrollHeight <= copy.clientHeight + 2; };
+            check();
+            window.addEventListener('resize', check);
+            button.addEventListener('click', () => {
+              const open = copy.classList.toggle('is-open');
+              button.setAttribute('aria-expanded', open);
+              button.textContent = open ? button.dataset.less : button.dataset.more;
+            });
+          })();
+        </script>
+      {%- else -%}
+        <div class="csi__copy">{{ intro }}</div>
+      {%- endif -%}
     {%- elsif request.design_mode -%}
       <p class="csi__hint">
         Add this collection's intro in Products &gt; Collections &gt; {{ c.title }} &gt; Metafields &gt; Intro SEO copy.
@@ -131,6 +163,60 @@
     letter-spacing: 0.02em;
     line-height: 1.05;
     text-transform: uppercase;
+  }
+
+  /* Full width: the copy spreads across the page */
+  .csi--full .csi__copy {
+    max-inline-size: none;
+  }
+
+  /* Dropdown: a short preview of the copy, the rest opens with "Read more" */
+  .csi__copy--collapsible:not(.is-open) {
+    max-block-size: calc(var(--csi-collapsed-lines) * 1.65em);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  }
+
+  .csi__copy--collapsible > :first-child {
+    margin-block-start: 0;
+  }
+
+  .csi__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-block-start: 8px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--csi-accent);
+    font-family: var(--font-body--family);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+
+  .csi__more[hidden] {
+    display: none;
+  }
+
+  .csi__more::after {
+    content: '';
+    inline-size: 7px;
+    block-size: 7px;
+    border-inline-end: 1.5px solid currentColor;
+    border-block-end: 1.5px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+
+  .csi__more[aria-expanded='true']::after {
+    transform: translateY(2px) rotate(-135deg);
   }
 
   /* The copy is rich text from the metafield: subtitles, paragraphs, lists and links */
@@ -281,6 +367,42 @@
       "step": 20,
       "unit": "px",
       "default": 900
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Text spreads across the full page",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "collapsible",
+      "label": "Show a short preview with Read more",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "collapsed_lines",
+      "label": "Lines in the preview",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 2,
+      "visible_if": "{{ section.settings.collapsible }}"
+    },
+    {
+      "type": "text",
+      "id": "read_more_label",
+      "label": "Read more label",
+      "default": "Read more",
+      "visible_if": "{{ section.settings.collapsible }}"
+    },
+    {
+      "type": "text",
+      "id": "read_less_label",
+      "label": "Read less label",
+      "default": "Read less",
+      "visible_if": "{{ section.settings.collapsible }}"
     },
     {
       "type": "header",

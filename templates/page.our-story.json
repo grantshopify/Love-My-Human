@@ -90,7 +90,7 @@
           "settings": {
             "question": "How much is delivery?",
             "answer": "<p>Delivery costs are shown at checkout before you pay:</p>",
-            "bullets": "Standard UK delivery: free on orders over £50\nStandard UK delivery under £50: [£X]\nExpress delivery: [£X]",
+            "bullets": "Orders under £50: Royal Mail 1st Class, £3.50 (2–3 working days)\nOrders over £50: courier, £6 (1–2 working days)\nFree UK delivery on orders over £75",
             "answer_after": ""
           }
         },
