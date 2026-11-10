@@ -23,6 +23,8 @@
         "full_width": true,
         "collapsible": true,
         "collapsed_lines": 2,
+        "read_more_label": "Read more",
+        "read_less_label": "Read less",
         "background_color": "",
         "accent_color": "",
         "text_color": "",
@@ -66,6 +68,8 @@
           "static": true,
           "settings": {
             "enable_filtering": true,
+            "drawer_on_desktop": true,
+            "drawer_button_label": "Filter & sort",
             "filter_style": "horizontal",
             "filter_width": "full-width",
             "text_label_case": "default",
@@ -80,9 +84,7 @@
             "padding-inline-start": 40,
             "padding-inline-end": 40,
             "facets_margin_bottom": 12,
-            "facets_margin_right": 0,
-            "drawer_on_desktop": true,
-            "drawer_button_label": "Filter & sort"
+            "facets_margin_right": 0
           },
           "blocks": {}
         },
@@ -251,6 +253,19 @@
                   },
                   "blocks": {}
                 },
+                "swatches_lmh": {
+                  "type": "swatches",
+                  "settings": {
+                    "product_swatches_alignment": "flex-start",
+                    "product_swatches_alignment_mobile": "flex-start",
+                    "hide_padding": false,
+                    "product_swatches_padding_top": 4,
+                    "product_swatches_padding_bottom": 0,
+                    "product_swatches_padding_left": 0,
+                    "product_swatches_padding_right": 0
+                  },
+                  "blocks": {}
+                },
                 "group_HnURV7": {
                   "type": "_product-card-group",
                   "name": "t:names.group",
@@ -321,10 +336,6 @@
                     "text_yYkK7E"
                   ]
                 },
-                "swatches_lmh": {
-                  "type": "swatches",
-                  "settings": {}
-                },
                 "card_add_lmh": {
                   "type": "lmh-card-add",
                   "settings": {
@@ -334,7 +345,8 @@
                     "sold_out_label": "Sold out",
                     "accent_color": "",
                     "accent_text_color": ""
-                  }
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
@@ -356,7 +368,7 @@
         "layout_type": "grid",
         "product_card_size": "medium",
         "mobile_product_card_size": "small",
-        "enable_infinite_scroll": true,
+        "enable_infinite_scroll": false,
         "products_per_page": 24,
         "product_grid_width": "centered",
         "full_width_on_mobile": false,
