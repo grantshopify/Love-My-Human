@@ -19,6 +19,9 @@
   assign live_domain = 'href="' | append: shop.url
   assign intro = intro | replace: own_domain, 'href="' | replace: live_domain, 'href="'
 
+  # Empty paragraphs (often pasted in at the start) would make the Read more preview look blank
+  assign intro = intro | replace: '<p>&nbsp;</p>', '' | replace: '<p> </p>', '' | replace: '<p> </p>', '' | replace: '<p><br></p>', '' | replace: '<p></p>', '' | strip
+
   assign heading = c.title
   if s.heading != blank
     assign heading = s.heading
