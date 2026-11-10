@@ -125,6 +125,9 @@
       <button
         type="button"
         class="sticky-add-to-cart__button add-to-cart-button button"
+        {%- if section.settings.sticky_button_background != blank -%}
+          style="--sticky-atc-bg: {{ section.settings.sticky_button_background }}; --sticky-atc-text: {{ section.settings.sticky_button_text | default: '#ffffff' }};"
+        {%- endif -%}
         ref="addToCartButton"
         on:click="/handleAddToCartClick"
         {% unless current_variant.available %}
@@ -294,6 +297,13 @@
     position: relative;
   }
 
+  /* Optional brand colours for the sticky button (section settings) */
+  .sticky-add-to-cart__button[style*='--sticky-atc-bg'] {
+    background-color: var(--sticky-atc-bg);
+    border-color: var(--sticky-atc-bg);
+    color: var(--sticky-atc-text);
+  }
+
   /* Mobile adjustments */
   @media screen and (max-width: 749px) {
     .sticky-add-to-cart__bar {
@@ -461,6 +471,17 @@
       "label": "Show cart icon in the sticky bar",
       "default": true,
       "visible_if": "{{ section.settings.enable_sticky_add_to_cart }}"
+    },
+    {
+      "type": "color",
+      "id": "sticky_button_background",
+      "label": "Sticky button colour",
+      "info": "Leave empty to use the theme's button colour"
+    },
+    {
+      "type": "color",
+      "id": "sticky_button_text",
+      "label": "Sticky button icon/text colour"
     },
     {
       "type": "color",

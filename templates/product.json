@@ -484,7 +484,9 @@
         "limit_details_width": false,
         "gap": 12,
         "enable_sticky_add_to_cart": true,
-        "sticky_show_icon": false,
+        "sticky_show_icon": true,
+        "sticky_button_background": "#ea5355",
+        "sticky_button_text": "#fcf7eb",
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 20,
         "padding-block-end": 0
