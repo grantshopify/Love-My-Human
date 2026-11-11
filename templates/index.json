@@ -313,7 +313,7 @@
       "settings": {
         "image_1": "shopify://shop_images/wholesale.jpg",
         "image_2": "shopify://shop_images/Jenny_Matthews_at_the_LMH_Townhouse.webp",
-        "image_3": "shopify://shop_images/lmh-how-to-become-dog-groomer-london-main-head-poodle-finished-groom_f3960ddd-c51e-4e56-99ac-e0c800078d43_1.webp",
+        "image_3": "shopify://shop_images/Screenshot_2025-06-17_at_10.33.22_1_730535b1-1314-44da-85f0-d8da3b86ac1d.jpg",
         "image_position": "left",
         "collage_height": 520,
         "eyebrow": "Our story",
@@ -442,6 +442,7 @@
               "name": "t:names.product_card_media",
               "settings": {
                 "image_ratio": "adapt",
+                "image_fit": "cover",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
