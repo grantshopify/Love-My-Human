@@ -40,7 +40,7 @@
         "heading_style": "title",
         "text": "<p>Welcome to our very dog-friendly independent Chelsea community cafe, where you and your dogs can relax and enjoy a delicious meal together. Your dogs are welcomed to sit next to you however, they must eat from a bowl on the floor to prevent cross contamination. Highly qualified dog nutritionists to make sure we serve them as well as we serve you.</p>",
         "button_label": "Make a Booking",
-        "button_link": "https://web.dojo.app/create_booking/vendor/0FTNuQ2Ak58Nt1LLVh5Jn716Lkn36KgKa9NGaixazCY_restaurant",
+        "button_link": "#cafe-booking",
         "button_style": "solid",
         "button_label_2": "Visit Us",
         "button_link_2": "https://maps.app.goo.gl/KBEoz1wsF8GPjaEf6",
@@ -98,7 +98,7 @@
         "heading": "PRIVATE HIRE FOR DOG-FRIENDLY EVENTS",
         "text": "<p>Our dog-friendly café is the perfect venue for any celebration. If you’re looking for a pet-friendly space to host an unforgettable event, look no further.</p><p>With extensive experience in hosting parties and product launches that include our four-legged friends, we offer a unique and enjoyable setting for both humans and dogs alike. We provide delicious light bites for your guests, whether they have two legs or four, ensuring everyone is well-fed and happy.</p>",
         "button_label": "Make a Booking",
-        "button_link": "https://web.dojo.app/create_booking/vendor/0FTNuQ2Ak58Nt1LLVh5Jn716Lkn36KgKa9NGaixazCY_restaurant",
+        "button_link": "#cafe-booking",
         "button_style": "solid"
       }
     },
@@ -192,7 +192,7 @@
         "text": "<p>We are experts in organising parties for dogs and their owners. Our main room is 100% dog safe, temperature and sound proofed and is perfect for your dog's birthday or Gotcha day celebration. In the summer months, you and your four-legged guests will also have use of our roof terrace garden for loo breaks (for the dogs only!) and zoomies. Bookings are available on&nbsp;Sundays&nbsp;only.</p>",
         "box_background": "#FCF7EB",
         "button_label": "Make a Booking",
-        "button_link": "https://web.dojo.app/create_booking/vendor/0FTNuQ2Ak58Nt1LLVh5Jn716Lkn36KgKa9NGaixazCY_restaurant",
+        "button_link": "#cafe-booking",
         "button_style": "solid"
       }
     },
@@ -355,6 +355,26 @@
         "button_link": "https://www.google.com/search?q=love+my+human&oq=love+my+human&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIQCAEQLhivARjHARiABBiOBTIGCAIQIxgnMgYIAxBFGDsyEAgEEC4YrwEYxwEYgAQYjgUyBggFEEUYPDIGCAYQRRg8MgYIBxBFGDzSAQgxODU5ajBqMagCALACAA&sourceid=chrome&ie=UTF-8&lqi=Cg1sb3ZlIG15IGh1bWFuSOzZnePvtYCACFolEAAQARACGAAYARgCIg1sb3ZlIG15IGh1bWFuKggIAhAAEAEQApIBBGNhZmWqAUQKDS9nLzExZjYxNWNiXzAQATIeEAEiGpfW0nTd4ZBRPASNVG7qRVp82-i5S06BPhTgMhEQAiINbG92ZSBteSBodW1hbg#lkt=LocalPoiReviews&rlimm=298493026911098021&lrd=0x4876055c1f59ed57:0x42475d394f794a5,3,,,,",
         "button_style": "dashed"
       }
+    },
+    "cafe_booking": {
+      "type": "lmh-course-enquiry",
+      "settings": {
+        "heading": "MAKE A BOOKING",
+        "text": "<p>Tell us when you would like to visit or what you are planning, and we will get back to you to confirm.</p>",
+        "request_type": "Café booking request",
+        "anchor": "cafe-booking",
+        "choice_label": "Booking type",
+        "courses": "Table booking\nPrivate hire – café\nPrivate hire – daycare room\nOther",
+        "show_date": true,
+        "message_label": "Anything else we should know?",
+        "message_placeholder": "Time, dogs coming along, occasion…",
+        "button_label": "Send booking request",
+        "success_message": "Thank you! We will be in touch shortly to confirm your booking.",
+        "background": "#4D69B0",
+        "text_color": "#FCF7EB",
+        "padding_top": 52,
+        "padding_bottom": 52
+      }
     }
   },
   "order": [
@@ -367,6 +387,7 @@
     "lmh_06_rich_text",
     "lmh_07_multicolumn",
     "lmh_08_image_banner",
+    "cafe_booking",
     "lmh_09_multicolumn",
     "lmh_10_collage",
     "lmh_11_multicolumn",

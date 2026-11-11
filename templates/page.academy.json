@@ -126,8 +126,8 @@
             "title_font": "body",
             "background": "#4D69B0",
             "text_color": "#FCF7EB",
-            "button_label": "LEARN MORE",
-            "button_link": "https://www.lovemyhuman.co.uk/pages/groomers-taster-course"
+            "button_label": "ENQUIRE NOW",
+            "button_link": "#course-enquiry-1"
           }
         },
         "item1": {
@@ -141,8 +141,8 @@
             "title_font": "body",
             "background": "#4D69B0",
             "text_color": "#FCF7EB",
-            "button_label": "LEARN MORE",
-            "button_link": "https://www.lovemyhuman.co.uk/pages/home-grooming-course"
+            "button_label": "ENQUIRE NOW",
+            "button_link": "#course-enquiry-2"
           }
         },
         "item2": {
@@ -156,8 +156,8 @@
             "title_font": "body",
             "background": "#4D69B0",
             "text_color": "#FCF7EB",
-            "button_label": "LEARN MORE",
-            "button_link": "https://www.lovemyhuman.co.uk/pages/track-1-cpg-certified-professional-groomer-course"
+            "button_label": "ENQUIRE NOW",
+            "button_link": "#course-enquiry-3"
           }
         },
         "item3": {
@@ -171,8 +171,8 @@
             "title_font": "body",
             "background": "#4D69B0",
             "text_color": "#FCF7EB",
-            "button_label": "LEARN MORE",
-            "button_link": "https://www.lovemyhuman.co.uk/pages/track-2-cpg-certified-advanced-professional-groomer"
+            "button_label": "ENQUIRE NOW",
+            "button_link": "#course-enquiry-4"
           }
         }
       },
@@ -243,6 +243,18 @@
         "heading": "READY TO BEGIN?",
         "heading_style": "section",
         "text": "<p>Submit your interest and we’ll contact you for a short interview. Spaces are limited and not all applicants are accepted. We're looking for passion and alignment with our values.</p>"
+      },
+      "disabled": true
+    },
+    "course_enquiry": {
+      "type": "lmh-course-enquiry",
+      "settings": {
+        "heading": "READY TO BEGIN?",
+        "text": "<p>Submit your interest and we’ll contact you for a short interview. Spaces are limited and not all applicants are accepted. We're looking for passion and alignment with our values.</p>",
+        "background": "#4D69B0",
+        "text_color": "#FCF7EB",
+        "padding_top": 52,
+        "padding_bottom": 52
       }
     }
   },
@@ -257,6 +269,7 @@
     "lmh_07_rich_text",
     "lmh_08_collage",
     "lmh_09_rich_text",
-    "lmh_10_rich_text"
+    "lmh_10_rich_text",
+    "course_enquiry"
   ]
 }

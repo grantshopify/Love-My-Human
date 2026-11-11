@@ -1,0 +1,252 @@
+{%- comment -%}
+  Course enquiry: a heading, short text and a contact form for Academy courses. Messages go to the store's contact
+  email, titled "Course enquiry". Buttons can link to #course-enquiry-1, -2, ... to open the form with that course
+  (numbered in the order of the "Courses" list) already picked.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign form_id = 'CourseEnquiry-' | append: section.id
+  assign courses = s.courses | newline_to_br | split: '<br />'
+  assign anchor = s.anchor | default: 'course-enquiry' | handleize
+  assign request_type = s.request_type | default: 'Course enquiry'
+  assign choice_label = s.choice_label | default: 'Course'
+-%}
+
+<div
+  class="lmh-ce"
+  id="{{ anchor }}"
+  style="
+    --lmh-ce-bg: {{ s.background }};
+    --lmh-ce-text: {{ s.text_color }};
+    --lmh-ce-pt: {{ s.padding_top }}px;
+    --lmh-ce-pb: {{ s.padding_bottom }}px;
+  "
+>
+  <div class="lmh-ce__inner">
+    {%- if s.heading != blank -%}
+      <h2 class="lmh-ce__heading">{{ s.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if s.text != blank -%}
+      <div class="lmh-ce__text">{{ s.text }}</div>
+    {%- endif -%}
+
+    {%- form 'contact', id: form_id, class: 'lmh-ce__form' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="lmh-ce__status" role="status">{{ s.success_message }}</p>
+      {%- else -%}
+        {%- if form.errors -%}
+          <p class="lmh-ce__status lmh-ce__status--error" role="alert">{{ form.errors | default_errors }}</p>
+        {%- endif -%}
+        <input type="hidden" name="contact[Request]" value="{{ request_type | escape }}">
+
+        <div class="lmh-ce__row">
+          <label class="lmh-ce__field">
+            <span>Name *</span>
+            <input type="text" name="contact[name]" autocomplete="name" required value="{{ form.name }}">
+          </label>
+          <label class="lmh-ce__field">
+            <span>Email *</span>
+            <input type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}">
+          </label>
+        </div>
+
+        <div class="lmh-ce__row">
+          <label class="lmh-ce__field">
+            <span>Phone</span>
+            <input type="tel" name="contact[phone]" autocomplete="tel" value="{{ form.phone }}">
+          </label>
+          <label class="lmh-ce__field">
+            <span>{{ choice_label | escape }} *</span>
+            <select name="contact[{{ choice_label | escape }}]" required data-course-select>
+              <option value="">Choose…</option>
+              {%- for c in courses -%}
+                {%- assign course_name = c | strip_newlines | strip -%}
+                {%- if course_name != blank -%}
+                  <option value="{{ course_name | escape }}">{{ course_name | escape }}</option>
+                {%- endif -%}
+              {%- endfor -%}
+            </select>
+          </label>
+        </div>
+
+        {%- if s.show_date -%}
+          <div class="lmh-ce__row">
+            <label class="lmh-ce__field">
+              <span>Preferred date</span>
+              <input type="date" name="contact[Preferred date]">
+            </label>
+            <label class="lmh-ce__field">
+              <span>Number of guests</span>
+              <input type="number" name="contact[Guests]" min="1" inputmode="numeric">
+            </label>
+          </div>
+        {%- endif -%}
+
+        <label class="lmh-ce__field">
+          <span>{{ s.message_label | default: 'Tell us a little about you' | escape }}</span>
+          <textarea name="contact[body]" rows="4" placeholder="{{ s.message_placeholder | escape }}">{{ form.body }}</textarea>
+        </label>
+
+        <button type="submit" class="lmh-ce__button">{{ s.button_label | default: 'Send enquiry' }}</button>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</div>
+
+<script>
+  (() => {
+    const anchor = {{ anchor | json }};
+    const root = document.getElementById(anchor);
+    if (!root) return;
+    const select = root.querySelector('[data-course-select]');
+    // #course-enquiry-2 picks the 2nd course, then scrolls to the form
+    const pick = () => {
+      // #<anchor> opens the form; #<anchor>-2 also picks the 2nd option
+      const hash = decodeURIComponent(location.hash.slice(1));
+      if (hash !== anchor && !hash.startsWith(anchor + '-')) return;
+      const n = Number(hash.slice(anchor.length + 1));
+      const option = n && select ? select.options[n] : null;
+      if (option) select.value = option.value;
+      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    pick();
+    window.addEventListener('hashchange', pick);
+  })();
+</script>
+
+{% stylesheet %}
+  .lmh-ce {
+    padding: var(--lmh-ce-pt) var(--page-margin, 16px) var(--lmh-ce-pb);
+    background: var(--lmh-ce-bg);
+    color: var(--lmh-ce-text);
+    text-align: center;
+    scroll-margin-top: 80px;
+  }
+
+  .lmh-ce__inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .lmh-ce__heading {
+    margin: 0 0 16px;
+    color: inherit;
+    font-family: var(--font-heading--family);
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 400;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  .lmh-ce__text {
+    margin: 0 auto 28px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .lmh-ce__text > * {
+    margin: 0;
+  }
+
+  .lmh-ce__form {
+    display: grid;
+    gap: 16px;
+    text-align: start;
+  }
+
+  .lmh-ce__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .lmh-ce__field {
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .lmh-ce__field :is(input, select, textarea) {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid color-mix(in srgb, var(--lmh-ce-text) 60%, transparent);
+    border-radius: 0;
+    background: var(--lmh-ce-text);
+    color: #222;
+    font: inherit;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+
+  .lmh-ce__button {
+    justify-self: center;
+    margin-top: 8px;
+    padding: 14px 40px;
+    border: 2px solid var(--lmh-ce-text);
+    background: var(--lmh-ce-text);
+    color: var(--lmh-ce-bg);
+    font-family: var(--font-heading--family);
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .lmh-ce__button:hover {
+    background: transparent;
+    color: var(--lmh-ce-text);
+  }
+
+  .lmh-ce__status {
+    margin: 0;
+    padding: 16px;
+    border: 1px solid var(--lmh-ce-text);
+    text-align: center;
+    font-size: 16px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .lmh-ce__row {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Enquiry form",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Ready to begin?" },
+    { "type": "text", "id": "request_type", "label": "Email title", "default": "Course enquiry", "info": "Shown at the top of the email, e.g. Course enquiry or Café booking request" },
+    { "type": "text", "id": "anchor", "label": "Link name", "default": "course-enquiry", "info": "Buttons link to #<link name> (or #<link name>-2 to pick the 2nd option)" },
+    { "type": "text", "id": "choice_label", "label": "Dropdown label", "default": "Course" },
+    { "type": "checkbox", "id": "show_date", "label": "Show date and number of guests", "default": false },
+    { "type": "text", "id": "message_label", "label": "Message label", "default": "Tell us a little about you" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    {
+      "type": "textarea",
+      "id": "courses",
+      "label": "Dropdown options (one per line)",
+      "info": "Buttons linking to #course-enquiry-1, #course-enquiry-2 ... open the form with that course picked.",
+      "default": "Taster Course\nHome Grooming Course\nCertified Professional Groomer - ICMG Track 1\nCertified Advanced Pet Groomer - ICMG Track 2"
+    },
+    { "type": "text", "id": "message_placeholder", "label": "Message placeholder", "default": "Your experience, preferred dates, any questions" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Send enquiry" },
+    { "type": "text", "id": "success_message", "label": "Thank-you message", "default": "Thank you! We'll be in touch soon about your course." },
+    { "type": "color", "id": "background", "label": "Background", "default": "#4D69B0" },
+    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#FCF7EB" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 52 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 52 }
+  ],
+  "presets": [{ "name": "Enquiry form" }]
+}
+{% endschema %}
