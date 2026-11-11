@@ -1,3 +1,15 @@
+{%- if block.settings.desktop_photo_space > 0 -%}
+  {%- style -%}
+    /* Desktop: a little space around each photo so wide products (e.g. beds) don't look zoomed in */
+    @media screen and (min-width: 750px) {
+      .product-information__media media-gallery .product-media-container img {
+        object-fit: contain !important;
+        padding: {{ block.settings.desktop_photo_space }}%;
+        box-sizing: border-box;
+      }
+    }
+  {%- endstyle -%}
+{%- endif -%}
 
 {% render 'product-media-gallery-content',
   media_presentation: block.settings.media_presentation,
@@ -240,6 +252,17 @@
       ],
       "default": "cover",
       "visible_if": "{{ block.settings.aspect_ratio == 'adapt' and block.settings.constrain_to_viewport == true }}"
+    },
+    {
+      "type": "range",
+      "id": "desktop_photo_space",
+      "label": "Space around photos (desktop)",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "%",
+      "default": 0,
+      "info": "Zooms the photo out a little on desktop so the whole product shows with some room. Phones are not affected."
     },
     {
       "type": "range",
