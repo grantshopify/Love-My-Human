@@ -66,6 +66,11 @@
       assign media_fit = block_settings.constrain_to_viewport
     endif
   endif
+
+  # "Fit" shows the whole photo inside the card (no zoom/crop); "Fill" crops it to fill the card
+  if block_settings.image_fit == 'contain'
+    assign media_fit = 'contain'
+  endif
 %}
 
 <div

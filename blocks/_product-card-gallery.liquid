@@ -81,6 +81,17 @@
       "info": "t:info.aspect_ratio_adjusted"
     },
     {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "options": [
+        { "value": "cover", "label": "Fill (crop to the card)" },
+        { "value": "contain", "label": "Fit (show the whole photo)" }
+      ],
+      "default": "cover",
+      "info": "Fit stops wide photos (like beds) looking zoomed in."
+    },
+    {
       "type": "header",
       "content": "t:content.borders"
     },

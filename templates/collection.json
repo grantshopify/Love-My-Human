@@ -109,6 +109,7 @@
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
+                "image_fit": "contain",
                 "image_ratio": "portrait",
                 "border": "solid",
                 "border_width": 0,
