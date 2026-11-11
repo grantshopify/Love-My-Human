@@ -18,7 +18,7 @@
         "heading_color": "{{ settings.color_palette.color1 }}",
         "align": "center",
         "full_width": false,
-        "heading": "COLOURFUL FRIDAY",
+        "heading": "COLOUR FRIDAY",
         "heading_style": "title",
         "text": "<p>UP TO 20% OFF ALL PRODUCTS</p>",
         "button_label": "SHOP THE SALE",
