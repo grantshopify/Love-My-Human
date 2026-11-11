@@ -48,6 +48,7 @@
             "aspect_ratio": "1",
             "constrain_to_viewport": true,
             "media_fit": "cover",
+            "desktop_photo_space": 10,
             "media_radius": 16,
             "extend_media": false,
             "zoom": true,
