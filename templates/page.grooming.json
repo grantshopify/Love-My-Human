@@ -125,7 +125,7 @@
         "heading_style": "title",
         "text": "<p>Welcome to Love My Human Pet Grooming, the finest grooming experience in London situated in the heart of Chelsea. Our senior groomers provide expert care and services tailored to your pet's unique needs. Contact us for a bespoke quote.</p>",
         "button_label": "MAKE ENQUIRY",
-        "button_link": "#GroomRequest-groom_booking",
+        "button_link": "#request-a-groom",
         "button_style": "solid"
       }
     },
@@ -154,7 +154,7 @@
         "heading": "WASH AND BLOWDRY",
         "text": "<p>A&nbsp;lovely way to get your dog’s coat back to a clean and cuddly condition. </p><p>Includes: A double cleanse with shampoo, brush and de-matt if needed and then your dog will have a gentle warm blow dry and spritz with a pleasant scent. </p><p><strong>Duration:</strong> 1-2 hours (varies by breed &amp; size). </p><p><strong>(!)</strong> Note: Heavily matted coats may require extra time, fees, or a clip-off for healthy regrowth.</p>",
         "button_label": "MAKE ENQUIRY",
-        "button_link": "#GroomRequest-groom_booking",
+        "button_link": "#request-a-groom",
         "button_style": "solid",
         "image": "shopify://shop_images/Group_187.png"
       }
@@ -172,7 +172,7 @@
         "heading": "WASH AND TIDY",
         "text": "<p>Ideal for maintaining your dog’s coat between full grooms. </p><p>Includes: Double cleanse with premium shampoo, gentle brush, de-matting (if needed), warm blow dry, and a fresh scent. We also trim nails, tidy the sanitary area, and clean around eyes and paws. </p><p><strong>Duration</strong>: 1.5 to 2.5 hours, depending on breed and size. </p><p><strong>(!)</strong> Note: Heavily matted coats may require extra time, fees, or a clip-off for healthy regrowth.</p>",
         "button_label": "MAKE ENQUIRY",
-        "button_link": "#GroomRequest-groom_booking",
+        "button_link": "#request-a-groom",
         "button_style": "solid",
         "image": "shopify://shop_images/Group_75.png"
       }
@@ -190,7 +190,7 @@
         "heading": "FULL GROOM",
         "text": "<p>Ready for a deep clean? All of our Full Grooms begin with a two-shampoo cleanse, de-matting/gentle brushing, and hand-drying.</p><p>Our service includes:</p><ul><li>Short-coated dogs have dead fur stripped away for a clean coat.</li><li>Long, curly, or drop-coated dogs receive a trim to your chosen style.</li><li>We also clip nails, clean ears, and tidy the sanitary area for a complete grooming experience.</li></ul><p>After the groom, your dog will look and feel amazing! </p><p><strong>Duration</strong>: 1.5 hours for short-coated dogs, 2+ hours for long or complex coats. </p><p><strong>(!)</strong> Note: Heavily matted coats may require extra time, fees, or a clip-off for healthy regrowth.</p>",
         "button_label": "MAKE ENQUIRY",
-        "button_link": "#GroomRequest-groom_booking",
+        "button_link": "#request-a-groom",
         "button_style": "solid",
         "image": "shopify://shop_images/Group_753.png"
       }
@@ -209,7 +209,7 @@
         "heading": "PUPPY INTRODUCTION GROOM",
         "text": "<p>A fun, gentle introduction to grooming for your little one! We keep it light and stress-free, making sure your pup enjoys their first grooming experience. </p><p>Includes:</p><ul><li>Gentle bathing</li><li>Nail clipping</li><li>Light brushing</li><li>Ear cleaning </li><li>No cutting or styling until fully grown. </li></ul><p><strong>Duration</strong>: 1.5 hours maximum. </p><p>Note: Puppies can start at around 12 weeks, but it depends on breed and temperament. Some groomers may recommend a \"puppy introduction\" session earlier to get them comfortable with the process!</p>",
         "button_label": "MAKE ENQUIRY",
-        "button_link": "#GroomRequest-groom_booking",
+        "button_link": "#request-a-groom",
         "button_style": "solid"
       }
     },
@@ -523,7 +523,7 @@
         "layout": "rich_text",
         "heading_style": "section",
         "button_label": "ENQUIRY",
-        "button_link": "#GroomRequest-groom_booking",
+        "button_link": "#request-a-groom",
         "button_style": "solid"
       }
     },

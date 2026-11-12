@@ -207,6 +207,7 @@
 
     {%- comment -%} Groom request: a Shopify contact form, so each request is emailed to the store {%- endcomment -%}
     {%- assign form_id = 'GroomRequest-' | append: section.id -%}
+    <span id="request-a-groom" class="gb-anchor" aria-hidden="true"></span>
     <div class="gb-request" id="{{ form_id }}">
       <div class="gb-request__intro">
         <h2 class="gb-request__title">{{ s.form_heading }}</h2>
@@ -346,6 +347,7 @@
 </script>
 
 {% stylesheet %}
+  .gb-anchor { display: block; position: relative; top: -90px; visibility: hidden; }
   .gb__hero {
     position: relative;
     display: grid;

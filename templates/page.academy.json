@@ -112,7 +112,8 @@
         "padding_top": 4,
         "padding_bottom": 4,
         "layout": "cards",
-        "columns": 3
+        "columns": 3,
+        "anchor": "courses"
       },
       "blocks": {
         "item0": {
