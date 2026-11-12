@@ -78,7 +78,7 @@
     {%- when 'cards' -%}
       <div class="lmh-m__inner">
         {%- if s.heading != blank -%}<h2 class="lmh-m__heading lmh-m__heading--cards">{{ s.heading }}</h2>{%- endif -%}
-        <div class="lmh-m__cards">
+        <div class="lmh-m__cards{% if s.card_align == 'center' %} lmh-m__cards--center{% endif %}">
           {%- for block in section.blocks -%}
             <div
               class="lmh-m__card lmh-m__card--{{ block.settings.style }}"
@@ -131,7 +131,7 @@
     {%- when 'faq' -%}
       <div class="lmh-m__inner">
         {%- if s.heading != blank -%}<h2 class="lmh-m__heading" style="text-align: center;">{{ s.heading }}</h2>{%- endif -%}
-        <div class="lmh-m__faq">
+        <div class="lmh-m__faq{% if s.faq_style == 'boxes' %} lmh-m__faq--boxes{% endif %}">
           {%- for block in section.blocks -%}
             <details class="lmh-m__faq-item" {{ block.shopify_attributes }}>
               <summary>{{ block.settings.title }}<span aria-hidden="true"></span></summary>
@@ -215,6 +215,9 @@
   .lmh-m__images--row .lmh-m__image, .lmh-m__images--two_wide .lmh-m__image { height: var(--lmh-banner-h); overflow: hidden; }
   .lmh-m__images--row .lmh-m__image img, .lmh-m__images--two_wide .lmh-m__image img { max-height: none; }
   .lmh-m__images--two_wide { grid-template-columns: 2fr 1fr; }
+  .lmh-m__images--whole { display: flex; justify-content: center; }
+  .lmh-m__images--whole .lmh-m__image { height: var(--lmh-banner-h); }
+  .lmh-m__images--whole .lmh-m__image img { width: auto; height: 100%; max-height: none; object-fit: contain; }
   .lmh-m__images--left, .lmh-m__images--right { grid-template-columns: 2fr 1fr; grid-template-rows: calc(var(--lmh-banner-h) / 2) calc(var(--lmh-banner-h) / 2); }
   .lmh-m__images--right { grid-template-columns: 1fr 2fr; }
   .lmh-m__images--left .lmh-m__image:first-child { grid-row: 1 / span 2; }
@@ -262,6 +265,12 @@
   .lmh-m__faq-item summary::-webkit-details-marker { display: none; }
   .lmh-m__faq-item summary span::before { content: '+'; font-family: var(--font-body--family); font-size: 20px; }
   .lmh-m__faq-item[open] summary span::before { content: '–'; }
+  .lmh-m__faq--boxes { border-top: 0; }
+  .lmh-m__faq--boxes .lmh-m__faq-item { border: 1px solid currentColor; border-radius: 8px; margin-bottom: 12px; padding: 0 10px; }
+  .lmh-m__faq--boxes .lmh-m__faq-item summary span::before { content: ''; display: inline-block; width: 6px; height: 6px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(45deg); margin: 0 20px 4px 0; transition: transform 0.2s; }
+  .lmh-m__faq--boxes .lmh-m__faq-item[open] summary span::before { content: ''; transform: rotate(-135deg); margin-bottom: -2px; }
+  .lmh-m__cards--center .lmh-m__card { text-align: center; }
+  .lmh-m__heading--small { font-size: 24px; }
   .lmh-m__faq-answer { font-family: var(--font-body--family); font-size: 16px; line-height: 1.8; letter-spacing: 0.6px; padding-bottom: 22px; }
 
   @media screen and (max-width: 749px) {
@@ -319,9 +328,11 @@
       "type": "select",
       "id": "heading_style",
       "label": "Heading style",
-      "options": [{ "value": "section", "label": "Section heading" }, { "value": "title", "label": "Large page title" }],
+      "options": [{ "value": "section", "label": "Section heading" }, { "value": "title", "label": "Large page title" }, { "value": "small", "label": "Small heading" }],
       "default": "section"
     },
+    { "type": "select", "id": "card_align", "label": "Box text alignment", "options": [{ "value": "left", "label": "Left" }, { "value": "center", "label": "Centre" }], "default": "left" },
+    { "type": "select", "id": "faq_style", "label": "FAQ style", "options": [{ "value": "lines", "label": "Lines" }, { "value": "boxes", "label": "Boxes" }], "default": "lines" },
     { "type": "richtext", "id": "text", "label": "Text" },
     { "type": "text", "id": "button_label", "label": "Button label" },
     { "type": "url", "id": "button_link", "label": "Button link" },
@@ -364,7 +375,7 @@
       "type": "select",
       "id": "collage",
       "label": "Three images layout",
-      "options": [{ "value": "row", "label": "In a row" }, { "value": "left", "label": "Large on the left" }, { "value": "right", "label": "Large on the right" }, { "value": "two_wide", "label": "Two images, first wider" }],
+      "options": [{ "value": "row", "label": "In a row" }, { "value": "left", "label": "Large on the left" }, { "value": "right", "label": "Large on the right" }, { "value": "two_wide", "label": "Two images, first wider" }, { "value": "whole", "label": "One image, whole, centred" }],
       "default": "row"
     },
     { "type": "video", "id": "video", "label": "Video" },

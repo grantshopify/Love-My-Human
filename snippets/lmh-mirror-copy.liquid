@@ -3,7 +3,7 @@
   @param {object} s - The section settings
 {%- enddoc -%}
 {%- if s.heading != blank -%}
-  <h2 class="lmh-m__heading{% if s.heading_style == 'title' %} lmh-m__heading--title{% endif %}">{{ s.heading }}</h2>
+  <h2 class="lmh-m__heading{% if s.heading_style == 'title' %} lmh-m__heading--title{% endif %}{% if s.heading_style == 'small' %} lmh-m__heading--small{% endif %}">{{ s.heading }}</h2>
 {%- endif -%}
 {%- if s.text != blank -%}
   <div class="lmh-m__text">{{ s.text }}</div>

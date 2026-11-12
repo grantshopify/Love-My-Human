@@ -6,6 +6,7 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
+  * Old grooming page content added under the request form (13 Nov).
  */
 {
   "sections": {
@@ -110,10 +111,818 @@
         "padding-block-start": 40,
         "padding-block-end": 80
       }
+    },
+    "groomers_lmh_01_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "Refined Grooms for Dogs",
+        "heading_style": "title",
+        "text": "<p>Welcome to Love My Human Pet Grooming, the finest grooming experience in London situated in the heart of Chelsea. Our senior groomers provide expert care and services tailored to your pet's unique needs. Contact us for a bespoke quote.</p>",
+        "button_label": "MAKE ENQUIRY",
+        "button_link": "#GroomRequest-groom_booking",
+        "button_style": "solid"
+      }
+    },
+    "groomers_lmh_02_video": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FFFFFF",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "video",
+        "video": "shopify://files/videos/LMH-academy-video.mp4"
+      }
+    },
+    "groomers_lmh_03_image_with_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "left",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "layout": "image_text",
+        "image_right": true,
+        "heading": "WASH AND BLOWDRY",
+        "text": "<p>A&nbsp;lovely way to get your dog’s coat back to a clean and cuddly condition. </p><p>Includes: A double cleanse with shampoo, brush and de-matt if needed and then your dog will have a gentle warm blow dry and spritz with a pleasant scent. </p><p><strong>Duration:</strong> 1-2 hours (varies by breed &amp; size). </p><p><strong>(!)</strong> Note: Heavily matted coats may require extra time, fees, or a clip-off for healthy regrowth.</p>",
+        "button_label": "MAKE ENQUIRY",
+        "button_link": "#GroomRequest-groom_booking",
+        "button_style": "solid",
+        "image": "shopify://shop_images/Group_187.png"
+      }
+    },
+    "groomers_lmh_04_image_with_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "left",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "layout": "image_text",
+        "image_right": false,
+        "heading": "WASH AND TIDY",
+        "text": "<p>Ideal for maintaining your dog’s coat between full grooms. </p><p>Includes: Double cleanse with premium shampoo, gentle brush, de-matting (if needed), warm blow dry, and a fresh scent. We also trim nails, tidy the sanitary area, and clean around eyes and paws. </p><p><strong>Duration</strong>: 1.5 to 2.5 hours, depending on breed and size. </p><p><strong>(!)</strong> Note: Heavily matted coats may require extra time, fees, or a clip-off for healthy regrowth.</p>",
+        "button_label": "MAKE ENQUIRY",
+        "button_link": "#GroomRequest-groom_booking",
+        "button_style": "solid",
+        "image": "shopify://shop_images/Group_75.png"
+      }
+    },
+    "groomers_lmh_05_image_with_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "left",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "layout": "image_text",
+        "image_right": true,
+        "heading": "FULL GROOM",
+        "text": "<p>Ready for a deep clean? All of our Full Grooms begin with a two-shampoo cleanse, de-matting/gentle brushing, and hand-drying.</p><p>Our service includes:</p><ul><li>Short-coated dogs have dead fur stripped away for a clean coat.</li><li>Long, curly, or drop-coated dogs receive a trim to your chosen style.</li><li>We also clip nails, clean ears, and tidy the sanitary area for a complete grooming experience.</li></ul><p>After the groom, your dog will look and feel amazing! </p><p><strong>Duration</strong>: 1.5 hours for short-coated dogs, 2+ hours for long or complex coats. </p><p><strong>(!)</strong> Note: Heavily matted coats may require extra time, fees, or a clip-off for healthy regrowth.</p>",
+        "button_label": "MAKE ENQUIRY",
+        "button_link": "#GroomRequest-groom_booking",
+        "button_style": "solid",
+        "image": "shopify://shop_images/Group_753.png"
+      }
+    },
+    "groomers_lmh_06_image_with_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "left",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "layout": "image_text",
+        "image": "shopify://shop_images/pups.webp",
+        "image_right": false,
+        "heading": "PUPPY INTRODUCTION GROOM",
+        "text": "<p>A fun, gentle introduction to grooming for your little one! We keep it light and stress-free, making sure your pup enjoys their first grooming experience. </p><p>Includes:</p><ul><li>Gentle bathing</li><li>Nail clipping</li><li>Light brushing</li><li>Ear cleaning </li><li>No cutting or styling until fully grown. </li></ul><p><strong>Duration</strong>: 1.5 hours maximum. </p><p>Note: Puppies can start at around 12 weeks, but it depends on breed and temperament. Some groomers may recommend a \"puppy introduction\" session earlier to get them comfortable with the process!</p>",
+        "button_label": "MAKE ENQUIRY",
+        "button_link": "#GroomRequest-groom_booking",
+        "button_style": "solid"
+      }
+    },
+    "groomers_lmh_07_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 40,
+        "padding_bottom": 8,
+        "layout": "rich_text",
+        "heading": "OUR PRICE GUIDE",
+        "heading_style": "section"
+      }
+    },
+    "groomers_lmh_08_multicolumn": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#FCF7EB",
+        "align": "left",
+        "padding_top": 4,
+        "padding_bottom": 4,
+        "layout": "cards",
+        "columns": 2
+      },
+      "blocks": {
+        "item0": {
+          "type": "item",
+          "settings": {
+            "title": "Small Dogs",
+            "text": "<p>(Up to 15lbs / 6.8kg)</p><h6>eg: Chihuahua, Teacup Yorkie, Teacup Pomeranian, Dachshund, Shih Tzu, French Bulldog, Miniature Schnauzer.</h6><ul><li>Wash and Fluff from £97 </li><li>Wash and Tidy from £107 </li><li>Full Groom from £128</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item1": {
+          "type": "item",
+          "settings": {
+            "title": "Medium Dogs",
+            "text": "<p>(16 - 40lbs / 7.3 - 18.1kg)</p><h6>eg: Beagle, Cocker Spaniel, Cavalier King Charles Spaniel, Bulldog</h6><ul><li>Wash and Fluff from £107 </li><li>Wash and Tidy from £118 </li><li>Full Groom from £138</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item0",
+        "item1"
+      ]
+    },
+    "groomers_lmh_09_multicolumn": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#FCF7EB",
+        "align": "left",
+        "padding_top": 4,
+        "padding_bottom": 4,
+        "layout": "cards",
+        "columns": 2
+      },
+      "blocks": {
+        "item0": {
+          "type": "item",
+          "settings": {
+            "title": "Large Dogs",
+            "text": "<p>(41 - 90lbs / 18.6 - 40.8kg)</p><h6>eg: Labrador Retriever, Boxer, Golden Retriever, Rottweiler</h6><ul><li>Wash and Fluff from £128 </li><li>Wash and Tidy from £138 </li><li>Full Groom from £160</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item1": {
+          "type": "item",
+          "settings": {
+            "title": "Extra Large Dogs",
+            "text": "<p>(91lbs / 18.6 - 41.3kg and above)</p><h6>Great Dane, Saint Bernard, Mastiff, Newfoundland</h6><ul><li>Wash and Fluff from £138 </li><li>Wash and Tidy from £149 </li><li>Full Groom from £170 </li></ul><p>-</p><p>Extra large dog Long Hair: </p><ul><li>Wash and Fluff from £160 </li><li>Wash and Tidy from £171 </li><li>Full Groom from £191</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item0",
+        "item1"
+      ]
+    },
+    "groomers_lmh_10_multicolumn": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 4,
+        "layout": "cards",
+        "heading": "ADD ONS",
+        "columns": 2
+      },
+      "blocks": {
+        "item0": {
+          "type": "item",
+          "settings": {
+            "title": "Ultrasonic teeth cleaning £50",
+            "text": "<p>A gentle, effective way to deep clean your dog’s teeth. we use a non-vibrating 'ultrasonic' toothbrush (to reduce stress) and microbubble toothpaste to tackle plaque, tartar, and bad breath. Groomers gently scrape buildup and assess your dog’s dental health in a pre-treatment consultation. Multiple sessions may be needed based on severity. No sedation is used, if a dog is too fidgety, we pause treatment and inform the owner. Sessions take about 30 minutes and can be added to grooming or booked separately.</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item1": {
+          "type": "item",
+          "settings": {
+            "title": "Regular Teeth Cleaning £16",
+            "text": "<p>A great way to maintain your dog's oral health. We use a regular, soft toothbrush with a special dog toothpaste to brush their teeth. This service is perfect for puppies as an introduction to teeth cleaning, or if your dog's teeth doesn't need a deeper cleaning, only maintenance. Regular Teeth Cleaning can not be booked as a standalone session, only as an addition to any of our grooming services. Please keep in mind that, similarly to our Ultrasonic service, if a dog doesn't let us complete the session, we don't force the treatment on them and the owner will be notified.</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item2": {
+          "type": "item",
+          "settings": {
+            "title": "Ultrasonic Teeth Cleaning Package 3x Sessions £130",
+            "text": "<p>Our Ultrasonic Teeth Cleaning Package contains 3x sessions in one package, which is a great way to save if you know your dog will have this treatment on a regular basis.</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item3": {
+          "type": "item",
+          "settings": {
+            "title": "Nail Trim £19",
+            "text": "<p>Our Nail Trim service is a great way to keep your dog's nails trimmed back to a healthy length without the need of booking a grooming appointment. It takes around 5-10 minutes, can be booked via phone or as a walk-in service, however, it is always recommended to call up ahead and check the time so we can make sure there's a groomer available for you.</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item4": {
+          "type": "item",
+          "settings": {
+            "title": "Blueberry Facial £19",
+            "text": "<p>Helps reduce tear stains and mouth area discoloration in white or light-coated dogs. It uses a special shampoo, gently massaged and thoroughly rinsed for a clean, brighter coat. Multiple sessions and ongoing care may be needed for severe staining. Available only with wash &amp; fluff, wash &amp; tidy, or full groom appointments, not as a standalone service</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item5": {
+          "type": "item",
+          "settings": {
+            "title": "Ear Cleaning £16",
+            "text": "<p>Keeping your dog's ears cleaned regularly. While it's included in all of our grooming services, if you find your pup having dirty ears after a long session in the park, and you would like to make sure their ears are cleaned perfectly, we can book them in for a quick treatment. It takes around 5-10 minutes, can be booked via phone or as a walk-in service, however, it is always recommended to call up ahead and check the time so we can make sure there's a groomer available for you.</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item6": {
+          "type": "item",
+          "settings": {
+            "title": "Paw & Nose Balm £9",
+            "text": "<p>Add our Paw &amp; Nose Balm treatment to your dog’s groom for extra protection and moisture. Ideal for hot summers or cold winters, it shields sensitive skin from harsh weather. Made with natural oils, it's safe for all breeds, even if licked.</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item7": {
+          "type": "item",
+          "settings": {
+            "title": "Tick Removal £10",
+            "text": "<p>Our Tick Removal service is perfect if you can't go to the vet, but your pup has an unwanted hijacker. Our groomers are trained to remove ticks safely, without risking any complications. It takes around 5-10 minutes, can be booked via phone or as a walk-in service, however, it is always recommended to call up ahead and check the time so we can make sure there's a groomer available for you.</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item8": {
+          "type": "item",
+          "settings": {
+            "title": "Dematting Charges between £20 to £50",
+            "text": "<p>Dematting is an add-on to grooming for dogs with matted patches. The groomer will assess the coat during the pre-grooming consultation and advise if extra treatment is needed. Pricing depends on matting severity. It adds 20–30 minutes to the session. If matting is extreme or causes stress, a short cut may be recommended for the dog’s wellbeing. This service cannot be booked on its own.</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item9": {
+          "type": "item",
+          "settings": {
+            "title": "Seasonal Packages £40",
+            "text": "<p>Our Seasonal Packages are a great way to give your pup an extra pamper during their groom. It includes Regular Teeth Cleaning, Blueberry Facial, Paw &amp; Nose Balm, a Doggy Biscuit from our Townhouse Cafe, a little Seasonal Bow and a pump or two of a dog friendly perfume. Seasonal Packages can be asked on top of a grooming service and can not be booked as a standalone service.</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item0",
+        "item1",
+        "item2",
+        "item3",
+        "item4",
+        "item5",
+        "item6",
+        "item7",
+        "item8",
+        "item9"
+      ]
+    },
+    "groomers_lmh_11_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading_style": "section",
+        "text": "<p>Our senior&nbsp;groomers each have over 6+ years of experience and deliver the highest level of skill &amp; care. A surcharge of £20-£30 applies for their&nbsp;service.</p><p>Please note that Scissor Cut services have a surcharge of £30 on top of the prices above.</p>"
+      }
+    },
+    "groomers_lmh_12_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading_style": "section",
+        "button_label": "ENQUIRY",
+        "button_link": "#GroomRequest-groom_booking",
+        "button_style": "solid"
+      }
+    },
+    "groomers_lmh_13_multicolumn": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#FCF7EB",
+        "align": "left",
+        "padding_top": 52,
+        "padding_bottom": 4,
+        "layout": "cards",
+        "heading": "ADD ONS",
+        "columns": 2,
+        "card_align": "center"
+      },
+      "blocks": {
+        "item0": {
+          "type": "item",
+          "settings": {
+            "title": "Canine Oral Health at Love My Human",
+            "text": "<p>We all understand the vital role oral health plays in our overall well-being, and the same holds true for our beloved dogs. Keeping your dog’s teeth and gums clean is essential not only for their breath but also for their overall health. Healthy, clean canine teeth contribute to a longer, happier life, preventing issues such as gum disease, tooth decay, and potential organ&nbsp;infections.</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item1": {
+          "type": "item",
+          "settings": {
+            "title": "At Love My Human, we offer a professional canine teeth cleaning service that doesn’t require anaesthesia.",
+            "text": "<p>Using an advanced ultrasonic cleaning method, we can gently and effectively remove plaque, tartar, and bacteria from your dog’s teeth. This method works especially well on young, healthy teeth without enamel cracks or major damage.</p>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item0",
+        "item1"
+      ]
+    },
+    "groomers_lmh_14_collage": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "layout": "images",
+        "collage": "two_wide",
+        "banner_height": 490,
+        "image": "shopify://shop_images/LMH.Web-54_1.jpg",
+        "image_2": "shopify://shop_images/LMH-58_1.jpg"
+      }
+    },
+    "groomers_lmh_15_image_with_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "left",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "layout": "image_text",
+        "image_right": true,
+        "heading": "At Love My Human, we select groomers for their skills, kindness, professionalism, and teamwork.",
+        "text": "<p>At Love My Human, we select groomers for their skills, kindness, professionalism, and teamwork. Each member of our grooming team comes to us with no less than level two City and Guilds (or equivalent) qualification in dog grooming. As partners and members of ICMG (International Certified Master Groomers) we follow a strict code of ethics prioritising your pet's well-being while delivering exceptional grooming. We continuously&nbsp;train our&nbsp;groomers with ICMG so that they reach Master Groomer status</p>",
+        "image": "shopify://shop_images/Group_189.png",
+        "heading_style": "small"
+      }
+    },
+    "groomers_lmh_16_collapsible_content": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "faq",
+        "heading": "FREQUENTLY ASKED QUESTIONS",
+        "faq_style": "boxes"
+      },
+      "blocks": {
+        "item0": {
+          "type": "item",
+          "settings": {
+            "title": "What Makes Our Teeth Cleaning Safe and Effective?",
+            "text": "<ul><li>No Anaesthesia Required: Unlike traditional dental cleanings that require anaesthesia, our ultrasonic method is safe, non-invasive, and doesn’t involve the stress of sedation for your dog.</li><li>Gentle yet Thorough: The ultrasonic technology uses vibrations to break down plaque and tartar buildup, allowing us to clean your dog’s teeth without causing discomfort.</li><li>Best for Healthy Teeth: This method is particularly effective for dogs with healthy teeth and gums. We can safely clean teeth without causing any harm, enhancing overall oral hygiene.</li></ul>",
+            "style": "plain"
+          }
+        },
+        "item1": {
+          "type": "item",
+          "settings": {
+            "title": "Is It Right for Your Dog?",
+            "text": "<p>While our ultrasonic teeth cleaning service works wonders for many dogs, it may not be suitable for all. For dogs that are unable to sit still during the procedure, we may need to recommend an alternative. Additionally, in cases where there is significant dental disease, such as infected gums or advanced tooth decay, we strongly recommend a visit to your vet. Regular veterinary check-ups are vital for more severe dental issues, as they may require treatments beyond ultrasonic cleaning.</p>",
+            "style": "plain"
+          }
+        },
+        "item2": {
+          "type": "item",
+          "settings": {
+            "title": "When Should You Visit the Vet?",
+            "text": "<ul><li><strong>Signs of Gum Disease</strong>: If your dog is experiencing red, swollen, or bleeding gums, it could be a sign of gum disease, which may require a vet's intervention.</li><li><strong>Severe Plaque or Tartar Buildup</strong>: In cases of advanced tartar or plaque buildup that can’t be removed through ultrasonic cleaning alone, your vet may recommend a professional dental cleaning under anaesthesia.</li><li><strong>Pain or Discomfort</strong>: If your dog shows signs of discomfort while chewing, has bad breath, or has noticeable tooth loss, it’s important to seek professional dental care.</li></ul>",
+            "style": "plain"
+          }
+        },
+        "item3": {
+          "type": "item",
+          "settings": {
+            "title": "Why Regular Teeth Cleaning Matters",
+            "text": "<p>Just like us, dogs need regular dental care to prevent long-term issues like periodontal disease, which can lead to tooth loss and affect their overall health. Dental problems in dogs have been linked to other health conditions, including heart disease, kidney issues, and diabetes, so keeping their teeth clean is crucial.</p><p>This service can help your dog maintain a beautiful smile while also protecting their overall health. If you have any concerns or your dog shows signs of dental issues, our team is always here to guide you in the best direction!</p>",
+            "style": "plain"
+          }
+        }
+      },
+      "block_order": [
+        "item0",
+        "item1",
+        "item2",
+        "item3"
+      ]
+    },
+    "groomers_lmh_17_collapsible_content": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "faq",
+        "heading": "FURTHER INSIGHT INTO GROOMING TECHNIQUES",
+        "faq_style": "boxes"
+      },
+      "blocks": {
+        "item0": {
+          "type": "item",
+          "settings": {
+            "title": "Hand Stripping",
+            "text": "<p>Hand stripping is a specialized grooming technique designed for dogs with wiry coats, such as terriers and some sporting breeds. Unlike traditional clipping or trimming, hand stripping involves carefully plucking the dead outer coat by hand or using a stripping knife. This method preserves the natural texture and color of the coat, promotes healthy new growth, and maintains the breed's traditional appearance.</p><p>Hand stripping is typically recommended every few months to ensure the coat remains in top condition. It is an essential part of grooming for certain breeds, as it helps maintain the coat's integrity and prevents matting.</p><p>For the best results and to ensure a comfortable experience for your dog, it is always advised to have hand stripping done by a professional groomer who is trained in this technique.</p>",
+            "style": "plain"
+          }
+        },
+        "item1": {
+          "type": "item",
+          "settings": {
+            "title": "Scissor Cut",
+            "text": "<p>Scissor cutting is a refined grooming technique often used for dogs with long, curly, or flowing coats. This method involves carefully trimming and shaping the fur with scissors to achieve the desired length and style. It offers precise control, allowing the groomer to create a tailored, neat, and polished appearance that enhances the dog’s natural features.</p><p>Scissor cuts are particularly ideal for dogs whose coats require a gentle, customised touch. This technique ensures a smooth, well-balanced finish and is often used to maintain an elegant and healthy look. Regular grooming with scissor cuts helps preserve the overall health of the coat, keeping it looking fresh, neat, and beautiful.</p>",
+            "style": "plain"
+          }
+        },
+        "item2": {
+          "type": "item",
+          "settings": {
+            "title": "Clipping",
+            "text": "<p>Clipping is a versatile grooming technique commonly used for dogs with thick, dense, or matted coats. This method involves the use of electric clippers with various blade lengths, allowing the groomer to trim the fur to a specific length based on the dog’s breed and desired style, whether shorter for a neat, practical look or longer for a fuller, well-maintained appearance.</p><p>Clipping is highly effective in managing a dog’s coat, helping to reduce shedding, prevent matting, and ensure the dog stays cool and comfortable, particularly in warmer weather. Regular clipping not only helps keep the coat tidy but also supports its health by preventing tangles and making grooming sessions more manageable.</p>",
+            "style": "plain"
+          }
+        },
+        "item3": {
+          "type": "item",
+          "settings": {
+            "title": "Close Clipping",
+            "text": "<p>Close clipping is a specialised grooming technique used for dogs with severely matted coats. This method requires time, patience, and careful handling of the clippers to gently remove the matted fur as close to the skin as possible. It’s a delicate process, as it aims to carefully free the coat from mats without causing discomfort or harm to the dog.</p><p>While close clipping is an effective solution for dogs with heavy matting, it’s important to note that this procedure requires the expertise of a professional groomer to ensure it’s done safely and effectively. After the mats are removed, the coat is left clean, and the dog will feel much more comfortable.</p>",
+            "style": "plain"
+          }
+        },
+        "item4": {
+          "type": "item",
+          "settings": {
+            "title": "Dematting",
+            "text": "<p>Dematting your dog’s fur requires extra care and attention. Our skilled groomers will assess the condition of your dog's coat to determine the best approach for safely removing tangles and mats. It's important to bring your dog in for grooming without severe matting, as excessive tangles can cause discomfort, skin irritation, and potential health issues.</p><p>Please note, we can only spend a maximum of <strong>30 minutes</strong> on dematting. Any longer could lead to unnecessary discomfort for your pet, and continuing past this time may be considered unethical. If mats are still present after this period, we will recommend a close clip to safely start fresh and ensure your dog’s well-being.</p><p>Note: additional time used for dematting will incur an additional fee of £20 - £30 </p>",
+            "style": "plain"
+          }
+        },
+        "item5": {
+          "type": "item",
+          "settings": {
+            "title": "Two Groomers",
+            "text": "<p>In certain situations, we may require the assistance of two groomers to provide the best care for your dog. This could be due to factors such as your dog’s large size, severe matting or tangling, behavioural traits, anxiety, or other considerations. Having two groomers allows us to ensure that the grooming process is carried out safely, efficiently, and with the highest level of quality, while minimising stress and ensuring your dog's comfort.</p><p>Note: A second groomer will incur a fee of £30 to £60 in addition to the grooming fee. </p>",
+            "style": "plain"
+          }
+        },
+        "item6": {
+          "type": "item",
+          "settings": {
+            "title": "Seasonal Grooming Packages",
+            "text": "<p>Our exclusive Seasonal Grooming Package is designed to keep your dog looking and feeling their best throughout the year. Tailored to each season, this special grooming bundle includes:</p><p>Regular tooth brush and dog tooth past Teeth Cleaning: To maintain your dog's oral health and freshen their breath.</p><p>Blueberry facial: A gentle yet effective way of lifting tears stains from around your dog's eyes - it also acts as a wonderful facial massage for your dog.</p><p>Seasonal spritz: A refreshing seasonal fragrance to keep your dog smelling delightful.</p><p>Balm for Paw Pads and Nose: To soothe and protect their paws and nose from harsh weather conditions.</p><p>This comprehensive grooming package ensures your dog receives the ultimate care and attention during every season, leaving them both stylish and comfortable.</p><p>Price: £45</p>",
+            "style": "plain"
+          }
+        }
+      },
+      "block_order": [
+        "item0",
+        "item1",
+        "item2",
+        "item3",
+        "item4",
+        "item5",
+        "item6"
+      ]
+    },
+    "groomers_lmh_18_collage": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "layout": "images",
+        "collage": "whole",
+        "banner_height": 410,
+        "image": "shopify://shop_images/Group_138.png"
+      }
+    },
+    "groomers_lmh_19_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "ICMG Code of Ethics",
+        "heading_style": "section",
+        "text": "<p>As a member in good standing of IPG, I promise to:</p>"
+      }
+    },
+    "groomers_lmh_20_multicolumn": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "left",
+        "padding_top": 4,
+        "padding_bottom": 4,
+        "layout": "cards",
+        "columns": 2
+      },
+      "blocks": {
+        "item0": {
+          "type": "item",
+          "settings": {
+            "title": "",
+            "text": "<ul><li>Treat humanely all animals entrusted in my care, and place their welfare above all else. Exhibit compassion and integrity when dealing with these pets, ensuring their safety and health.</li><li>Report any injury occurring to an animal in your care to the owner immediately.</li><li>Exhibit a proper professional attitude and demeanour at all times. Promote harmony among my peers by encouraging professionalism and continuing education.</li><li>Advertise and sell the merits of my services while refraining from attacking competitors or reflecting unfairly on their services, methods of doing business, or their personal life. This includes negative posting on any social networking.</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#F5F1E9",
+            "text_color": "#4D69B0",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item1": {
+          "type": "item",
+          "settings": {
+            "title": "",
+            "text": "<ul><li>Honour the spirit of IPG, Inc. and to continually strive to gain respect for the industry by promoting professionalism in the field of pet grooming.</li><li>Work toward the highest standards in pet styling, stay current with industry trends and continue to improve my capabilities as a professional pet groomer with higher education.</li><li>Be honest, fair, and responsible in all business transactions and abide by all laws affecting my business and profession. Encourage responsible pet ownership and promote the importance of professional pet care.</li><li>Use my certification titles and IPG logos only as allowed and approved by IPG.</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#F5F1E9",
+            "text_color": "#4D69B0",
+            "button_label": "",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item0",
+        "item1"
+      ]
+    },
+    "groomers_lmh_21_multicolumn": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "left",
+        "padding_top": 52,
+        "padding_bottom": 4,
+        "layout": "cards",
+        "heading": "TESTIMONIALS",
+        "columns": 3
+      },
+      "blocks": {
+        "item0": {
+          "type": "item",
+          "settings": {
+            "title": "Xena Neysha",
+            "text": "<p>I booked a<strong> grooming session</strong> for my Pomeranian Neysha today, and the service was absolutely amazing! The results were nothing short of spectacular. The lady who took care of my dog was incredibly meticulous and thorough. She asked me a lot of questions and even requested pictures to make sure she fully understood what I wanted. She also took extra care to ensure that the grooming wouldn’t damage the quality of my Pomeranian’s fur. I was genuinely impressed by her dedication and commitment to excellence and Neysha didn’t want to leave afterwards. The results were flawless, and I couldn’t be happier! I’m so glad I found this place, and I highly recommend it to anyone who hasn’t tried it yet, definitely worth it!</p>",
+            "image": "shopify://shop_images/5stars.png",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item1": {
+          "type": "item",
+          "settings": {
+            "title": "Mariam El-Banna",
+            "text": "<p>Took my kitten for his first-ever groom to introduce him to the whole process. The ladies were lovely and incredibly understanding, knowing this was his first time. They agreed they would only take him as far as he was comfortable, and since he has such a lovely and pleasant disposition, I was a bit worried that a negative experience might shake him.</p><p>However, all concerns were put to rest when I came to collect him. They showed me photos and little videos — he did so well! And when I brought him home, he was just as confident, friendly, and relaxed as ever.</p><p>Super happy with the service, and I’ll definitely be bringing him back for his regular grooming.</p>",
+            "image": "shopify://shop_images/5stars.png",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item2": {
+          "type": "item",
+          "settings": {
+            "title": "Aphria O’Brien",
+            "text": "<p>Simply love this place! The staff are absolutely fabulous—friendly, caring, and so good with Jules. He loves going there to spend the afternoon mingling with his friends. They’re incredibly accommodating too; whenever I need an emergency appointment, it’s never a hassle. Truly grateful for their kindness and professionalism.</p>",
+            "image": "shopify://shop_images/5stars.png",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#546EB2",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item0",
+        "item1",
+        "item2"
+      ]
+    },
+    "groomers_lmh_22_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FFDD60",
+        "text_color": "#3F4040",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "TELL US WHAT YOU THINK",
+        "heading_style": "section",
+        "button_label": "LEAVE A REVIEW",
+        "button_link": "https://www.google.com/search?q=love+my+human&oq=love+my+human&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIQCAEQLhivARjHARiABBiOBTIGCAIQIxgnMgYIAxBFGDsyEAgEEC4YrwEYxwEYgAQYjgUyBggFEEUYPDIGCAYQRRg8MgYIBxBFGDzSAQgxODU5ajBqMagCALACAA&sourceid=chrome&ie=UTF-8&lqi=Cg1sb3ZlIG15IGh1bWFuSODX1pKYrYCACFolEAAQARACGAAYARgCIg1sb3ZlIG15IGh1bWFuKggIAhAAEAEQApIBC3BldF9ncm9vbWVyqgFECg0vZy8xMWY2MTVjYl8wEAEyHhABIhqX1tJ03eGQUTwEjVRu6kVafNvouUtOgT4U4DIREAIiDWxvdmUgbXkgaHVtYW4#lkt=LocalPoiReviews&rlimm=2700985693799468138&lrd=0x487605d64682cf7f:0x257bd42d96544c6a,3,,,,",
+        "button_style": "dashed"
+      }
     }
   },
   "order": [
     "groom_booking",
+    "groomers_lmh_01_rich_text",
+    "groomers_lmh_02_video",
+    "groomers_lmh_03_image_with_text",
+    "groomers_lmh_04_image_with_text",
+    "groomers_lmh_05_image_with_text",
+    "groomers_lmh_06_image_with_text",
+    "groomers_lmh_07_rich_text",
+    "groomers_lmh_08_multicolumn",
+    "groomers_lmh_09_multicolumn",
+    "groomers_lmh_10_multicolumn",
+    "groomers_lmh_11_rich_text",
+    "groomers_lmh_12_rich_text",
+    "groomers_lmh_13_multicolumn",
+    "groomers_lmh_14_collage",
+    "groomers_lmh_15_image_with_text",
+    "groomers_lmh_16_collapsible_content",
+    "groomers_lmh_17_collapsible_content",
+    "groomers_lmh_18_collage",
+    "groomers_lmh_19_rich_text",
+    "groomers_lmh_20_multicolumn",
+    "groomers_lmh_21_multicolumn",
+    "groomers_lmh_22_rich_text",
     "main"
   ]
 }
