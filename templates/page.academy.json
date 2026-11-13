@@ -127,8 +127,8 @@
             "title_font": "body",
             "background": "#4D69B0",
             "text_color": "#FCF7EB",
-            "button_label": "ENQUIRE NOW",
-            "button_link": "#course-enquiry-1"
+            "button_label": "LEARN MORE",
+            "button_link": "/pages/groomers-taster-course"
           }
         },
         "item1": {
@@ -142,8 +142,8 @@
             "title_font": "body",
             "background": "#4D69B0",
             "text_color": "#FCF7EB",
-            "button_label": "ENQUIRE NOW",
-            "button_link": "#course-enquiry-2"
+            "button_label": "LEARN MORE",
+            "button_link": "/pages/home-grooming-course"
           }
         },
         "item2": {
@@ -157,8 +157,8 @@
             "title_font": "body",
             "background": "#4D69B0",
             "text_color": "#FCF7EB",
-            "button_label": "ENQUIRE NOW",
-            "button_link": "#course-enquiry-3"
+            "button_label": "LEARN MORE",
+            "button_link": "/pages/track-1-cpg-certified-professional-groomer-course"
           }
         },
         "item3": {
@@ -172,8 +172,8 @@
             "title_font": "body",
             "background": "#4D69B0",
             "text_color": "#FCF7EB",
-            "button_label": "ENQUIRE NOW",
-            "button_link": "#course-enquiry-4"
+            "button_label": "LEARN MORE",
+            "button_link": "/pages/track-2-cpg-certified-advanced-professional-groomer"
           }
         }
       },

@@ -1,0 +1,108 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+/*
+ * Mirrors the original lovemyhuman.co.uk page section by section (LMH classic section).
+ * Edit freely in the theme editor.
+ */
+{
+  "sections": {
+    "lmh_00_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "Track 2 CPG Certified Advanced Professional Groomer",
+        "heading_style": "section",
+        "text": "<p>You will study the course provided by provided by International Certified Master Groomer (ICMG) and receive instructions from our master groomer who will guild you through the course. Designed for those serious about launching a career in grooming.</p><p><strong>Course Fee £3,000</strong></p><p><strong>Duration: </strong></p><p>FULL TIME </p><p>20 days</p><p>PART TIME</p><p>20 weeks</p><p><strong>Requirement: </strong></p><p>Track 1 CPG qualification</p>",
+        "button_label": "Purchase Now",
+        "button_link": "/products/certified-advanced-pet-groomer-icmg-track-2",
+        "button_style": "filled",
+        "button_fill": "#4D69B0",
+        "button_text": "#FCF7EB"
+      }
+    },
+    "lmh_01_collage": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "layout": "images",
+        "collage": "left",
+        "image": "shopify://shop_images/Screenshot_2025-06-17_at_10.35.12_1_7e4829b2-e07c-48c6-99b2-98da8e49c4ba.jpg",
+        "image_2": "shopify://shop_images/image_19.jpg",
+        "image_3": "shopify://shop_images/Group_284.jpg",
+        "banner_height": 620
+      }
+    },
+    "lmh_02_collage": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "layout": "images",
+        "collage": "right",
+        "image": "shopify://shop_images/Group_286_6f04f645-7141-4f0c-ad40-36246aabbafe.jpg",
+        "image_2": "shopify://shop_images/Group_287_1796046e-e66f-4a12-8780-018fe0b4b4b2.jpg",
+        "image_3": "shopify://shop_images/image_18_51d91710-fd80-45e8-aa40-a0e55e4e2653.jpg",
+        "banner_height": 660
+      }
+    },
+    "lmh_03_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "ABOUT THE COURSE",
+        "heading_style": "section",
+        "text": "<p><strong>Certified Professional Groomer (CPG) </strong> </p><p>Class size: &nbsp;Maximum 6 students</p><p>Learners must demonstrate practical skills in</p><ul><li>Safe handling, bathing, drying, and trimming of a toy breed (small frame and/or senior dog)</li><li>Safe handling, bathing, drying, and trimming of a double-coated breed</li></ul><p>Knowledge and understanding will cover: </p><ul><li>Animal welfare and canine wellbeing</li><li>Canine skeletal structure, anatomy, and balance</li><li>Creating style, shape, and symmetry in grooming</li><li>Use and care of grooming tools: blades, scissors, blenders, chunkers</li><li>Grooming techniques for toy breeds and double coats</li><li>Dematting and coat management</li><li>Continued Professional Development (CPD)</li></ul><p><strong>Assessment Structure </strong></p><p>Practical<strong> </strong>Examinations (Two components)</p><p>1. Toy Breed Groom </p><ul><li>Dog must be from the Toy Group</li><li>Must have a trimmable coat</li><li>Under 10” (25cm) at withers and weigh under 10lb (5kg)</li><li>Dog to be pre-bathed and prepared</li><li>Time Allowed: 45 minutes</li><li>Pass Mark: 86% or above </li></ul><p>2. Double-Coated Breed Groom </p><ul><li>Dog must be unbathed at the start of the exam</li><li>Includes full bathing, drying, and grooming</li><li>Time Allowed: 90 minutes(Extra time may be granted for very large breeds)</li><li>Pass Mark: 86% or above</li></ul><p><strong>Written Examination</strong></p><ul><li>50 questions (True/False and Multiple Choice)</li><li>All questions are based on the official Study Guide</li><li>Time Allowed: 30 minutes </li><li>Open Book: Pass mark 92% or above</li><li>Non-Open Book: Pass mark 86% or above</li></ul><p><strong>Study Guide Topics Include:</strong></p><ul><li>Advanced scissoring techniques</li><li>Toy Breed Grooming</li><li>Double Coat Grooming</li><li>Skeletal structure and canine anatomy</li><li>Shape creation, balance, angulation, and diagonal lines</li><li>Dematting techniques</li><li>Further Continuing Professional Development (CPD)</li></ul>",
+        "button_label": "Apply for course",
+        "button_link": "/pages/academy#course-enquiry-4",
+        "button_style": "filled",
+        "button_fill": "#4D69B0",
+        "button_text": "#FCF7EB"
+      }
+    },
+    "lmh_04_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FFDD60",
+        "text_color": "#3F4040",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "LOOKING FOR EXPERIENCE?",
+        "heading_style": "section",
+        "text": "<p>Both of our ICMG Track 1 and track 2 course comes with optional in salon experience at the end of the course so that this can be added to your CV</p>"
+      }
+    }
+  },
+  "order": [
+    "lmh_00_rich_text",
+    "lmh_01_collage",
+    "lmh_02_collage",
+    "lmh_03_rich_text",
+    "lmh_04_rich_text"
+  ]
+}

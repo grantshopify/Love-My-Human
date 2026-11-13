@@ -1,0 +1,94 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+/*
+ * Mirrors the original lovemyhuman.co.uk page section by section (LMH classic section).
+ * Edit freely in the theme editor.
+ */
+{
+  "sections": {
+    "lmh_00_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "Taster Course",
+        "heading_style": "section",
+        "text": "<p>Curious about a career in dog grooming? Spend a few hours with our team and get a glimpse into life in a professional grooming salon, from the skills we use to the care we give every dog.</p><p><strong>Scroll down to discover more about our Taster Day!</strong></p><p><strong>Course Fee: £150 &nbsp;</strong> </p><p>Gift voucher is available for this course. </p><p>Grooming Goodie Bag gift on completion.</p><p><strong>Duration: </strong></p><p>4 hours including lunch </p>",
+        "button_label": "Purchase Now",
+        "button_link": "/products/taster-groomer-course",
+        "button_style": "filled",
+        "button_fill": "#4D69B0",
+        "button_text": "#FCF7EB",
+        "button_label_2": "Gift Card",
+        "button_link_2": "/products/taster-course-gift-card",
+        "button_style_2": "filled"
+      }
+    },
+    "lmh_01_collage": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "layout": "images",
+        "collage": "left",
+        "image": "shopify://shop_images/image_17_72316844-d052-41f6-aca4-78f10cb4b5a4.jpg",
+        "image_2": "shopify://shop_images/Screenshot_2025-06-17_at_10.33.22_1_54800479-a64b-494b-801f-df9d963552a2.jpg",
+        "image_3": "shopify://shop_images/Screenshot_2025-06-17_at_10.35.12_1_d21087a0-5d6b-4ae7-b3b4-89be51c20a22.jpg",
+        "banner_height": 720
+      }
+    },
+    "lmh_02_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "ABOUT THE COURSE",
+        "heading_style": "section",
+        "text": "<p>Class size: 4 max </p><p><strong>Pet Grooming Taster Day</strong></p><p>Curious about a career in dog grooming? Our Taster Day is a great way to find out what it’s really like to work in a grooming salon.</p><p>You’ll spend the day alongside our experienced groomers, seeing what goes on behind the scenes and learning how to handle, bathe and dry a dog under their supervision. We’ll introduce you to the equipment we use and give you an insight into the different skills and techniques involved in grooming.</p><p>Depending on the dogs being groomed on the day, you may see a variety of services, from a wash and fluff to different stages of a full groom. You’ll also get a feel for the day-to-day running of the salon and what<br>it takes to work as a professional dog groomer.</p><p>By the end of the day, you’ll have a better understanding of what a career in dog grooming involves, helping you decide whether it’s the right path for you.</p><p><strong>A Special Offer for Your Next Step</strong></p><p>If you enrol on our <strong>ICMG Track 1 Course within one week of completing your Taster Day</strong>, you’ll receive a <strong>£150 deduction from th cost of your course</strong>.</p><p>Ready to explore a career working with dogs? Join us for a Taster Day and take the first step towards turning your passion for pets into a rewarding career!</p><p>&nbsp;</p>",
+        "button_label": "Purchase Course",
+        "button_link": "/products/taster-groomer-course",
+        "button_style": "filled",
+        "button_fill": "#4D69B0",
+        "button_text": "#FCF7EB"
+      }
+    },
+    "lmh_03_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#4D69B0",
+        "text_color": "#FCF7EB",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "READY TO BEGIN?",
+        "heading_style": "section",
+        "text": "<p>Submit your interest and we’ll contact you for a short interview. Spaces are limited and not all applicants are accepted. We're looking for passion and alignment with our values.</p>"
+      }
+    }
+  },
+  "order": [
+    "lmh_00_rich_text",
+    "lmh_01_collage",
+    "lmh_02_rich_text",
+    "lmh_03_rich_text"
+  ]
+}

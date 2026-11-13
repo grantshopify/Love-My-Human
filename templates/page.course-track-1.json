@@ -1,0 +1,108 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+/*
+ * Mirrors the original lovemyhuman.co.uk page section by section (LMH classic section).
+ * Edit freely in the theme editor.
+ */
+{
+  "sections": {
+    "lmh_00_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "ICMG Track 1 CPG Certified Professional Groomer",
+        "heading_style": "section",
+        "text": "<p>In this course you will study the course provided by International Certified Master Groomer (ICMG) and receive instructions from our master groomer who will guild you through the course. Designed for those serious about launching a career in grooming.</p><p><strong>Course Fee £3,900&nbsp; </strong> </p><p><strong>Duration: </strong> </p><p>FULL TIME</p><p>20 days</p><p>PART TIME </p><p>20 weeks</p><p>20 weeks - &nbsp;1 day per week</p>",
+        "button_label": "Purchase Now",
+        "button_link": "/products/certified-professional-groomer-icmg-track-1",
+        "button_style": "filled",
+        "button_fill": "#4D69B0",
+        "button_text": "#FCF7EB"
+      }
+    },
+    "lmh_01_collage": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "layout": "images",
+        "collage": "left",
+        "image": "shopify://shop_images/image_21.jpg",
+        "image_2": "shopify://shop_images/image_19.jpg",
+        "image_3": "shopify://shop_images/image_17_506198f6-9cec-4eee-9e69-5194ae341689.jpg",
+        "banner_height": 690
+      }
+    },
+    "lmh_02_collage": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "layout": "images",
+        "collage": "right",
+        "image": "shopify://shop_images/Group_289.jpg",
+        "image_2": "shopify://shop_images/Group_290.jpg",
+        "image_3": "shopify://shop_images/image_18.jpg",
+        "banner_height": 680
+      }
+    },
+    "lmh_03_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "ABOUT THE COURSE",
+        "heading_style": "section",
+        "text": "<p><strong>Certified Professional Groomer (CPG) </strong> </p><p>Class size: &nbsp;Maximum 6 students</p><p><strong>Items included in All ICMG courses:</strong></p><ul><li>Text books and student login portal where your instructor will review all that you have completed.&nbsp;</li><li>Grooming Uniform</li><li>Grooming Kit</li><li>Exam fees</li><li>Those who pass the course have an opportunity to work in our salon and gain paid salon experience which is invaluable on your CV</li></ul><p><strong>Stage 1 Examination: Bath and Dry </strong></p><p>This qualification is designed to help learners understand the roles and responsibilities of a professional dog groomer and the requirements for offering grooming services to clients.Learners will be required to demonstrate practical skills in:</p><ul><li>Safe handling and restraint</li><li>Effective bathing and drying of a coated breed</li><li>Hygiene area care</li><li>Nail trimming </li></ul><p><strong>Knowledge and understanding will cover: </strong></p><ul><li>Animal Welfare Legislation and Codes of Practice</li><li>Canine Health and Disease</li><li>Groomer Wellbeing </li></ul><p><strong>Assessment: </strong></p><ul><li>Practical Exam: Bath and Dry (Duration: 1 hour; Pass mark: 86% or above)</li><li>Written Exam: 100 questions (Duration: 1 hour)</li><li>Open Book: Pass mark 92% or above</li><li>Non-Open Book: Pass mark 86% or above</li></ul><p><strong>Assessement Requirements: </strong></p><ul><li>All dogs used for assessment must have a minimum&nbsp;at least 8 preferably 10&nbsp;weeks of fur&nbsp;growth.&nbsp;</li></ul><p>A comprehensive resource manual is provided, covering both practical and written exam content, including: </p><ul><li>Canine Handling and Behaviour</li><li>Skin and Hair Anatomy</li><li>Bathing and Drying Techniques</li><li>Canine Health and Diseases</li><li>Parasites and First Aid</li><li>Sanitation and Disinfection</li><li>Groomer Health and Safety </li></ul> <p><strong>Stage 2 Examination: Kennel/Pet Trim</strong></p><p>This advanced qualification builds on the foundational skills from Stage 1 and expands the learner’s understanding of pet grooming techniques, with a focus on pet or kennel trims.</p><p><strong>Learners will be required to demonstrate practical skills in: </strong></p><ul><li>Safe handling and restraint</li><li>Clipping and styling for a pet or kennel trim</li><li>Proficient use of clippers, blades, and scissors </li></ul><p><strong>Knowledge and understanding will cover: </strong></p><ul><li>Animal Welfare and Handling (including aggressive dogs)</li><li>Chemical safety</li><li>Dog handling and care</li><li>Skin anatomy, hair growth, and epidermal structures</li><li>Emergency procedures and groomer liability</li></ul><p><strong>Assessment: </strong></p><ul><li>Practical Exam: Kennel/Pet Trim (Duration: 1 hour; Pass mark: 86% or above)</li><li>Written Exam: 100 questions (Duration: 1 hour)</li><li>Open Book: Pass mark 92% or above</li><li>Non-Open Book: Pass mark 86% or above </li></ul><p><strong>Topics include: </strong></p><ul><li>Pet/Kennel Trimming Techniques</li><li>Handling Aggressive Dogs</li><li>Dog Grooming Importance</li><li>Skin Layers and Appendages (e.g., hair follicles, erector pili muscle)</li><li>Equipment Use and Maintenance (clippers, blades, scissors, comb attachments)</li><li>Emergency Response</li><li>Legal and Professional Responsibilities</li></ul><p>Note: All written exam questions are taken directly from the provided study guides. Answer formats include True/False and Multiple Choice.</p>",
+        "button_label": "Apply for course",
+        "button_link": "/pages/academy#course-enquiry-3",
+        "button_style": "filled",
+        "button_fill": "#4D69B0",
+        "button_text": "#FCF7EB"
+      }
+    },
+    "lmh_04_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FFDD60",
+        "text_color": "#3F4040",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "LOOKING FOR EXPERIENCE?",
+        "heading_style": "section",
+        "text": "<p>Both of our ICMG Track 1 and track 2 course comes with optional in salon experience at the end of the course so that this can be added to your CV</p>"
+      }
+    }
+  },
+  "order": [
+    "lmh_00_rich_text",
+    "lmh_01_collage",
+    "lmh_02_collage",
+    "lmh_03_rich_text",
+    "lmh_04_rich_text"
+  ]
+}

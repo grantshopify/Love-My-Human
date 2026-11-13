@@ -1,0 +1,225 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+/*
+ * Mirrors the original lovemyhuman.co.uk page section by section (LMH classic section).
+ * Edit freely in the theme editor.
+ */
+{
+  "sections": {
+    "lmh_00_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "Home Grooming Course",
+        "heading_style": "section",
+        "text": "<p>Let us teach you how to maintain your dogs fur at home like a pro.</p><p><strong>Course Fee £320 &nbsp;</strong> </p><p>Gift voucher is available for this course. </p><p>Grooming Goodie Bag gift on completion.</p><p><strong>Duration: </strong> </p><p>4- 5 hours depending on dog breed</p><p>1 hour break with lunch included in our cafe </p>",
+        "button_label": "Purchase Now",
+        "button_link": "/products/home-grooming-course",
+        "button_style": "filled",
+        "button_fill": "#4D69B0",
+        "button_text": "#FCF7EB",
+        "button_label_2": "Gift Card",
+        "button_link_2": "/products/home-grooming-course-gift-card",
+        "button_style_2": "filled"
+      }
+    },
+    "lmh_01_collage": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#505C31",
+        "align": "left",
+        "padding_top": 28,
+        "padding_bottom": 28,
+        "layout": "images",
+        "collage": "left",
+        "image": "shopify://shop_images/LMH_Aug_JLC0448_1.jpg",
+        "image_2": "shopify://shop_images/LMH_Aug_JLC0442_1.jpg",
+        "image_3": "shopify://shop_images/LMH_Aug_JLC0405_1.jpg",
+        "banner_height": 730
+      }
+    },
+    "lmh_02_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#4D69B0",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "ABOUT THE COURSE",
+        "heading_style": "section",
+        "text": "<p>Class size: &nbsp;4 dogs and owners max&nbsp; </p><p>For those who would love to be able to do a thorough wash and tidy of their dogs coats at home, this is the perfect one day course for you. We will take you through safe handling, the equipment that you will need to maintain your dogs coat in between grooms and the correct shampoos to use for your dog's coat type. </p><ul><li>How to bath your dog thoroughly and how to dry your dog&nbsp;and de-matt safely by combing through knots &amp; tangles.&nbsp;</li><li>How to tidy up your dogs sanitary area and safely trim fur away from it’s eyes</li><li>How to clip your dogs nails and brush their teeth using a tooth brush and dog tooth paste.&nbsp;</li><li>Drying techniques at home suitable for your breed</li></ul><p><strong>Coat specific grooming techniques</strong></p><ul><li>How to get your curly coated dog soft and fluffy</li><li>How to maintain long fur between grooms and keep it silky and shiny</li><li>How to maintain a harsh terrier coat&nbsp;</li><li>How to Keep a dog in full coat/maintain a breed standard coat in between grooms.</li><li>How to maintain a pet trim in between professional grooms&nbsp;</li></ul>",
+        "button_label": "Apply for course",
+        "button_link": "/products/home-grooming-course",
+        "button_style": "filled",
+        "button_fill": "#4D69B0",
+        "button_text": "#FCF7EB"
+      }
+    },
+    "lmh_03_multicolumn": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#3F4040",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 4,
+        "layout": "cards",
+        "heading": "BREED TYPE GUIDE",
+        "columns": 3
+      },
+      "blocks": {
+        "item0": {
+          "type": "item",
+          "settings": {
+            "title": "Curly/Wavy/Woolmix:",
+            "text": "<ul><li>Poodle</li><li>Bichon</li><li>Cockapoo</li><li>Labradoodle</li><li>Bedlington terrier</li><li>Soft coated wheaten terrier</li><li>Kerry Blue terrier</li><li>Havanese</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#4D69B0",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item1": {
+          "type": "item",
+          "settings": {
+            "title": "Drop coat/Small heavy coated:",
+            "text": "<ul><li>Maltese</li><li>Shih tzu</li><li>Yorkshire terrier </li><li>Tibetan terrier</li><li>Lhasa apso</li><li>Coton de Tulear</li><li>Pekingese</li><li>Poms</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#FFDD60",
+            "text_color": "#3F4040",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item2": {
+          "type": "item",
+          "settings": {
+            "title": "Long haired/In Full coat:",
+            "text": "<ul><li>Maltese</li><li>Shih tzu</li><li>Bearded Collie</li><li>lhasa Apso </li><li>Pekingese</li><li>Tibetan Terrier</li><li>Shepherds</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#9CCA7E",
+            "text_color": "#3F4040",
+            "button_label": "",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item0",
+        "item1",
+        "item2"
+      ]
+    },
+    "lmh_04_multicolumn": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#FCF7EB",
+        "text_color": "#FCF7EB",
+        "align": "left",
+        "padding_top": 4,
+        "padding_bottom": 4,
+        "layout": "cards",
+        "columns": 3
+      },
+      "blocks": {
+        "item0": {
+          "type": "item",
+          "settings": {
+            "title": "Smooth/Short/Double. De-shedding dogs:",
+            "text": "<ul><li>Husky</li><li>Akita</li><li>Spitz</li><li>Corgi</li><li>Labrador</li><li>Smooth Terriers</li><li>Mastiff</li><li>Pug</li><li>Boxer</li><li>Bulldogs</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#EA5355",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item1": {
+          "type": "item",
+          "settings": {
+            "title": "Wire haired dogs:",
+            "text": "<ul><li>Terriers</li><li>Dachshunds</li><li>Griffons</li><li>Spinone</li><li>Affenpinscher</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#505C31",
+            "text_color": "#FCF7EB",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "item2": {
+          "type": "item",
+          "settings": {
+            "title": "Silk coat dogs or combination coated dogs:",
+            "text": "<ul><li>Spaniels</li><li>Setters</li><li>Combination coated dogs ie Retrievers</li><li>Long haired Dach</li><li>Borzoi</li><li>Cavalier kc</li><li>Shepherds</li><li>Sheep dogs</li></ul>",
+            "image": "",
+            "style": "filled",
+            "title_size": 18,
+            "title_font": "body",
+            "background": "#E3CDC5",
+            "text_color": "#3F4040",
+            "button_label": "",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item0",
+        "item1",
+        "item2"
+      ]
+    },
+    "lmh_05_rich_text": {
+      "type": "lmh-mirror",
+      "settings": {
+        "background": "#4D69B0",
+        "text_color": "#FCF7EB",
+        "align": "center",
+        "padding_top": 52,
+        "padding_bottom": 52,
+        "layout": "rich_text",
+        "heading": "READY TO BEGIN?",
+        "heading_style": "section",
+        "text": "<p>Submit your interest and we’ll contact you for a short interview. Spaces are limited and not all applicants are accepted. We're looking for passion and alignment with our values.</p>"
+      }
+    }
+  },
+  "order": [
+    "lmh_00_rich_text",
+    "lmh_01_collage",
+    "lmh_02_rich_text",
+    "lmh_03_multicolumn",
+    "lmh_04_multicolumn",
+    "lmh_05_rich_text"
+  ]
+}
