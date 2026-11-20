@@ -229,6 +229,17 @@
           {%- endif -%}
 
           <div class="gb-request__fields">
+            {%- comment -%} 20 Nov (Joe): name / email at top; groomer choice replaced by reply preference + new / been before {%- endcomment -%}
+            <div class="gb-request__field">
+              <label for="{{ form_id }}-name">Your name *</label>
+              <input id="{{ form_id }}-name" type="text" name="contact[name]" autocomplete="name" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" required>
+            </div>
+
+            <div class="gb-request__field">
+              <label for="{{ form_id }}-email">Email *</label>
+              <input id="{{ form_id }}-email" type="email" name="contact[email]" autocomplete="email" autocapitalize="off" spellcheck="false" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required>
+            </div>
+
             <div class="gb-request__field">
               <label for="{{ form_id }}-pet">1. Is it a dog or a cat? *</label>
               <div class="gb-book__select">
@@ -262,32 +273,25 @@
               <input id="{{ form_id }}-when" type="datetime-local" name="contact[Preferred day and time]" required>
             </div>
 
-            <div class="gb-request__field">
-              <label for="{{ form_id }}-groomer">5. Which groomer?</label>
-              <div class="gb-book__select">
-                <select id="{{ form_id }}-groomer" name="contact[Groomer]">
-                  {%- assign groomers = s.form_groomers | newline_to_br | split: '<br />' -%}
-                  {%- for option in groomers -%}
-                    {%- assign option_text = option | strip -%}
-                    {%- if option_text != blank -%}<option value="{{ option_text | escape }}">{{ option_text }}</option>{%- endif -%}
-                  {%- endfor -%}
-                </select>
+            <fieldset class="gb-request__field gb-request__field--full gb-choice">
+              <legend>5. How should we get back to you? *</legend>
+              <div class="gb-choice__options">
+                <label class="gb-choice__option"><input type="radio" name="contact[Get back to me by]" value="Email me back" required checked><span>Email me back</span></label>
+                <label class="gb-choice__option"><input type="radio" name="contact[Get back to me by]" value="Call me back"><span>Call me back</span></label>
               </div>
-            </div>
+            </fieldset>
+
+            <fieldset class="gb-request__field gb-request__field--full gb-choice">
+              <legend>6. Have you been before? *</legend>
+              <div class="gb-choice__options">
+                <label class="gb-choice__option"><input type="radio" name="contact[Been before]" value="I am new to this" required checked><span>I am new to this</span></label>
+                <label class="gb-choice__option"><input type="radio" name="contact[Been before]" value="I have been before, I know a groomer I like"><span>I have been before, I know a groomer I like</span></label>
+              </div>
+            </fieldset>
 
             <div class="gb-request__field gb-request__field--full">
-              <label for="{{ form_id }}-notes">6. Anything we should know?</label>
+              <label for="{{ form_id }}-notes">7. Anything we should know?</label>
               <textarea id="{{ form_id }}-notes" name="contact[body]" rows="3" placeholder="Matting, health, temperament, the style you'd like">{{ form.body }}</textarea>
-            </div>
-
-            <div class="gb-request__field">
-              <label for="{{ form_id }}-name">Your name *</label>
-              <input id="{{ form_id }}-name" type="text" name="contact[name]" autocomplete="name" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" required>
-            </div>
-
-            <div class="gb-request__field">
-              <label for="{{ form_id }}-email">Email *</label>
-              <input id="{{ form_id }}-email" type="email" name="contact[email]" autocomplete="email" autocapitalize="off" spellcheck="false" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required>
             </div>
 
             <div class="gb-request__field gb-request__field--full">
@@ -785,7 +789,7 @@
     color: var(--color-foreground);
   }
 
-  .gb-request__field :is(input, textarea),
+  .gb-request__field :is(input:not([type="radio"]), textarea),
   .gb-request .gb-book__select select {
     box-sizing: border-box;
     inline-size: 100%;
@@ -801,6 +805,56 @@
 
   .gb-request .gb-book__select select {
     padding-inline-end: 44px;
+  }
+
+  .gb-choice {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .gb .gb-choice legend {
+    margin: 0 0 6px;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+
+  .gb-choice__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .gb .gb-choice__option {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 10px 16px;
+    border: 1px solid rgb(234 83 85 / 0.35);
+    border-radius: 999px;
+    background: #fff;
+    color: #2b1f1f;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .gb-choice__option input {
+    accent-color: var(--color-foreground);
+    margin: 0 6px 0 0;
+    flex-shrink: 0;
+  }
+
+  .gb-choice__option:has(input:checked) {
+    border-color: var(--color-foreground);
+    box-shadow: inset 0 0 0 1px var(--color-foreground);
+  }
+
+  .gb-choice__option:has(input:focus-visible) {
+    box-shadow: 0 0 0 3px rgb(234 83 85 / 0.18);
   }
 
   .gb-request__field textarea {
