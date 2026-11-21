@@ -48,6 +48,7 @@
             "aspect_ratio": "1",
             "constrain_to_viewport": true,
             "media_fit": "cover",
+            "desktop_photo_space": 0,
             "media_radius": 16,
             "extend_media": false,
             "zoom": true,
@@ -251,6 +252,7 @@
                 },
                 "lmh_availability": {
                   "type": "lmh-availability",
+                  "disabled": true,
                   "settings": {
                     "show_stock": true,
                     "in_stock_text": "In stock",
