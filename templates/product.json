@@ -463,6 +463,12 @@
                 "accent_color": "{{ settings.color_palette.foreground }}"
               },
               "blocks": {}
+            },
+            "lmh_size_guide": {
+              "type": "lmh-size-guide",
+              "settings": {
+                "label": "Size Chart"
+              }
             }
           },
           "block_order": [
@@ -471,6 +477,7 @@
             "lmh_price_row",
             "lmh_benefits",
             "variant_picker_R3rGDr",
+            "lmh_size_guide",
             "buy_buttons_eYQEYi",
             "lmh_delivery"
           ]
