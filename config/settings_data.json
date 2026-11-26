@@ -105,6 +105,15 @@
         "type": "shopify://apps/gsc-countdown-timer/blocks/countdown-bar/58dc5b1b-43d2-4209-b1f3-52aff31643ed",
         "disabled": false,
         "settings": {}
+      },
+      "10830403595879607806": {
+        "type": "shopify://apps/reviews-io/blocks/reviewsio-core/92a082e5-b297-4e88-b428-ac96cbc505f9",
+        "disabled": false,
+        "settings": {
+          "url_key": "REVIEWS.io",
+          "lang": "auto",
+          "enable_syndication": false
+        }
       }
     },
     "color_palette": {
