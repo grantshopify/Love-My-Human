@@ -29,16 +29,19 @@
   <a class="lmh-reviews lmh-reviews--rio" href="{{ b.link | default: '#reviews' }}" {{ block.shopify_attributes }}>
     <span class="ruk_rating_snippet" data-sku="{{ rio_ids | strip }}"></span>
   </a>
-  <link rel="stylesheet" href="https://widget.reviews.co.uk/rating-snippet/dist.css">
-  <script src="https://widget.reviews.co.uk/rating-snippet/dist.js" defer></script>
   <script>
-    window.addEventListener('DOMContentLoaded', function () {
-      if (typeof ratingSnippet === 'undefined') return;
+    {%- comment -%}
+      The Reviews.io app embed ("Rating snippet") loads the same script; load ours only when it hasn't,
+      so it isn't declared twice. Async scripts finish before 'load', so by then we know.
+    {%- endcomment -%}
+    (function () {
+      var store = {{ b.reviewsio_store | json }};
+      var color = {{ rio_accent | json }};
       var draw = function () {
         ratingSnippet('ruk_rating_snippet', {
-          store: {{ b.reviewsio_store | json }},
+          store: store,
           mode: 'default',
-          color: {{ rio_accent | json }},
+          color: color,
           linebreak: false,
           text: 'reviews',
           singularText: 'review',
@@ -47,22 +50,36 @@
           showEmptyStars: true,
         });
       };
-      draw();
-      var timer;
-      var redraws = 0;
-      new MutationObserver(function () {
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-          var empty = Array.prototype.some.call(document.querySelectorAll('.lmh-reviews--rio .ruk_rating_snippet'), function (el) {
-            return !el.children.length;
-          });
-          if (empty && redraws < 20) {
-            redraws += 1;
-            draw();
-          }
-        }, 500);
-      }).observe(document.querySelector('.product-details') || document.body, { childList: true, subtree: true });
-    });
+      var run = function () {
+        if (typeof ratingSnippet === 'undefined') return;
+        draw();
+        var timer;
+        var redraws = 0;
+        new MutationObserver(function () {
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            var empty = Array.prototype.some.call(document.querySelectorAll('.lmh-reviews--rio .ruk_rating_snippet'), function (el) {
+              return !el.children.length;
+            });
+            if (empty && redraws < 20) {
+              redraws += 1;
+              draw();
+            }
+          }, 500);
+        }).observe(document.querySelector('.product-details') || document.body, { childList: true, subtree: true });
+      };
+      window.addEventListener('load', function () {
+        if (typeof ratingSnippet !== 'undefined') return run();
+        var css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = 'https://widget.reviews.co.uk/rating-snippet/dist.css';
+        document.head.appendChild(css);
+        var js = document.createElement('script');
+        js.src = 'https://widget.reviews.co.uk/rating-snippet/dist.js';
+        js.onload = run;
+        document.head.appendChild(js);
+      });
+    })();
   </script>
 {%- elsif count > 0 or b.empty_text != blank -%}
   <a
