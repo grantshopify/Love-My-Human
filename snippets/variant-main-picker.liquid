@@ -29,7 +29,7 @@
     {% render 'variant-button-custom-styles', block_settings: block_settings, block_id: block.id %}
   {% endif %}
   <variant-picker
-    class="variant-picker spacing-style variant-picker--{{ block_settings.alignment }}{% if has_custom_variant_buttons %} variant-picker--custom-{{ block.id }}{% endif %}"
+    class="variant-picker spacing-style variant-picker--{{ block_settings.alignment }}{% if block_settings.lmh_compact %} variant-picker--lmh-compact{% endif %}{% if has_custom_variant_buttons %} variant-picker--custom-{{ block.id }}{% endif %}"
     style="
       {% render 'spacing-style', settings: block_settings %}
        {% if block_settings.option_label_text_color != blank %}
@@ -110,8 +110,21 @@
               {{ product_option.name | replace: 'Color', 'Colour' | escape -}}
               {%- if variant_style == 'swatch' -%}
                 <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
+              {%- elsif block_settings.lmh_compact and product_option.selected_value != blank -%}
+                {%- comment -%} LMH compact sizes (Zac 26 Nov, Cloud7 style): "Size: 3" {%- endcomment -%}
+                :
+                <span class="lmh-compact-value">
+                  {{- product_option.selected_value | remove_first: 'Size ' | remove_first: 'size ' | remove_first: 'SIZE ' -}}
+                </span>
               {%- endif %}
             </legend>
+            {%- liquid
+              assign lmh_option_dn = product_option.name | downcase
+              if block_settings.lmh_compact and lmh_option_dn contains 'size'
+                assign lmh_guide_id = block.id | append: '-' | append: product_option.position
+                render 'lmh-size-guide-link', product: product_resource, id: lmh_guide_id, class: 'lmh-size-guide--picker'
+              endif
+            -%}
             {%- for product_option_value in product_option.values -%}
               {% if product_option_value.size > longest_value and option_id_attribute %}
                 {% assign longest_value = product_option_value.size %}
@@ -181,7 +194,11 @@
                     class="variant-option__button-label__text"
                     data-key="variant-option-text"
                   >
-                    {{- product_option_value | escape -}}
+                    {%- if block_settings.lmh_compact -%}
+                      {{- product_option_value | remove_first: 'Size ' | remove_first: 'size ' | remove_first: 'SIZE ' | escape -}}
+                    {%- else -%}
+                      {{- product_option_value | escape -}}
+                    {%- endif -%}
                   </span>
                 {% endif %}
                 {% render 'strikethrough-variant', product_option: product_option_value %}

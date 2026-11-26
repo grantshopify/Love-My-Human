@@ -1,0 +1,290 @@
+{%- comment -%}
+  Colour circles linking to the same item in other colours (Zac 26 Nov, Cloud7 style: "Colour: Coffee" + round swatches).
+  On LMH each colour is its own product, so the colours are found like this:
+  1. If the product's "Colour options" metafield (custom.colour_options, list of products) is filled, those products.
+  2. Otherwise automatically: products of the same brand, in the same collections, whose title is the same
+     apart from the colour at the end ("Cloud7 Alaska Seersucker Dog Coat Coffee" / "... Orange").
+  Each circle shows the product's "Swatch image" (custom.swatch_image) if set, otherwise a close crop of its main photo.
+  The colour name is the product's "Colour name" (custom.colour_name) if set, otherwise the end of its title.
+{%- endcomment -%}
+
+{%- liquid
+  assign b = block.settings
+  assign p = closest.product
+  assign cur_words = p.title | split: ' '
+  assign group_prefix = cur_words.size
+  assign found = 0
+  assign manual = p.metafields.custom.colour_options.value
+
+  # Pass 1: find the other colours (handles in "matches") and the number of title words they all share
+  assign matches = '|'
+  if manual != blank
+    for o in manual
+      if o.id == p.id
+        continue
+      endif
+      assign o_words = o.title | split: ' '
+      assign common = 0
+      for w in o_words
+        if forloop.index0 >= cur_words.size or cur_words[forloop.index0] != w
+          break
+        endif
+        assign common = common | plus: 1
+      endfor
+      if common < group_prefix
+        assign group_prefix = common
+      endif
+      assign matches = matches | append: o.handle | append: '|'
+      assign found = found | plus: 1
+    endfor
+  else
+    assign seen = '|' | append: p.handle | append: '|'
+    assign seen_titles = '|' | append: p.title | append: '|'
+    for c in p.collections
+      for o in c.products
+        if o.vendor != p.vendor
+          continue
+        endif
+        if p.type != blank and o.type != blank and o.type != p.type
+          continue
+        endif
+        assign seen_key = '|' | append: o.handle | append: '|'
+        assign seen_title = '|' | append: o.title | append: '|'
+        if seen contains seen_key or seen_titles contains seen_title
+          continue
+        endif
+        assign seen = seen | append: o.handle | append: '|'
+
+        assign o_words = o.title | split: ' '
+        assign common = 0
+        for w in o_words
+          if forloop.index0 >= cur_words.size or cur_words[forloop.index0] != w
+            break
+          endif
+          assign common = common | plus: 1
+        endfor
+
+        # Same item in another colour: both titles carry on after the shared start, and the shared start is
+        # everything but the last word of the shorter title (or all but its last two, when 4+ words are shared)
+        assign shorter = cur_words.size | at_most: o_words.size
+        assign limit_1 = shorter | minus: 1
+        assign limit_2 = shorter | minus: 2
+        assign is_colour = false
+        if common >= 3 and common < cur_words.size and common < o_words.size
+          if common >= limit_1
+            assign is_colour = true
+          elsif common >= 4 and common >= limit_2
+            assign is_colour = true
+          endif
+          # Colour parts of different lengths ("Lead Black" / "Bags"): need a longer shared start
+          if cur_words.size != o_words.size and common < 4
+            assign is_colour = false
+          endif
+        endif
+
+        if is_colour
+          assign seen_titles = seen_titles | append: o.title | append: '|'
+          if common < group_prefix
+            assign group_prefix = common
+          endif
+          assign matches = matches | append: o.handle | append: '|'
+          assign found = found | plus: 1
+        endif
+      endfor
+    endfor
+  endif
+
+  if group_prefix >= cur_words.size
+    assign group_prefix = cur_words.size | minus: 1
+  endif
+
+  # Pass 2: the circles, each named by the words after the shared start ("Black & Brown", not "& Brown")
+  capture swatches
+    if manual != blank
+      for o in manual
+        assign key = '|' | append: o.handle | append: '|'
+        if matches contains key
+          render 'lmh-colour-swatch', item: o, current: p, prefix_len: group_prefix
+        endif
+      endfor
+    else
+      assign done = '|'
+      for c in p.collections
+        for o in c.products
+          assign key = '|' | append: o.handle | append: '|'
+          if matches contains key
+            unless done contains key
+              assign done = done | append: o.handle | append: '|'
+              render 'lmh-colour-swatch', item: o, current: p, prefix_len: group_prefix
+            endunless
+          endif
+        endfor
+      endfor
+    endif
+  endcapture
+
+  capture current_name
+    assign own_name = p.metafields.custom.colour_name.value
+    if own_name != blank
+      echo own_name
+    else
+      for w in cur_words offset: group_prefix
+        echo w
+        unless forloop.last
+          echo ' '
+        endunless
+      endfor
+    endif
+  endcapture
+-%}
+
+{%- if found > 0 -%}
+  <div class="lmh-colours" {{ block.shopify_attributes }}>
+    <p class="lmh-colours__label">
+      {{ b.label | escape }}: <span class="lmh-colours__value">{{ current_name | remove: '(' | remove: ')' | strip }}</span>
+    </p>
+    <ul class="lmh-colours__list" role="list">
+      {%- render 'lmh-colour-swatch', item: p, current: p, prefix_len: group_prefix -%}
+      {{ swatches }}
+    </ul>
+  </div>
+{%- elsif request.design_mode -%}
+  <p class="lmh-colours__hint" {{ block.shopify_attributes }}>
+    Colour swatches: no other colours found for this product. You can pick them in its "Colour options" metafield.
+  </p>
+{%- endif -%}
+
+{% stylesheet %}
+  .lmh-colours {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    inline-size: 100%;
+  }
+
+  .lmh-colours__label {
+    margin: 0;
+    font-size: 13px;
+  }
+
+  .lmh-colours__value {
+    font-weight: 600;
+  }
+
+  .lmh-colours__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lmh-colours__swatch {
+    position: relative;
+    display: block;
+    inline-size: 36px;
+    block-size: 36px;
+    padding: 3px;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    transition: border-color 0.2s ease;
+  }
+
+  .lmh-colours__swatch:hover {
+    border-color: color-mix(in srgb, var(--color-foreground) 45%, transparent);
+  }
+
+  .lmh-colours__swatch[aria-current='true'] {
+    border-color: var(--color-foreground);
+  }
+
+  .lmh-colours__clip {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: hidden;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 0.06);
+  }
+
+  .lmh-colours__clip img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* A product photo zoomed in so the circle shows the fabric, not the whole item */
+  .lmh-colours__clip img.lmh-colours__photo {
+    transform: scale(3);
+  }
+
+  /* Sold out colour: diagonal line */
+  .lmh-colours__swatch--sold-out::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    border-top: 1px solid var(--color-foreground);
+    transform: rotate(-45deg);
+  }
+
+  /* Colour name on hover / keyboard focus, in a small box under the circle (Cloud7 style) */
+  .lmh-colours__tip {
+    position: absolute;
+    inset-block-start: calc(100% + 6px);
+    inset-inline-start: 50%;
+    z-index: 3;
+    padding: 5px 10px;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 20%, transparent);
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-size: 12px;
+    line-height: 1.3;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -2px);
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .lmh-colours__swatch:hover .lmh-colours__tip,
+  .lmh-colours__swatch:focus-visible .lmh-colours__tip {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .lmh-colours__hint {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Colour swatches",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Colour"
+    },
+    {
+      "type": "paragraph",
+      "content": "Round swatches linking to this item in other colours. Found automatically (same brand, same title apart from the colour at the end). To choose them yourself, fill the product's \"Colour options\" metafield (custom.colour_options, list of products). Optional per product: \"Colour name\" (custom.colour_name) and \"Swatch image\" (custom.swatch_image)."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Colour swatches",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,18 @@
+{%- doc -%}
+  The product identifiers Reviews.io can match reviews on, joined with ";":
+  handle, product id, and each variant's SKU and id. Never empty, so a product without SKUs
+  doesn't show every review in the store.
+
+  @param {object} product - The product
+{%- enddoc -%}
+
+{%- liquid
+  assign ids = product.handle | append: ';' | append: product.id
+  for v in product.variants
+    if v.sku != blank
+      assign ids = ids | append: ';' | append: v.sku
+    endif
+    assign ids = ids | append: ';' | append: v.id
+  endfor
+  echo ids | strip_newlines | escape
+-%}

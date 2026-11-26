@@ -15,25 +15,87 @@
   assign fill = rating | times: 100.0 | divided_by: scale_max | round: 1
 -%}
 
-{%- if count > 0 or b.empty_text != blank -%}
+{%- if b.source == 'reviewsio' and b.reviewsio_store != blank -%}
+  {%- comment -%}
+    Reviews.io rating snippet (Zac 26 Nov: Reviews.io instead of Judge.me). Stars + "3 Reviews", linking down to the reviews.
+    A watcher redraws it if the page refreshes this part (e.g. after picking a size).
+  {%- endcomment -%}
+  {%- liquid
+    capture rio_ids
+      render 'lmh-reviewsio-ids', product: p
+    endcapture
+    assign rio_accent = b.accent_color | default: settings.color_palette.foreground | append: ''
+  -%}
+  <a class="lmh-reviews lmh-reviews--rio" href="{{ b.link | default: '#reviews' }}" {{ block.shopify_attributes }}>
+    <span class="ruk_rating_snippet" data-sku="{{ rio_ids | strip }}"></span>
+  </a>
+  <link rel="stylesheet" href="https://widget.reviews.co.uk/rating-snippet/dist.css">
+  <script src="https://widget.reviews.co.uk/rating-snippet/dist.js" defer></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      if (typeof ratingSnippet === 'undefined') return;
+      var draw = function () {
+        ratingSnippet('ruk_rating_snippet', {
+          store: {{ b.reviewsio_store | json }},
+          mode: 'default',
+          color: {{ rio_accent | json }},
+          linebreak: false,
+          text: 'reviews',
+          singularText: 'review',
+          lang: 'en',
+          usePolaris: true,
+          showEmptyStars: true,
+        });
+      };
+      draw();
+      var timer;
+      var redraws = 0;
+      new MutationObserver(function () {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          var empty = Array.prototype.some.call(document.querySelectorAll('.lmh-reviews--rio .ruk_rating_snippet'), function (el) {
+            return !el.children.length;
+          });
+          if (empty && redraws < 20) {
+            redraws += 1;
+            draw();
+          }
+        }, 500);
+      }).observe(document.querySelector('.product-details') || document.body, { childList: true, subtree: true });
+    });
+  </script>
+{%- elsif count > 0 or b.empty_text != blank -%}
   <a
     class="lmh-reviews"
     href="{{ b.link | default: '#reviews' }}"
     style="--lmh-accent: {{ b.accent_color | default: settings.color_palette.foreground }}; --lmh-fill: {{ fill }}%;"
     {{ block.shopify_attributes }}
   >
-    {%- comment -%} Five square tiles with a star in each, like the brief; each tile fills to its share of the rating {%- endcomment -%}
-    <span class="lmh-reviews__stars" aria-hidden="true">
-      {%- assign stars_rating = rating | times: 5.0 | divided_by: scale_max -%}
-      {%- for i in (1..5) -%}
-        {%- liquid
-          assign tile_fill = stars_rating | minus: forloop.index0 | times: 100 | at_least: 0 | at_most: 100
-        -%}
-        <span class="lmh-reviews__tile" style="--tile-fill: {{ tile_fill }}%;">
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="m12 3.2 2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6-4.5-4.2 6.1-.7L12 3.2Z"/></svg>
-        </span>
-      {%- endfor -%}
-    </span>
+    {%- assign stars_rating = rating | times: 5.0 | divided_by: scale_max -%}
+    {%- if b.star_style == 'plain' -%}
+      {%- comment -%} Plain stars, Cloud7 style (Zac 26 Nov): filled to the rating, outlined for the rest {%- endcomment -%}
+      <span class="lmh-reviews__plain" aria-hidden="true">
+        {%- for i in (1..5) -%}
+          {%- assign star_fill = stars_rating | minus: forloop.index0 | times: 100 | at_least: 0 | at_most: 100 -%}
+          <span class="lmh-reviews__star" style="--star-fill: {{ star_fill }}%;">
+            <svg class="lmh-reviews__star-empty" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="m12 3.2 2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6-4.5-4.2 6.1-.7L12 3.2Z"/></svg>
+            <svg class="lmh-reviews__star-full" viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="m12 3.2 2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6-4.5-4.2 6.1-.7L12 3.2Z"/></svg>
+          </span>
+        {%- endfor -%}
+      </span>
+    {%- else -%}
+      {%- comment -%} Five square tiles with a star in each, like the brief; each tile fills to its share of the rating {%- endcomment -%}
+      <span class="lmh-reviews__stars" aria-hidden="true">
+        {%- for i in (1..5) -%}
+          {%- liquid
+            assign tile_fill = stars_rating | minus: forloop.index0 | times: 100 | at_least: 0 | at_most: 100
+          -%}
+          <span class="lmh-reviews__tile" style="--tile-fill: {{ tile_fill }}%;">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="m12 3.2 2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6-4.5-4.2 6.1-.7L12 3.2Z"/></svg>
+          </span>
+        {%- endfor -%}
+      </span>
+    {%- endif -%}
     <span class="lmh-reviews__text">
       {%- if count > 0 -%}
         <span class="visually-hidden">{{ rating | round: 1 }} out of {{ scale_max }} stars,</span>
@@ -43,7 +105,7 @@
         {{ b.empty_text }}
       {%- endif -%}
     </span>
-    <svg class="lmh-reviews__chevron" aria-hidden="true" focusable="false" viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="m2.5 4.5 3.5 3.5 3.5-3.5"/></svg>
+    <svg class="lmh-reviews__chevron{% if b.star_style == 'plain' %} hidden{% endif %}" aria-hidden="true" focusable="false" viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="m2.5 4.5 3.5 3.5 3.5-3.5"/></svg>
   </a>
 {%- endif -%}
 
@@ -91,6 +153,23 @@
     transition: transform 0.3s ease;
   }
 
+  .lmh-reviews__plain {
+    display: inline-flex;
+    gap: 1px;
+    color: var(--lmh-accent);
+  }
+
+  .lmh-reviews__star {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .lmh-reviews__star-full {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 calc(100% - var(--star-fill, 0%)) 0 0);
+  }
+
   .lmh-reviews:hover .lmh-reviews__chevron {
     transform: translateY(2px);
   }
@@ -104,6 +183,33 @@
     {
       "type": "paragraph",
       "content": "Shows the star rating and number of reviews from your reviews app (e.g. Judge.me)."
+    },
+    {
+      "type": "select",
+      "id": "source",
+      "label": "Reviews from",
+      "options": [
+        { "value": "shopify", "label": "Reviews app ratings (Judge.me etc.)" },
+        { "value": "reviewsio", "label": "Reviews.io" }
+      ],
+      "default": "shopify"
+    },
+    {
+      "type": "text",
+      "id": "reviewsio_store",
+      "label": "Reviews.io store ID",
+      "info": "In Reviews.io > Integrations.",
+      "visible_if": "{{ block.settings.source == 'reviewsio' }}"
+    },
+    {
+      "type": "select",
+      "id": "star_style",
+      "label": "Star style",
+      "options": [
+        { "value": "tiles", "label": "Stars in squares" },
+        { "value": "plain", "label": "Plain stars" }
+      ],
+      "default": "tiles"
     },
     {
       "type": "text",

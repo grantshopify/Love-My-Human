@@ -1,0 +1,193 @@
+{%- comment -%}
+  Breadcrumbs above the product (Zac 26 Nov, Cloud7 style): Home > Dogs > Dog Coats > product.
+  The middle steps follow the main menu: the deepest menu link to a collection this product is in, plus its parent.
+  If no menu link matches, the collection the shopper came from, or else the product's first collection.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign p = product
+  assign p_handles = p.collections | map: 'handle'
+  assign menu = linklists[s.menu]
+
+  # Best menu link to a collection this product is in. A link whose name matches the product
+  # ("Dog Collars" for a collar) beats one that doesn't ("Puppy Shampoo"); then deeper beats shallower.
+  # Shown with its parent link.
+  assign title_dn = p.title | downcase
+  assign crumb_1 = nil
+  assign crumb_2 = nil
+  assign best = -1
+  for l1 in menu.links
+    for l2 in l1.links
+      for l3 in l2.links
+        if l3.type == 'collection_link' and p_handles contains l3.object.handle
+          assign score = 3
+          assign link_words = l3.title | downcase | split: ' '
+          for lw in link_words
+            assign stem = lw | remove_last: 's'
+            if stem.size >= 4 and title_dn contains stem
+              assign score = score | plus: 10
+            endif
+          endfor
+          if score > best
+            assign best = score
+            assign crumb_1 = l2
+            assign crumb_2 = l3
+          endif
+        endif
+      endfor
+      if l2.type == 'collection_link' and p_handles contains l2.object.handle
+        assign score = 2
+        assign link_words = l2.title | downcase | split: ' '
+        for lw in link_words
+          assign stem = lw | remove_last: 's'
+          if stem.size >= 4 and title_dn contains stem
+            assign score = score | plus: 10
+          endif
+        endfor
+        if score > best
+          assign best = score
+          assign crumb_1 = l1
+          assign crumb_2 = l2
+        endif
+      endif
+    endfor
+    if l1.type == 'collection_link' and p_handles contains l1.object.handle
+      assign score = 1
+      assign link_words = l1.title | downcase | split: ' '
+      for lw in link_words
+        assign stem = lw | remove_last: 's'
+        if stem.size >= 4 and title_dn contains stem
+          assign score = score | plus: 10
+        endif
+      endfor
+      if score > best
+        assign best = score
+        assign crumb_1 = l1
+        assign crumb_2 = nil
+      endif
+    endif
+  endfor
+
+  assign fallback = nil
+  if crumb_1 == nil
+    if collection != blank
+      assign fallback = collection
+    else
+      for c in p.collections
+        unless c.handle == 'all' or c.handle == 'frontpage'
+          assign fallback = c
+          break
+        endunless
+      endfor
+    endif
+  endif
+-%}
+
+{%- if p != blank -%}
+<div class="section section--page-width">
+  <nav
+    class="lmh-crumbs"
+    aria-label="Breadcrumb"
+    style="--lmh-crumbs-pt: {{ s.padding_top }}px; --lmh-crumbs-pb: {{ s.padding_bottom }}px;"
+  >
+    <ol class="lmh-crumbs__list" role="list">
+      <li><a href="{{ routes.root_url }}">Home</a></li>
+      {%- if crumb_1 -%}
+        <li><a href="{{ crumb_1.url }}">{{ crumb_1.title | escape }}</a></li>
+      {%- endif -%}
+      {%- if crumb_2 -%}
+        <li><a href="{{ crumb_2.url }}">{{ crumb_2.title | escape }}</a></li>
+      {%- endif -%}
+      {%- if fallback -%}
+        <li><a href="{{ fallback.url }}">{{ fallback.title | escape }}</a></li>
+      {%- endif -%}
+      <li aria-current="page">{{ p.title | escape }}</li>
+    </ol>
+  </nav>
+</div>
+{%- endif -%}
+
+{% stylesheet %}
+  .lmh-crumbs {
+    padding-block: var(--lmh-crumbs-pt, 16px) var(--lmh-crumbs-pb, 0px);
+  }
+
+  .lmh-crumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .lmh-crumbs__list li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lmh-crumbs__list li + li::before {
+    content: '>';
+    opacity: 0.6;
+  }
+
+  .lmh-crumbs__list a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .lmh-crumbs__list a:hover {
+    text-decoration: underline;
+  }
+
+  .lmh-crumbs__list [aria-current] {
+    opacity: 0.75;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Breadcrumbs",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu to follow",
+      "default": "main-menu"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "presets": [
+    {
+      "name": "Breadcrumbs"
+    }
+  ]
+}
+{% endschema %}

@@ -62,7 +62,8 @@
             "padding-block-start": 12,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "lmh_mobile_arrows": true
           },
           "blocks": {}
         },
@@ -103,7 +104,8 @@
                 "share_x": true,
                 "share_pinterest": true,
                 "share_copy": true,
-                "accent_color": "{{ settings.color_palette.foreground }}"
+                "accent_color": "{{ settings.color_palette.foreground }}",
+                "link_vendor": true
               },
               "blocks": {}
             },
@@ -235,20 +237,36 @@
                       },
                       "blocks": {}
                     },
-                    "lmh_reviews": {
-                      "type": "lmh-review-summary",
-                      "disabled": true,
+                    "lmh_price_note": {
+                      "type": "text",
+                      "name": "t:names.title",
                       "settings": {
-                        "empty_text": "Be the first to review",
-                        "link": "",
-                        "accent_color": "{{ settings.color_palette.foreground }}"
+                        "text": "<p>Incl. VAT, excl. <a href=\"/policies/shipping-policy\" title=\"Shipping policy\">delivery</a>. UK delivery in 1–3 working days</p>",
+                        "width": "fit-content",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "paragraph",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.foreground }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
                       },
                       "blocks": {}
                     }
                   },
                   "block_order": [
                     "price_a7krng",
-                    "lmh_reviews"
+                    "lmh_price_note"
                   ]
                 },
                 "lmh_availability": {
@@ -363,7 +381,8 @@
                 "b2",
                 "b3",
                 "b4"
-              ]
+              ],
+              "disabled": true
             },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
@@ -384,7 +403,8 @@
                 "padding-block-start": 12,
                 "padding-block-end": 24,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "lmh_compact": true
               },
               "blocks": {}
             },
@@ -433,7 +453,8 @@
                     "border_width": 1,
                     "border_radius": 0
                   },
-                  "blocks": {}
+                  "blocks": {},
+                  "disabled": true
                 },
                 "add-to-cart": {
                   "type": "add-to-cart",
@@ -470,6 +491,84 @@
                 "fallback": "Order today for fast UK delivery",
                 "accent_color": "{{ settings.color_palette.foreground }}"
               },
+              "blocks": {},
+              "disabled": true
+            },
+            "lmh_colours": {
+              "type": "lmh-colour-swatches",
+              "settings": {
+                "label": "Colour"
+              },
+              "blocks": {}
+            },
+            "lmh_reviews": {
+              "type": "lmh-review-summary",
+              "settings": {
+                "empty_text": "Be the first to review",
+                "link": "",
+                "accent_color": "{{ settings.color_palette.foreground }}",
+                "star_style": "plain",
+                "source": "reviewsio",
+                "reviewsio_store": "lovemyhuman.co.uk"
+              },
+              "blocks": {}
+            },
+            "lmh_features": {
+              "type": "lmh-features",
+              "settings": {
+                "heading": "Highlights / Features",
+                "content_source": "description",
+                "open_by_default": true
+              },
+              "blocks": {
+                "row_care": {
+                  "type": "_lmh-feature-row",
+                  "settings": {
+                    "title": "Care",
+                    "content": "<p>Look after it and it will look after your dog for years to come.</p><ul><li>Follow the care label on the product</li><li>Brush off hair and dirt regularly</li><li>Spot clean marks with a damp cloth and mild soap</li><li>Wash removable covers on a gentle cycle and air dry</li><li>Keep away from direct heat and strong sunlight</li></ul>",
+                    "page": "",
+                    "link_label": "",
+                    "link": "",
+                    "open": false
+                  }
+                },
+                "row_delivery": {
+                  "type": "_lmh-feature-row",
+                  "settings": {
+                    "title": "Delivery & returns",
+                    "content": "<p><strong>UK delivery</strong></p><ul><li>Orders under £50: Royal Mail 1st Class, £3.50, 2–3 working days</li><li>Orders over £50: courier, £6, 1–2 working days</li><li>Free delivery on orders over £75</li></ul><p><strong>Europe</strong></p><p>Tracked and signed courier from £25. For larger items such as dog beds, email <a href=\"mailto:hello@lovemyhuman.co.uk\">hello@lovemyhuman.co.uk</a> and we will arrange the best way to send them.</p><p><strong>Returns</strong></p><p>Changed your mind? We are happy to refund or exchange non-perishable items within 14 days, as long as they are new, unused and in their original packaging. Personalised and special-order items cannot be returned. This does not affect your statutory rights.</p>",
+                    "page": "",
+                    "link_label": "",
+                    "link": "",
+                    "open": false
+                  }
+                },
+                "row_gifting": {
+                  "type": "_lmh-feature-row",
+                  "settings": {
+                    "title": "Gifting",
+                    "content": "<p>Looking for something ready to give? Our XMAS Hamper is packed with treats and toys chosen by the team.</p><p>[Add your gift message and gift wrapping options here.]</p>",
+                    "page": "",
+                    "link_label": "",
+                    "link": "",
+                    "open": false
+                  }
+                }
+              },
+              "block_order": [
+                "row_care",
+                "row_delivery",
+                "row_gifting"
+              ]
+            },
+            "lmh_top_style": {
+              "type": "lmh-top-style",
+              "settings": {
+                "title_size": 34,
+                "price_size": 20,
+                "button_width": 60,
+                "lines": true
+              },
               "blocks": {}
             }
           },
@@ -477,11 +576,15 @@
             "lmh_meta",
             "text_tefwj7",
             "lmh_price_row",
-            "lmh_benefits",
+            "lmh_colours",
             "variant_picker_R3rGDr",
+            "lmh_benefits",
             "lmh_size_guide",
             "buy_buttons_eYQEYi",
-            "lmh_delivery"
+            "lmh_delivery",
+            "lmh_reviews",
+            "lmh_features",
+            "lmh_top_style"
           ]
         }
       },
@@ -578,7 +681,7 @@
       "settings": {
         "product": "",
         "heading": "",
-        "description_source": "product",
+        "description_source": "custom",
         "custom_description": "",
         "details": "<p>Every piece in our edit is chosen by our founder Jenny and tried and tested by the dogs of our London townhouse, so it works as hard for your dog as it looks in your home.</p><p>Designed for pets. Loved by humans.</p><p>Not sure about the size or fit? Our team is happy to help you choose the right one for your dog.</p>",
         "show_sku": true,
@@ -594,8 +697,11 @@
         "background_color": "{{ settings.color_palette.background }}",
         "heading_color": "{{ settings.color_palette.foreground }}",
         "text_color": "{{ settings.color_palette.color1 }}",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "padding_top": 40,
+        "padding_bottom": 24,
+        "max_width": 1200,
+        "tab_style": "simple",
+        "hide_tabs": true
       }
     },
     "press_logos": {
@@ -707,7 +813,7 @@
       "settings": {
         "eyebrow": "",
         "heading": "Featured in the press",
-        "heading_size": 48,
+        "heading_size": 32,
         "heading_rule": true,
         "layout": "slider",
         "per_page": 4,
@@ -721,13 +827,13 @@
         "marquee_speed": 70,
         "animate": true,
         "grayscale": true,
-        "max_width": 1080,
+        "max_width": 1200,
         "color_style": "brand",
         "background_color": "{{ settings.color_palette.background }}",
         "heading_color": "{{ settings.color_palette.foreground }}",
         "text_color": "{{ settings.color_palette.color1 }}",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "padding_top": 32,
+        "padding_bottom": 32
       }
     },
     "image_grid_tv": {
@@ -800,7 +906,7 @@
         "eyebrow": "",
         "heading": "As seen on TV",
         "text": "",
-        "heading_size": 56,
+        "heading_size": 32,
         "heading_rule": true,
         "caption_style": "overlay",
         "link_label": "Watch the clip",
@@ -811,13 +917,13 @@
         "mobile_layout": "grid_1",
         "aspect_ratio": "tv",
         "gap": 10,
-        "max_width": 1080,
+        "max_width": 1200,
         "color_style": "brand",
         "background_color": "{{ settings.color_palette.background }}",
         "heading_color": "{{ settings.color_palette.foreground }}",
         "text_color": "{{ settings.color_palette.color1 }}",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "padding_top": 32,
+        "padding_bottom": 32
       }
     },
     "editorial_video": {
@@ -829,7 +935,7 @@
         "button_label": "Discover our story",
         "button_link": "shopify://pages/about-us",
         "heading_uppercase": true,
-        "heading_size": 34,
+        "heading_size": 30,
         "video_file": "https://www.lovemyhuman.co.uk/cdn/shop/videos/c/vp/a5f74f01a9ca4222a1e685ea0e4ed642/a5f74f01a9ca4222a1e685ea0e4ed642.HD-1080p-7.2Mbps-49327868.mp4",
         "video_url": "",
         "autoplay": true,
@@ -845,8 +951,8 @@
         "background_color": "{{ settings.color_palette.background }}",
         "heading_color": "{{ settings.color_palette.foreground }}",
         "text_color": "{{ settings.color_palette.color1 }}",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "padding_top": 32,
+        "padding_bottom": 32
       }
     },
     "customer_reviews": {
@@ -865,24 +971,33 @@
       "block_order": [
         "judgeme_reviews"
       ],
-      "disabled": true,
       "settings": {
         "eyebrow": "Reviews",
         "heading": "What humans say",
-        "heading_size": 48,
+        "heading_size": 32,
         "heading_rule": true,
         "anchor": "reviews",
         "animate": true,
-        "max_width": 1080,
+        "max_width": 1200,
         "background_color": "{{ settings.color_palette.background }}",
         "accent_color": "{{ settings.color_palette.foreground }}",
         "text_color": "{{ settings.color_palette.color1 }}",
-        "padding_top": 64,
-        "padding_bottom": 64
+        "padding_top": 32,
+        "padding_bottom": 56,
+        "reviewsio_store": "lovemyhuman.co.uk"
+      }
+    },
+    "breadcrumbs": {
+      "type": "lmh-breadcrumbs",
+      "settings": {
+        "menu": "main-menu",
+        "padding_top": 16,
+        "padding_bottom": 0
       }
     }
   },
   "order": [
+    "breadcrumbs",
     "main",
     "product_details_editorial",
     "press_logos",

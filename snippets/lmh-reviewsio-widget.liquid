@@ -1,0 +1,113 @@
+{%- doc -%}
+  Reviews.io product reviews widget (Polaris) for one product, in LMH colours (Zac 26 Nov 2026: Reviews.io instead of Judge.me).
+
+  @param {object} product - The product
+  @param {string} store - Reviews.io store ID
+  @param {string} [accent] - Colour for stars, buttons and headings
+{%- enddoc -%}
+
+{%- liquid
+  assign accent = accent | default: '#ea5355' | append: ''
+  capture ids
+    render 'lmh-reviewsio-ids', product: product
+  endcapture
+  assign widget_id = 'LmhReviewsWidget-' | append: product.id
+-%}
+
+<div id="{{ widget_id }}" class="lmh-reviewsio-widget"></div>
+<script src="https://widget.reviews.co.uk/polaris/build.js" defer></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof ReviewsWidget === 'undefined') return;
+    new ReviewsWidget('#{{ widget_id }}', {
+      store: {{ store | json }},
+      widget: 'polaris',
+      options: {
+        types: 'product_review,questions',
+        lang: 'en',
+        layout: '',
+        per_page: 10,
+        product_review: {
+          sku: {{ ids | strip | json }},
+          hide_if_no_results: false,
+        },
+        questions: {
+          hide_if_no_results: false,
+          enable_ask_question: true,
+          show_dates: true,
+          grouping: {{ product.handle | json }},
+        },
+        header: {
+          enable_summary: true,
+          enable_ratings: true,
+          enable_attributes: true,
+          enable_image_gallery: true,
+          enable_percent_recommended: false,
+          enable_write_review: true,
+          enable_ask_question: true,
+          enable_sub_header: true,
+          rating_decimal_places: 1,
+          use_write_review_button: true,
+          enable_if_no_results: true,
+        },
+        filtering: {
+          enable: true,
+          enable_text_search: false,
+          enable_sorting: true,
+          enable_product_filter: false,
+          enable_media_filter: true,
+          enable_overall_rating_filter: true,
+          enable_ratings_filters: true,
+          enable_attributes_filters: true,
+          enable_expanded_filters: false,
+        },
+        reviews: {
+          enable_avatar: true,
+          enable_reviewer_name: true,
+          enable_reviewer_address: false,
+          enable_verified_badge: true,
+          enable_reviewer_recommends: true,
+          enable_attributes: true,
+          enable_product_name: false,
+          enable_review_title: true,
+          enable_replies: true,
+          enable_images: true,
+          enable_ratings: true,
+          enable_share: false,
+          enable_helpful_vote: true,
+          enable_helpful_display: true,
+          enable_report: true,
+          enable_date: true,
+        },
+      },
+      styles: {
+        '--base-font-size': '16px',
+        '--common-button-font-family': 'inherit',
+        '--common-button-font-size': '15px',
+        '--common-button-font-weight': '600',
+        '--common-button-border-radius': '0px',
+        '--primary-button-bg-color': {{ accent | json }},
+        '--primary-button-border-color': {{ accent | json }},
+        '--primary-button-text-color': '#ffffff',
+        '--secondary-button-bg-color': 'transparent',
+        '--secondary-button-border-color': {{ accent | json }},
+        '--secondary-button-text-color': {{ accent | json }},
+        '--common-star-color': {{ accent | json }},
+        '--common-star-disabled-color': 'rgba(0,0,0,0.2)',
+        '--medium-star-size': '20px',
+        '--small-star-size': '16px',
+        '--heading-text-color': {{ accent | json }},
+        '--heading-text-font-family': 'inherit',
+        '--body-text-color': 'inherit',
+        '--body-text-font-family': 'inherit',
+        '--inputfield-border-radius': '0px',
+        '--common-border-color': 'rgba(0,0,0,0.12)',
+        '--pagination-tab-text-color': {{ accent | json }},
+        '--pagination-tab-active-text-color': {{ accent | json }},
+        '--pagination-tab-active-border-color': {{ accent | json }},
+        '--badge-icon-color': {{ accent | json }},
+        '--badge-text-color': 'inherit',
+      },
+    });
+  });
+</script>

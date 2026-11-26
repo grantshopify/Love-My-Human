@@ -1,141 +1,20 @@
 {%- comment -%}
   Size guide link: shows only when the product has a file in the "Size guide" metafield (custom.size_guide).
-  Clicking it opens the guide in a pop-up: an image is shown as is, a PDF is shown in a viewer
-  with an "Open the PDF" link for phones that can't show PDFs inside a page (Zac, 25 Nov 2026).
+  Clicking it opens the guide in a pop-up (snippets/lmh-size-guide-link.liquid).
+  When the size picker uses "Compact sizes" it shows the link next to "Size" itself, and this block hides (CSS below).
 {%- endcomment -%}
 
-{%- liquid
-  assign b = block.settings
-  assign p = closest.product
-  assign guide = p.metafields.custom.size_guide.value
-  assign guide_is_image = false
-  assign guide_url = ''
-  if guide != blank
-    if guide.media_type == 'image'
-      assign guide_is_image = true
-      assign guide_url = guide | image_url: width: 1600
-    else
-      assign guide_url = guide.url
-    endif
-  endif
-  assign dialog_id = 'LmhSizeGuide-' | append: block.id
--%}
-
-{%- if guide_url != blank -%}
-  <div class="lmh-size-guide" {{ block.shopify_attributes }}>
-    {%- comment -%}
-      A real link to the file: phones open a PDF in their own viewer. On larger screens (and for images)
-      the click opens the pop-up instead.
-    {%- endcomment -%}
-    <a
-      href="{{ guide_url }}"
-      target="_blank"
-      rel="noopener"
-      class="lmh-size-guide__link"
-      aria-haspopup="dialog"
-      aria-controls="{{ dialog_id }}"
-      onclick="if ({{ guide_is_image }} || window.matchMedia('(min-width: 750px)').matches) { event.preventDefault(); document.getElementById('{{ dialog_id }}').showModal(); }"
-    >
-      <span>{{ b.label | escape }}</span>
-    </a>
-
-    <dialog id="{{ dialog_id }}" class="lmh-size-guide__dialog" aria-label="{{ b.label | escape }}" onclick="if (event.target === this) this.close()">
-      <div class="lmh-size-guide__panel">
-        <div class="lmh-size-guide__header">
-          <p class="lmh-size-guide__title">{{ b.label | escape }}</p>
-          <button type="button" class="lmh-size-guide__close" aria-label="Close" onclick="this.closest('dialog').close()">
-            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-          </button>
-        </div>
-        {%- if guide_is_image -%}
-          {%- assign guide_alt = guide.alt | default: b.label -%}
-          {{ guide | image_url: width: 1600 | image_tag: class: 'lmh-size-guide__image', loading: 'lazy', alt: guide_alt }}
-        {%- else -%}
-          <iframe class="lmh-size-guide__frame" src="{{ guide_url }}#view=FitH" title="{{ b.label | escape }}" loading="lazy"></iframe>
-          <a class="lmh-size-guide__open" href="{{ guide_url }}" target="_blank" rel="noopener">Open the PDF</a>
-        {%- endif -%}
-      </div>
-    </dialog>
-  </div>
-{%- endif -%}
+{% render 'lmh-size-guide-link',
+  product: closest.product,
+  id: block.id,
+  label: block.settings.label,
+  class: 'lmh-size-guide--block',
+  attributes: block.shopify_attributes
+%}
 
 {% stylesheet %}
-  .lmh-size-guide {
-    inline-size: 100%;
-  }
-
-  .lmh-size-guide__link {
-    display: inline-block;
-    padding: 0 0 5px;
-    border: 0;
-    border-bottom: 1.5px solid currentColor;
-    background: none;
-    color: inherit;
-    font: inherit;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .lmh-size-guide__dialog {
-    inline-size: min(920px, calc(100vw - 32px));
-    max-block-size: calc(100dvh - 48px);
-    padding: 0;
-    border: 0;
-    border-radius: 12px;
-    background: var(--color-background, #fff);
-    color: var(--color-foreground, inherit);
-  }
-
-  .lmh-size-guide__dialog::backdrop {
-    background: rgb(0 0 0 / 0.5);
-  }
-
-  .lmh-size-guide__panel {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px 20px 20px;
-  }
-
-  .lmh-size-guide__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-
-  .lmh-size-guide__title {
-    margin: 0;
-    font-weight: 600;
-  }
-
-  .lmh-size-guide__close {
-    display: inline-flex;
-    padding: 6px;
-    border: 0;
-    background: none;
-    color: inherit;
-    cursor: pointer;
-  }
-
-  .lmh-size-guide__image {
-    display: block;
-    inline-size: 100%;
-    block-size: auto;
-    max-block-size: calc(100dvh - 140px);
-    object-fit: contain;
-  }
-
-  .lmh-size-guide__frame {
-    inline-size: 100%;
-    block-size: min(70dvh, 760px);
-    border: 0;
-  }
-
-  .lmh-size-guide__open {
-    align-self: center;
-    text-decoration: underline;
+  .product-details:has(.variant-picker .lmh-size-guide) .lmh-size-guide--block {
+    display: none;
   }
 {% endstylesheet %}
 

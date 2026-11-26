@@ -12,7 +12,13 @@
 
 <div class="lmh-meta" style="--lmh-accent: {{ block.settings.accent_color | default: settings.color_palette.foreground }};" {{ block.shopify_attributes }}>
   {%- if b.show_vendor and label != blank -%}
-    <p class="lmh-meta__vendor">{{ label }}</p>
+    <p class="lmh-meta__vendor">
+      {%- if b.link_vendor and b.text == blank -%}
+        {{ p.vendor | link_to_vendor }}
+      {%- else -%}
+        {{ label }}
+      {%- endif -%}
+    </p>
   {%- endif -%}
 
   {%- if b.show_share -%}
@@ -165,6 +171,12 @@
       "id": "text",
       "label": "Brand text",
       "info": "Leave empty to show the product's vendor."
+    },
+    {
+      "type": "checkbox",
+      "id": "link_vendor",
+      "label": "Link the brand to all its products",
+      "default": false
     },
     {
       "type": "checkbox",

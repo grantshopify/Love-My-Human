@@ -1,0 +1,74 @@
+{%- comment -%}
+  One extra drop-down under "Highlights / Features" (Care, Delivery & returns, Gifting...), same look (Zac 26 Nov).
+{%- endcomment -%}
+
+{%- liquid
+  assign b = block.settings
+  if b.page != blank
+    assign row_content = b.page.content
+  else
+    assign row_content = b.content
+  endif
+-%}
+
+{%- if b.title != blank and row_content != blank -%}
+  <details class="lmh-features__row" {% if b.open %}open{% endif %} {{ block.shopify_attributes }}>
+    <summary class="lmh-features__summary">
+      <span>{{ b.title | escape }}</span>
+      <span class="lmh-features__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="lmh-features__body rte">
+      {{ row_content }}
+      {%- if b.link_label != blank -%}
+        <p><a href="{{ b.link | default: '#' }}">{{ b.link_label | escape }}</a></p>
+      {%- endif -%}
+    </div>
+  </details>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Drop-down",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Care"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Text"
+    },
+    {
+      "type": "page",
+      "id": "page",
+      "label": "Or show a page",
+      "info": "Used instead of the text when picked."
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link text"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "open",
+      "label": "Open by default",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Drop-down"
+    }
+  ]
+}
+{% endschema %}

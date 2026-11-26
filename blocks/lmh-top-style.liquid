@@ -1,0 +1,128 @@
+{%- comment -%}
+  Layout tweaks for the top of the product page, Cloud7 style (Zac 26 Nov 2026).
+  Outputs only a little CSS for this product details column; remove the block to go back to the old look.
+{%- endcomment -%}
+
+{%- liquid
+  assign b = block.settings
+-%}
+
+<style>
+  /* Brand above the title: small and underlined, like "F/W 26 Collection" */
+  .product-details .lmh-meta__vendor {
+    font-family: var(--font-body--family);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  .product-details .lmh-meta__vendor,
+  .product-details .lmh-meta__vendor a {
+    color: var(--color-foreground);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  /* Smaller product title */
+  .product-details .text-block h1 {
+    font-size: {{ b.title_size }}px;
+    line-height: 1.1;
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-details .text-block h1 {
+      font-size: min({{ b.title_size }}px, 28px);
+    }
+  }
+
+  .product-details .price {
+    font-size: {{ b.price_size }}px;
+  }
+
+  /* Small print under the price (the text block with id lmh_price_note) */
+  .product-details [class*="__lmh_price_note"] p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    opacity: 0.85;
+  }
+
+  .product-details [class*="__lmh_price_note"] a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  {%- if b.lines -%}
+    /* Thin line under the price block, like Cloud7 */
+    .product-details .group-block:has(> .group-block-content > .group-block > .group-block-content > [class*="__lmh_price_note"]) {
+      padding-block-end: 20px;
+      border-block-end: 1px solid color-mix(in srgb, var(--color-foreground) 18%, transparent);
+    }
+  {%- endif -%}
+
+  {%- if b.button_width < 100 -%}
+    /* Add to cart button not full width on larger screens */
+    @media screen and (min-width: 750px) {
+      .product-details .product-form-buttons {
+        max-inline-size: {{ b.button_width }}%;
+      }
+    }
+  {%- endif -%}
+</style>
+
+{% schema %}
+{
+  "name": "Top layout (Cloud7 style)",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Small brand link, smaller title and price, and a narrower Add to cart button. Remove this block to go back to the old look."
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 18,
+      "max": 56,
+      "step": 1,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "label": "Price size",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "lines",
+      "label": "Line under the price",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "button_width",
+      "label": "Add to cart width (desktop)",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "Top layout (Cloud7 style)",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

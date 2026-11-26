@@ -1,0 +1,49 @@
+{%- doc -%}
+  One round colour swatch for the Colour swatches block.
+
+  @param {object} item - The product in that colour
+  @param {object} current - The product being viewed
+  @param {number} prefix_len - Number of title words shared by the whole group (the rest is the colour name)
+{%- enddoc -%}
+
+{%- liquid
+  assign name = item.metafields.custom.colour_name.value
+  if name == blank
+    assign words = item.title | split: ' '
+    capture name
+      for w in words offset: prefix_len
+        echo w
+        unless forloop.last
+          echo ' '
+        endunless
+      endfor
+    endcapture
+    assign name = name | remove: '(' | remove: ')' | strip | default: item.title
+  endif
+  assign swatch_image = item.metafields.custom.swatch_image.value
+-%}
+
+<li>
+  <a
+    href="{{ item.url }}"
+    class="lmh-colours__swatch{% unless item.available %} lmh-colours__swatch--sold-out{% endunless %}"
+    aria-label="{{ name | escape }}{% unless item.available %} - sold out{% endunless %}"
+    {% if item.id == current.id %}
+      aria-current="true"
+    {% endif %}
+  >
+    <span class="lmh-colours__clip">
+      {%- if swatch_image != blank -%}
+        {{ swatch_image | image_url: width: 120 | image_tag: width: 60, height: 60, loading: 'eager', alt: '' }}
+      {%- elsif item.featured_image != blank -%}
+        {{ item.featured_image | image_url: width: 240 | image_tag: width: 60, height: 60, loading: 'eager', alt: '', class: 'lmh-colours__photo' }}
+      {%- else -%}
+        <span class="lmh-colours__blank"></span>
+      {%- endif -%}
+    </span>
+    {%- comment -%} Name shown on hover, like Cloud7 (Zac 26 Nov) {%- endcomment -%}
+    <span class="lmh-colours__tip" aria-hidden="true">
+      {{- name | escape }}{% unless item.available %} (sold out){% endunless -%}
+    </span>
+  </a>
+</li>

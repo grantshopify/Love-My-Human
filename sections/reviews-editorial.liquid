@@ -38,7 +38,13 @@
     {%- endif -%}
 
     <div class="rv__widget">
-      {% content_for 'blocks' %}
+      {%- comment -%} Reviews.io (Zac 26 Nov): with a Reviews.io store ID set, its widget replaces the app blocks {%- endcomment -%}
+      {%- if s.reviewsio_store != blank and product != blank -%}
+        {%- assign rv_accent = s.accent_color | default: settings.color_palette.foreground -%}
+        {% render 'lmh-reviewsio-widget', product: product, store: s.reviewsio_store, accent: rv_accent %}
+      {%- else -%}
+        {% content_for 'blocks' %}
+      {%- endif -%}
     </div>
   </div>
 </div>
@@ -201,6 +207,12 @@
     {
       "type": "paragraph",
       "content": "Add your reviews app's widget here (e.g. Judge.me > Reviews)."
+    },
+    {
+      "type": "text",
+      "id": "reviewsio_store",
+      "label": "Reviews.io store ID",
+      "info": "When filled, product pages show the Reviews.io widget here instead of the app blocks. Your store ID is in Reviews.io > Integrations."
     },
     {
       "type": "text",

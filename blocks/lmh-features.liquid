@@ -1,0 +1,141 @@
+{%- comment -%}
+  "Highlights / Features" drop-down under the buy button with the product description (Zac 26 Nov, Cloud7 style).
+{%- endcomment -%}
+
+{%- liquid
+  assign b = block.settings
+  assign p = closest.product
+  assign body = p.description
+  if b.content_source == 'metafield'
+    assign body = p.metafields.custom.features.value | default: p.description
+  endif
+-%}
+
+{%- comment -%} Extra drop-downs (Care, Delivery & returns, Gifting) join on underneath, one list (Zac 26 Nov) {%- endcomment -%}
+<div class="lmh-features" {{ block.shopify_attributes }}>
+  {%- if body != blank -%}
+    <details class="lmh-features__row" {% if b.open_by_default %}open{% endif %}>
+      <summary class="lmh-features__summary">
+        <span>{{ b.heading | escape }}</span>
+        <span class="lmh-features__icon" aria-hidden="true"></span>
+      </summary>
+      <div class="lmh-features__body rte">
+        {{ body }}
+      </div>
+    </details>
+  {%- endif -%}
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .lmh-features {
+    inline-size: 100%;
+    border-block-start: 1px solid color-mix(in srgb, var(--color-foreground) 18%, transparent);
+  }
+
+  .lmh-features:not(:has(.lmh-features__row)) {
+    border: 0;
+  }
+
+  .lmh-features__row {
+    border-block-end: 1px solid color-mix(in srgb, var(--color-foreground) 18%, transparent);
+  }
+
+  .lmh-features__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .lmh-features__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Plus when closed, minus when open */
+  .lmh-features__icon {
+    position: relative;
+    inline-size: 12px;
+    block-size: 12px;
+    flex: none;
+  }
+
+  .lmh-features__icon::before,
+  .lmh-features__icon::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    border-top: 1.5px solid currentColor;
+    transform: translateY(-50%);
+  }
+
+  .lmh-features__icon::after {
+    transform: translateY(-50%) rotate(90deg);
+    transition: transform 0.2s ease;
+  }
+
+  .lmh-features__row[open] > summary .lmh-features__icon::after {
+    transform: translateY(-50%) rotate(0deg);
+  }
+
+  .lmh-features__body {
+    padding: 0 0 16px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .lmh-features__body > :first-child {
+    margin-top: 0;
+  }
+
+  .lmh-features__body > :last-child {
+    margin-bottom: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Features drop-down",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_lmh-feature-row"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Highlights / Features"
+    },
+    {
+      "type": "select",
+      "id": "content_source",
+      "label": "Content",
+      "options": [
+        { "value": "description", "label": "Product description" },
+        { "value": "metafield", "label": "Features metafield (custom.features)" }
+      ],
+      "default": "description"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Open by default",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Features drop-down",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

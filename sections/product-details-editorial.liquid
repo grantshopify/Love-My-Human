@@ -41,7 +41,7 @@
 {%- if s.animate -%}{% render 'editorial-reveal' %}{%- endif -%}
 
 <product-details-editorial
-  class="pd-editorial"
+  class="pd-editorial{% if s.tab_style == 'simple' %} pd-editorial--simple-tabs{% endif %}{% if s.hide_tabs %} pd-editorial--no-tabs{% endif %}"
   data-single-open="{{ s.single_open }}"
   style="
     --pd-background: {{ pd_background }};
@@ -51,6 +51,7 @@
     --pd-title-size: {{ s.title_size }}px;
     --pd-padding-top: {{ s.padding_top }}px;
     --pd-padding-bottom: {{ s.padding_bottom }}px;
+    {% if s.max_width %}--pd-max-width: {{ s.max_width }}px;{% endif %}
   "
 >
   <div class="pd-editorial__grid">
@@ -120,7 +121,7 @@
     </div>
 
     {%- assign tabs = section.blocks | where: 'type', 'tab' -%}
-    {%- if tabs.size > 0 -%}
+    {%- if tabs.size > 0 and s.hide_tabs != true -%}
       <div class="pd-editorial__tabs">
         {%- for block in tabs -%}
           {%- liquid
@@ -144,6 +145,7 @@
                 <span class="pd-editorial__tab-icon">{% render 'editorial-icon', icon: b.icon, size: 20 %}</span>
               {%- endif -%}
               <span class="pd-editorial__tab-label">{{ b.title }}</span>
+              <span class="pd-editorial__plus" aria-hidden="true"></span>
               <svg class="pd-editorial__chevron" aria-hidden="true" focusable="false" viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m1.5 4.5 5.5 5 5.5-5"/>
               </svg>
@@ -166,7 +168,7 @@
     <script type="application/json" data-pd-skus>
       {
         {%- for v in p.variants -%}
-          {{ v.id | json }}: {{ v.sku | json }}{% unless forloop.last %},{% endunless %}
+          {{ v.id | append: '' | json }}: {{ v.sku | json }}{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
       }
     </script>
@@ -275,7 +277,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 32px;
-    max-inline-size: 1400px;
+    max-inline-size: var(--pd-max-width, 1400px);
     margin: 0 auto;
   }
 
@@ -425,6 +427,88 @@
 
   .pd-editorial__tab[open] .pd-editorial__chevron {
     transform: rotate(180deg);
+  }
+
+  .pd-editorial__plus {
+    display: none;
+  }
+
+  /* Drop-downs moved up to the buy box: the rest sits in one centred column */
+  .pd-editorial--no-tabs .pd-editorial__grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    max-inline-size: min(var(--pd-max-width, 1400px), 860px);
+  }
+
+  .pd-editorial--no-tabs .pd-editorial__info {
+    position: static !important;
+  }
+
+  /* ---------- "Simple" tabs: same look as the "Highlights / Features" drop-down by the buy button (Zac 26 Nov) ---------- */
+  .pd-editorial--simple-tabs .pd-editorial__tabs {
+    gap: 0;
+  }
+
+  .pd-editorial--simple-tabs .pd-editorial__tab {
+    border-block-end: 1px solid rgb(0 0 0 / 0.18);
+  }
+
+  .pd-editorial--simple-tabs .pd-editorial__tab:first-child {
+    border-block-start: 1px solid rgb(0 0 0 / 0.18);
+  }
+
+  .pd-editorial--simple-tabs .pd-editorial__tab-title {
+    gap: 16px;
+    padding: 14px 0;
+    border: 0;
+    color: #000;
+    font-family: var(--font-body--family);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .pd-editorial--simple-tabs .pd-editorial__tab-title::after,
+  .pd-editorial--simple-tabs .pd-editorial__tab-icon,
+  .pd-editorial--simple-tabs .pd-editorial__chevron {
+    display: none;
+  }
+
+  .pd-editorial--simple-tabs .pd-editorial__tab-title:hover .pd-editorial__tab-label {
+    transform: none;
+  }
+
+  .pd-editorial--simple-tabs .pd-editorial__plus {
+    position: relative;
+    display: block;
+    flex: none;
+    inline-size: 12px;
+    block-size: 12px;
+  }
+
+  .pd-editorial--simple-tabs .pd-editorial__plus::before,
+  .pd-editorial--simple-tabs .pd-editorial__plus::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    border-top: 1.5px solid currentColor;
+    transform: translateY(-50%);
+  }
+
+  .pd-editorial--simple-tabs .pd-editorial__plus::after {
+    transform: translateY(-50%) rotate(90deg);
+    transition: transform 0.2s ease;
+  }
+
+  .pd-editorial--simple-tabs .pd-editorial__tab[open] .pd-editorial__plus::after {
+    transform: translateY(-50%) rotate(0deg);
+  }
+
+  .pd-editorial--simple-tabs .pd-editorial__tab-inner {
+    padding-block: 0 16px;
+    color: #000;
+    font-size: 14px;
+    line-height: 1.6;
   }
 
   /* ---------- Highlights (small icon points under the description) ---------- */
@@ -928,6 +1012,33 @@
     {
       "type": "header",
       "content": "Spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_tabs",
+      "label": "Hide the drop-downs here",
+      "info": "When Care / Delivery / Gifting are shown under Highlights / Features by the buy button instead.",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "tab_style",
+      "label": "Drop-down style",
+      "options": [
+        { "value": "editorial", "label": "Brand headings with icons" },
+        { "value": "simple", "label": "Simple, like Highlights / Features" }
+      ],
+      "default": "editorial"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1400
     },
     {
       "type": "range",

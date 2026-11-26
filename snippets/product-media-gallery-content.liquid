@@ -456,7 +456,14 @@
 
     {% if render_slideshow_arrows %}
       {% capture slideshow_arrows %}
-        {% render 'slideshow-arrows', class: 'mobile:hidden', icon_style: block_settings.icons_style %}
+        {%- comment -%} LMH: "Arrows on phones too" shows the arrows on both sides on mobile as well (Zac 26 Nov) {%- endcomment -%}
+        {%- liquid
+          assign lmh_arrows_class = 'mobile:hidden'
+          if block_settings.lmh_mobile_arrows
+            assign lmh_arrows_class = 'lmh-arrows-everywhere'
+          endif
+        -%}
+        {% render 'slideshow-arrows', class: lmh_arrows_class, icon_style: block_settings.icons_style %}
       {% endcapture %}
     {% endif %}
 

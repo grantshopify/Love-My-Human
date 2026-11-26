@@ -112,6 +112,13 @@
       "visible_if": "{{ block.settings.media_presentation == 'carousel' }}"
     },
     {
+      "type": "checkbox",
+      "id": "lmh_mobile_arrows",
+      "label": "Arrows on phones too",
+      "default": false,
+      "visible_if": "{{ block.settings.media_presentation == 'carousel' }}"
+    },
+    {
       "type": "select",
       "id": "slideshow_controls_style",
       "label": "t:settings.desktop_pagination",

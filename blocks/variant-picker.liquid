@@ -11,6 +11,51 @@
   {% render 'variant-main-picker', product_resource: product_resource, section: section, product: product %}
 {% endunless %}
 
+{% stylesheet %}
+  /* LMH "Compact sizes" (Zac 26 Nov, Cloud7 style): small square boxes, "Size: 3", Size Chart on the right */
+  .variant-picker--lmh-compact .variant-option--buttons {
+    position: relative;
+  }
+
+  .variant-picker--lmh-compact .variant-option--buttons:not(.variant-option--swatches) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .variant-picker--lmh-compact .variant-option--buttons legend {
+    padding-inline-end: 110px;
+    font-size: 13px;
+  }
+
+  .variant-picker--lmh-compact .lmh-compact-value {
+    color: var(--color-foreground);
+    font-weight: 600;
+  }
+
+  .variant-picker--lmh-compact .variant-option--buttons:not(.variant-option--swatches) .variant-option__button-label {
+    flex: 0 0 auto;
+    min-inline-size: 40px;
+    min-block-size: 40px;
+    padding: 0 10px;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .variant-picker--lmh-compact .lmh-size-guide--picker {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    inline-size: auto;
+    font-size: 13px;
+  }
+
+  .variant-picker--lmh-compact .lmh-size-guide--picker .lmh-size-guide__link {
+    padding-bottom: 2px;
+    border-bottom-width: 1px;
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "t:names.product_variant_picker",
@@ -48,6 +93,13 @@
       "label": "Swatch colours",
       "info": "One colour per line, like Pumpkin Velvet: #D9682B. Used for any colour that has no swatch set in Shopify.",
       "visible_if": "{{ block.settings.show_swatches }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "lmh_compact",
+      "label": "Compact sizes",
+      "info": "Small square buttons (\"3\" instead of \"Size 3\"), the chosen value next to the label (\"Size: 3\") and the Size Chart link on the right of that line.",
+      "default": false
     },
     {
       "type": "header",
