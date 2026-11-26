@@ -237,6 +237,7 @@
                     },
                     "lmh_reviews": {
                       "type": "lmh-review-summary",
+                      "disabled": true,
                       "settings": {
                         "empty_text": "Be the first to review",
                         "link": "",
@@ -387,6 +388,13 @@
               },
               "blocks": {}
             },
+            "lmh_size_guide": {
+              "type": "lmh-size-guide",
+              "settings": {
+                "label": "Size Chart"
+              },
+              "blocks": {}
+            },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
@@ -463,12 +471,6 @@
                 "accent_color": "{{ settings.color_palette.foreground }}"
               },
               "blocks": {}
-            },
-            "lmh_size_guide": {
-              "type": "lmh-size-guide",
-              "settings": {
-                "label": "Size Chart"
-              }
             }
           },
           "block_order": [
