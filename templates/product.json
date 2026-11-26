@@ -9,6 +9,14 @@
  */
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "lmh-breadcrumbs",
+      "settings": {
+        "menu": "main-menu",
+        "padding_top": 16,
+        "padding_bottom": 0
+      }
+    },
     "main": {
       "type": "product-information",
       "blocks": {
@@ -336,6 +344,37 @@
                 "lmh_availability"
               ]
             },
+            "lmh_colours": {
+              "type": "lmh-colour-swatches",
+              "settings": {
+                "label": "Colour"
+              },
+              "blocks": {}
+            },
+            "variant_picker_R3rGDr": {
+              "type": "variant-picker",
+              "settings": {
+                "variant_style": "buttons",
+                "show_swatches": true,
+                "fallback_swatches": "Pumpkin Velvet: #D9682B\nBlush Pink: #E8B4B8\nTeal: #2B7A8C\nOlive: #8A8A3C\nMustard: #E3A82B\nDove Grey: #B9B4AE",
+                "lmh_compact": true,
+                "option_label_text_color": "",
+                "variant_style_class": "default",
+                "custom_variant_background": "{{ settings.color_palette.background }}",
+                "custom_variant_text": "{{ settings.color_palette.foreground }}",
+                "custom_variant_border": "{{ settings.color_palette.foreground }}",
+                "selected_variant_style_class": "default",
+                "custom_selected_variant_background": "{{ settings.color_palette.foreground }}",
+                "custom_selected_variant_text": "{{ settings.color_palette.background }}",
+                "custom_selected_variant_border": "{{ settings.color_palette.foreground }}",
+                "alignment": "left",
+                "padding-block-start": 12,
+                "padding-block-end": 24,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "lmh_benefits": {
               "type": "lmh-benefits",
               "disabled": true,
@@ -383,30 +422,6 @@
                 "b3",
                 "b4"
               ]
-            },
-            "variant_picker_R3rGDr": {
-              "type": "variant-picker",
-              "settings": {
-                "variant_style": "buttons",
-                "show_swatches": true,
-                "fallback_swatches": "Pumpkin Velvet: #D9682B\nBlush Pink: #E8B4B8\nTeal: #2B7A8C\nOlive: #8A8A3C\nMustard: #E3A82B\nDove Grey: #B9B4AE",
-                "lmh_compact": true,
-                "option_label_text_color": "",
-                "variant_style_class": "default",
-                "custom_variant_background": "{{ settings.color_palette.background }}",
-                "custom_variant_text": "{{ settings.color_palette.foreground }}",
-                "custom_variant_border": "{{ settings.color_palette.foreground }}",
-                "selected_variant_style_class": "default",
-                "custom_selected_variant_background": "{{ settings.color_palette.foreground }}",
-                "custom_selected_variant_text": "{{ settings.color_palette.background }}",
-                "custom_selected_variant_border": "{{ settings.color_palette.foreground }}",
-                "alignment": "left",
-                "padding-block-start": 12,
-                "padding-block-end": 24,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
             },
             "lmh_size_guide": {
               "type": "lmh-size-guide",
@@ -494,13 +509,6 @@
               },
               "blocks": {}
             },
-            "lmh_colours": {
-              "type": "lmh-colour-swatches",
-              "settings": {
-                "label": "Colour"
-              },
-              "blocks": {}
-            },
             "lmh_reviews": {
               "type": "lmh-review-summary",
               "settings": {
@@ -530,7 +538,8 @@
                     "link_label": "",
                     "link": "",
                     "open": false
-                  }
+                  },
+                  "blocks": {}
                 },
                 "row_delivery": {
                   "type": "_lmh-feature-row",
@@ -541,18 +550,20 @@
                     "link_label": "",
                     "link": "",
                     "open": false
-                  }
+                  },
+                  "blocks": {}
                 },
                 "row_gifting": {
                   "type": "_lmh-feature-row",
                   "settings": {
                     "title": "Gifting",
-                    "content": "<p>Looking for something ready to give? Our XMAS Hamper is packed with treats and toys chosen by the team.</p><p>[Add your gift message and gift wrapping options here.]</p>",
+                    "content": "<p>Make it a gift worth remembering. Each order can be beautifully wrapped and accompanied by a handwritten-style message of your choice, then sent directly to the recipient. Elegant, effortless, and ready to impress.</p>",
                     "page": "",
                     "link_label": "",
                     "link": "",
                     "open": false
-                  }
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
@@ -971,14 +982,6 @@
         "text_color": "{{ settings.color_palette.color1 }}",
         "padding_top": 32,
         "padding_bottom": 56
-      }
-    },
-    "breadcrumbs": {
-      "type": "lmh-breadcrumbs",
-      "settings": {
-        "menu": "main-menu",
-        "padding_top": 16,
-        "padding_bottom": 0
       }
     }
   },
