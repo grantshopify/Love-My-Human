@@ -224,6 +224,7 @@
     },
     "seo_intro": {
       "type": "collection-seo-intro",
+      "disabled": true,
       "name": "Collection intro (SEO)",
       "settings": {
         "fallback_to_description": true,
@@ -247,6 +248,7 @@
     },
     "collection_chips": {
       "type": "collection-chips",
+      "disabled": true,
       "name": "Collection chips",
       "settings": {
         "collection_list": [
