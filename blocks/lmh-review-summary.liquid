@@ -1,6 +1,6 @@
 {%- comment -%}
   Review summary for the buy box: stars and "3 reviews", linking down to the reviews.
-  Reads Shopify's standard rating fields, which review apps (Judge.me, Okendo, Yotpo…) fill in.
+  Reads Shopify's standard rating fields, which review apps fill in.
   With no reviews yet it shows empty stars and an invitation to review.
 {%- endcomment -%}
 
@@ -199,14 +199,14 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Shows the star rating and number of reviews from your reviews app (e.g. Judge.me)."
+      "content": "Shows the star rating and number of reviews from Reviews.io, or a reviews app that fills Shopify's rating fields."
     },
     {
       "type": "select",
       "id": "source",
       "label": "Reviews from",
       "options": [
-        { "value": "shopify", "label": "Reviews app ratings (Judge.me etc.)" },
+        { "value": "shopify", "label": "Shopify rating fields" },
         { "value": "reviewsio", "label": "Reviews.io" }
       ],
       "default": "shopify"

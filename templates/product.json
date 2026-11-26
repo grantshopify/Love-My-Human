@@ -40,6 +40,7 @@
             "image_gap": 8,
             "large_first_image": true,
             "icons_style": "chevron",
+            "lmh_mobile_arrows": true,
             "slideshow_controls_style": "thumbnails",
             "slideshow_mobile_controls_style": "thumbnails",
             "thumbnail_position": "bottom",
@@ -62,8 +63,7 @@
             "padding-block-start": 12,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0,
-            "lmh_mobile_arrows": true
+            "padding-inline-end": 0
           },
           "blocks": {}
         },
@@ -99,13 +99,13 @@
               "settings": {
                 "show_vendor": true,
                 "text": "",
+                "link_vendor": true,
                 "show_share": false,
                 "share_facebook": true,
                 "share_x": true,
                 "share_pinterest": true,
                 "share_copy": true,
-                "accent_color": "{{ settings.color_palette.foreground }}",
-                "link_vendor": true
+                "accent_color": "{{ settings.color_palette.foreground }}"
               },
               "blocks": {}
             },
@@ -338,6 +338,7 @@
             },
             "lmh_benefits": {
               "type": "lmh-benefits",
+              "disabled": true,
               "settings": {
                 "columns": 2,
                 "accent_color": "{{ settings.color_palette.foreground }}"
@@ -381,8 +382,7 @@
                 "b2",
                 "b3",
                 "b4"
-              ],
-              "disabled": true
+              ]
             },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
@@ -390,6 +390,7 @@
                 "variant_style": "buttons",
                 "show_swatches": true,
                 "fallback_swatches": "Pumpkin Velvet: #D9682B\nBlush Pink: #E8B4B8\nTeal: #2B7A8C\nOlive: #8A8A3C\nMustard: #E3A82B\nDove Grey: #B9B4AE",
+                "lmh_compact": true,
                 "option_label_text_color": "",
                 "variant_style_class": "default",
                 "custom_variant_background": "{{ settings.color_palette.background }}",
@@ -403,8 +404,7 @@
                 "padding-block-start": 12,
                 "padding-block-end": 24,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0,
-                "lmh_compact": true
+                "padding-inline-end": 0
               },
               "blocks": {}
             },
@@ -444,6 +444,7 @@
               "blocks": {
                 "quantity": {
                   "type": "quantity",
+                  "disabled": true,
                   "static": true,
                   "settings": {
                     "input_style": "default",
@@ -453,8 +454,7 @@
                     "border_width": 1,
                     "border_radius": 0
                   },
-                  "blocks": {},
-                  "disabled": true
+                  "blocks": {}
                 },
                 "add-to-cart": {
                   "type": "add-to-cart",
@@ -482,6 +482,7 @@
             },
             "lmh_delivery": {
               "type": "lmh-delivery-countdown",
+              "disabled": true,
               "settings": {
                 "message": "Want it by [day]? Order within [time] & select Next Day Delivery",
                 "cutoff_hour": 14,
@@ -491,8 +492,7 @@
                 "fallback": "Order today for fast UK delivery",
                 "accent_color": "{{ settings.color_palette.foreground }}"
               },
-              "blocks": {},
-              "disabled": true
+              "blocks": {}
             },
             "lmh_colours": {
               "type": "lmh-colour-swatches",
@@ -504,12 +504,12 @@
             "lmh_reviews": {
               "type": "lmh-review-summary",
               "settings": {
+                "source": "reviewsio",
+                "reviewsio_store": "lovemyhuman.co.uk",
+                "star_style": "plain",
                 "empty_text": "Be the first to review",
                 "link": "",
-                "accent_color": "{{ settings.color_palette.foreground }}",
-                "star_style": "plain",
-                "source": "reviewsio",
-                "reviewsio_store": "lovemyhuman.co.uk"
+                "accent_color": "{{ settings.color_palette.foreground }}"
               },
               "blocks": {}
             },
@@ -566,8 +566,8 @@
               "settings": {
                 "title_size": 34,
                 "price_size": 20,
-                "button_width": 60,
-                "lines": true
+                "lines": true,
+                "button_width": 60
               },
               "blocks": {}
             }
@@ -697,11 +697,11 @@
         "background_color": "{{ settings.color_palette.background }}",
         "heading_color": "{{ settings.color_palette.foreground }}",
         "text_color": "{{ settings.color_palette.color1 }}",
-        "padding_top": 40,
-        "padding_bottom": 24,
-        "max_width": 1200,
+        "hide_tabs": true,
         "tab_style": "simple",
-        "hide_tabs": true
+        "max_width": 1200,
+        "padding_top": 40,
+        "padding_bottom": 24
       }
     },
     "press_logos": {
@@ -957,21 +957,8 @@
     },
     "customer_reviews": {
       "type": "reviews-editorial",
-      "blocks": {
-        "judgeme_reviews": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "review_data": "sample_data",
-            "max_width": 1200,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judgeme_reviews"
-      ],
       "settings": {
+        "reviewsio_store": "lovemyhuman.co.uk",
         "eyebrow": "Reviews",
         "heading": "What humans say",
         "heading_size": 32,
@@ -983,8 +970,7 @@
         "accent_color": "{{ settings.color_palette.foreground }}",
         "text_color": "{{ settings.color_palette.color1 }}",
         "padding_top": 32,
-        "padding_bottom": 56,
-        "reviewsio_store": "lovemyhuman.co.uk"
+        "padding_bottom": 56
       }
     },
     "breadcrumbs": {

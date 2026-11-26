@@ -81,11 +81,6 @@
     "variant_button_width": "equal-width-buttons",
     "content_for_index": [],
     "blocks": {
-      "judgeme_core": {
-        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-        "disabled": false,
-        "settings": {}
-      },
       "13969055170449783870": {
         "type": "shopify://apps/bss-b2b-solution/blocks/config-header/451233f2-9631-4c49-8b6f-057e4ebcde7f",
         "disabled": false,
